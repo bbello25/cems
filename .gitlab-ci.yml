@@ -6,5 +6,5 @@ job1:
   script:
   - ls
   - cd cems.API
-  - docker-compose build 
-  - docker-compose up
+  - sudo docker-compose build 
+  - sudo docker-compose up
