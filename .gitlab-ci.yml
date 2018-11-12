@@ -1,5 +1,7 @@
 stages:
   test
+  pokus
+  
 job1:
   stage: test
   script:
