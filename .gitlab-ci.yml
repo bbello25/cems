@@ -1,3 +1,5 @@
+stages:
+  test
 job1:
     stage: test
 script:
