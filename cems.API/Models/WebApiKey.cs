@@ -10,8 +10,8 @@ namespace cems.API.Models
         public string ApiKey { get; set; }
 
         public ICollection<TrustedHost> TrustedHosts { get; set; }
-        public ICollection<LogEntry> LogEntries { get; set; }
-
+        public ICollection<ErrorLogBase> LogEntries { get; set; }
+        
         [JsonIgnore] public User User { get; set; }
         [JsonIgnore] public int UserId { get; set; }
     }

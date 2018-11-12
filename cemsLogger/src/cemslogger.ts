@@ -1,14 +1,21 @@
-export default class Logger {
+export class Logger {
   endPointUrl: string
   private apiKey: string
 
   constructor(endPointUrl: string, apiKey: string) {
-    this.endPointUrl = 'http://' + endPointUrl + '/api/log'
+    this.endPointUrl = 'http://' + endPointUrl + '/api/log/browserError'
     this.apiKey = apiKey
   }
 
-  log(error: Error) {
-    console.log(error)
+  log(name: String, error: Error) {
+    const errorLog = {
+      name: error.name,
+      source: name,
+      message: error.message,
+      stacktrace: error.stack,
+      timestamp: new Date().toLocaleString()
+    }
+
     fetch(this.endPointUrl, {
       method: 'post',
       headers: {
@@ -16,7 +23,7 @@ export default class Logger {
         'Content-Type': 'application/json',
         'api-key': this.apiKey
       },
-      body: JSON.stringify(error)
+      body: JSON.stringify(errorLog)
     })
       .then(res => res.json())
       .then(res => console.log(res))

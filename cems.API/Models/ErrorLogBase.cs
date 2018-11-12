@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace cems.API.Models
 {
-    public class LogEntry
+    public class ErrorLogBase
     {
         public int Id { get; set; }
         public string Message { get; set; }
@@ -13,6 +13,7 @@ namespace cems.API.Models
         public string Source { get; set; }
         public DateTime Timestamp { get; set; }
         public string ProgLanguage { get; set; }
+        public String Protocol { get; set; }
 
         [JsonIgnore] public int WebApiKeyId { get; set; }
         [JsonIgnore] public WebApiKey WebApiKey { get; set; }

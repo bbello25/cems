@@ -1,9 +1,12 @@
-namespace cems.Collector.DTO
+using System;
+
+namespace cems.API.Dtos.EndpointDTOs
 {
-    public class LogEntryForSaveDTO
+    public class ErrorForSaveBaseDto
     {
         public string Message { get; set; }
         public string StackTrace { get; set; }
         public string Source { get; set; }
+        public string Timestamp { get; set; }
     }
 }

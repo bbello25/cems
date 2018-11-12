@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace cems.API.Migrations
 {
-    public partial class dockerInit : Migration
+    public partial class changedToHierarchy : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -176,7 +176,7 @@ namespace cems.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "LogEntries",
+                name: "ErrorLog",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -186,20 +186,25 @@ namespace cems.API.Migrations
                     Source = table.Column<string>(nullable: true),
                     Timestamp = table.Column<DateTime>(nullable: false),
                     ProgLanguage = table.Column<string>(nullable: true),
+                    Protocol = table.Column<string>(nullable: true),
                     WebApiKeyId = table.Column<int>(nullable: false),
-                    UserId = table.Column<int>(nullable: true)
+                    ErrorLogType = table.Column<int>(nullable: false),
+                    UserId = table.Column<int>(nullable: true),
+                    UserAgent = table.Column<string>(nullable: true),
+                    Referer = table.Column<string>(nullable: true),
+                    Origin = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LogEntries", x => x.Id);
+                    table.PrimaryKey("PK_ErrorLog", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_LogEntries_AspNetUsers_UserId",
+                        name: "FK_ErrorLog_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_LogEntries_WebApiKeys_WebApiKeyId",
+                        name: "FK_ErrorLog_WebApiKeys_WebApiKeyId",
                         column: x => x.WebApiKeyId,
                         principalTable: "WebApiKeys",
                         principalColumn: "Id",
@@ -266,13 +271,13 @@ namespace cems.API.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LogEntries_UserId",
-                table: "LogEntries",
+                name: "IX_ErrorLog_UserId",
+                table: "ErrorLog",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LogEntries_WebApiKeyId",
-                table: "LogEntries",
+                name: "IX_ErrorLog_WebApiKeyId",
+                table: "ErrorLog",
                 column: "WebApiKeyId");
 
             migrationBuilder.CreateIndex(
@@ -305,7 +310,7 @@ namespace cems.API.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "LogEntries");
+                name: "ErrorLog");
 
             migrationBuilder.DropTable(
                 name: "TrustedHosts");

@@ -14,7 +14,7 @@ namespace cems.API.Data
         {
         }
 
-        public DbSet<LogEntry> LogEntries { get; set; }
+        public DbSet<ErrorLogBase> LogEntries { get; set; }
         public DbSet<WebApiKey> WebApiKeys { get; set; }
         public DbSet<TrustedHost> TrustedHosts { get; set; }
 
@@ -33,7 +33,7 @@ namespace cems.API.Data
 
             modelBuilder.Entity<UserRole>(userRole =>
             {
-                userRole.HasKey(ur => new {ur.UserId, ur.RoleId}); 
+                userRole.HasKey(ur => new {ur.UserId, ur.RoleId});
 
                 userRole.HasOne(ur => ur.Role)
                     .WithMany(r => r.UserRoles)
@@ -46,10 +46,7 @@ namespace cems.API.Data
                     .IsRequired();
             });
 
-            modelBuilder.Entity<User>(user =>
-            {
-                user.HasOne(u => u.WebApiKey).WithOne(w => w.User).IsRequired();
-            });
+            modelBuilder.Entity<User>(user => { user.HasOne(u => u.WebApiKey).WithOne(w => w.User).IsRequired(); });
 
             modelBuilder.Entity<WebApiKey>(webApiKey =>
             {
@@ -63,10 +60,22 @@ namespace cems.API.Data
 
             modelBuilder.Entity<TrustedHost>(trustedHost =>
             {
-                trustedHost.HasOne(t => t.WebApiKey).WithMany(w => w.TrustedHosts).HasForeignKey(t => t.WebApiKeyId);
+                trustedHost.HasOne(t => t.WebApiKey).WithMany(w => w.TrustedHosts)
+                    .HasForeignKey(t => t.WebApiKeyId);
             });
 
-            modelBuilder.Entity<LogEntry>(logEntry => { logEntry.HasOne(e => e.WebApiKey).WithMany(w => w.LogEntries); });
+            modelBuilder.Entity<ErrorLogBase>(logEntry =>
+            {
+                logEntry.HasOne(e => e.WebApiKey).WithMany(w => w.LogEntries);
+            });
+
+            modelBuilder.Entity<ErrorLogBase>()
+                .ToTable("ErrorLog")
+                .HasDiscriminator<int>("ErrorLogType")
+                .HasValue<ErrorLogBase>(1)
+                .HasValue<BrowserErrorLog>(2);
+
+
         }
     }
 }

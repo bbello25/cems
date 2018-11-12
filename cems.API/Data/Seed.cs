@@ -48,7 +48,7 @@ namespace cems.API.Data
                     WebApiKey = webApiKey
                 };
 
-                IdentityResult result = _userManger.CreateAsync(adminUser, "password").Result;
+                IdentityResult result = _userManger.CreateAsync(adminUser, "Pa$$w0rD").Result;
 
                 if (result.Succeeded)
                 {

@@ -19,15 +19,19 @@ namespace cems.API.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("cems.API.Models.LogEntry", b =>
+            modelBuilder.Entity("cems.API.Models.ErrorLogBase", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("ErrorLogType");
+
                     b.Property<string>("Message");
 
                     b.Property<string>("ProgLanguage");
+
+                    b.Property<string>("Protocol");
 
                     b.Property<string>("Source");
 
@@ -45,7 +49,9 @@ namespace cems.API.Migrations
 
                     b.HasIndex("WebApiKeyId");
 
-                    b.ToTable("LogEntries");
+                    b.ToTable("ErrorLog");
+
+                    b.HasDiscriminator<int>("ErrorLogType").HasValue(1);
                 });
 
             modelBuilder.Entity("cems.API.Models.Role", b =>
@@ -243,7 +249,24 @@ namespace cems.API.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("cems.API.Models.LogEntry", b =>
+            modelBuilder.Entity("cems.API.Models.BrowserErrorLog", b =>
+                {
+                    b.HasBaseType("cems.API.Models.ErrorLogBase");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Origin");
+
+                    b.Property<string>("Referer");
+
+                    b.Property<string>("UserAgent");
+
+                    b.ToTable("BrowserErrorLog");
+
+                    b.HasDiscriminator().HasValue(2);
+                });
+
+            modelBuilder.Entity("cems.API.Models.ErrorLogBase", b =>
                 {
                     b.HasOne("cems.API.Models.User")
                         .WithMany("LogEntries")
