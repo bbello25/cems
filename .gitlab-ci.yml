@@ -1,6 +1,6 @@
 stages:
   test
 job1:
-    stage: test
-script:
-- echo "prvni prikaz"
+  stage: test
+  script:
+  - echo "prvni prikaz"
