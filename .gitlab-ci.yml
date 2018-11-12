@@ -1,0 +1,10 @@
+stages:
+  - test
+  
+job1:
+  stage: test
+  script:
+  - ls
+  - cd cems.API
+  - sudo docker-compose build 
+  - sudo docker-compose up
