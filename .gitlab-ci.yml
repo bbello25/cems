@@ -4,4 +4,5 @@ stages:
 job1:
   stage: test
   script:
-  - echo "prvni prikaz"
+  - docker-compose build cems.API/
+  - docker-compose up cems.API/
