@@ -4,5 +4,7 @@ stages:
 job1:
   stage: test
   script:
-  - docker-compose build cems.API/
-  - docker-compose up cems.API/
+  - ls
+  - cd cems.API
+  - docker-compose build 
+  - docker-compose up
