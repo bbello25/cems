@@ -1,6 +1,5 @@
 stages:
-  test
-  pokus
+  - test
   
 job1:
   stage: test
