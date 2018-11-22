@@ -1,5 +1,5 @@
 import { ErrorHandler, Injectable } from '@angular/core';
-import { Logger } from 'cemslogger';
+// import { Logger } from 'cemslogger';
 
 const { name: name } = require('../../package.json');
 import * as StackTrace from 'stacktrace-js';
@@ -24,8 +24,8 @@ export class GlobalErrorHandler implements ErrorHandler {
     });
 
 
-    const logger = new Logger('localhost:5000', 'wfrrqzens9');
-    logger.log(name, error);
+    // const logger = new Logger('localhost:5000', 'wfrrqzens9');
+    // logger.log(name, error);
 
     throw error;
 
