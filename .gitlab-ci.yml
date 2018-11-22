@@ -11,3 +11,6 @@ job1:
   - cd ../cems.API
   - sudo docker-compose build 
   - sudo docker-compose up
+  cache:
+    paths:
+      - node_modules/
