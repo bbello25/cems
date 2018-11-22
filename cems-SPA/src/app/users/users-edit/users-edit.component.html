@@ -1,0 +1,119 @@
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-sm-">
+            <h1>Your Profile</h1>
+        </div>
+        <div class="col-sm-8">
+            <!-- <div *ngIf="editForm.dirty" class="alert alert-info">
+              <strong>Information:</strong> You have made changes.  Any unsaved changes will be lost!
+            </div> -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4 text-center">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Api Key</h4>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <p>{{user.webApiKey.apiKey}}</p>
+                    </div>
+
+                </div>
+                <!-- <div class="card-footer">
+                  <button [disabled]="!editForm.dirty" form="editForm" class="btn btn-success btn-block">Save Changes</button>
+                </div> -->
+            </div>
+        </div>
+        <div class="col-sm-8 text-center">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Trusted Host</h3>(Not Working)
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-10">
+                            <form #trustedHosts="ngForm">
+                                <input type="text" class="w-75" [(ngModel)]="hostToAdd.host" name="hostToAdd"
+                                       placeholder="Host">
+                            </form>
+                        </div>
+                        <div class="col-sm-2">
+                            <button class="btn btn-success" (click)="AddHost()" form="trustedHosts" type="submit">Add
+                            </button>
+                        </div>
+
+                    </div>
+                    <div *ngFor="let host of user.webApiKey.trustedHosts" class="row p-1 m-1">
+                        <div class="col-sm-10"><input type="text" name="host" disabled value="{{host.host}}"></div>
+                        <div class="col-sm-2">
+                            <button class="btn btn-danger" (click)="AddHost()" type="submit">Remove</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row m-2 justify-content-end">
+        <div class="col-6 ">
+            <form [formGroup]="userForm" #f="ngForm" (submit)="updateUser(userForm)">
+                <div class="form-group">
+                    <label for="username">username</label>
+                    <input id="username" type="text" formControlName="username"
+                           class="form-control"
+                           [ngClass]="{ 'is-invalid': submitted && f.username.errors }"/>
+                    <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+                        <div *ngIf="f.username.errors.required">Username is required</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input [readonly]="!editMode" type="text" formControlName="firstName" class="form-control"/>
+                    <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
+                        <div *ngIf="f.firstName.errors.required">First Name is required</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input [readonly]="!editMode" id="lastName" type="text" formControlName="lastName"
+                           class="form-control"/>
+                    <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
+                        <div *ngIf="f.lastName.errors.required">Last Name is required</div>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input [readonly]="!editMode" id="email" type="email" formControlName="email" class="form-control"
+                           [ngClass]="{ 'is-invalid': submitted && f.email.errors }"/>
+                    <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                        <div *ngIf="f.email.errors.required">Email is required</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="phoneNumber">Phone number</label>
+                    <input [readonly]="!editMode" id="phoneNumber" type="email" formControlName="phoneNumber"
+                           class="form-control"
+                           [ngClass]="{ 'is-invalid': submitted && f.phoneNumber.errors }"/>
+                    <div *ngIf="submitted && f.phoneNumber.errors" class="invalid-feedback">
+                        <div *ngIf="f.phoneNumber.errors.required">Phone number is required</div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <button *ngIf="editMode" class="btn btn-success  m-2 float-right" type="submit">Submit</button>
+                    <button type="button" (click)="toggleEditMode()"
+                            [className]="!editMode ? 'btn float-right btn-warning' : 'btn  m-2 float-right btn-danger'"
+                    >{{!editMode ? 'Edit' : 'Cancel' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

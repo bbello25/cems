@@ -1,0 +1,56 @@
+<div *ngIf="log$ | async as log">
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col col-2">
+                <h1>{{log.name}}</h1>
+            </div>
+        </div>
+
+        <div *ngIf="!isNullOrEmpty(log.timestamp)" class="row">
+            <div class="col p-2 m-2">{{ log.timestamp | date: 'medium' }}</div>
+        </div>
+        <div *ngIf="!isNullOrEmpty(log.message)" class="card">
+            <div class="card-header">
+                Message
+            </div>
+            <div class="card-body">
+                {{log.message}}
+            </div>
+        </div>
+
+        <div *ngIf="!isNullOrEmpty(log.stackTrace)" class="card my-3">
+            <div class="card-header">
+                StackTrace
+            </div>
+            <div class="card-body">
+                {{log.stackTrace}}
+            </div>
+        </div>
+
+        <div *ngIf="!isNullOrEmpty([log.userAgent, log.referer, log.origin])" class="card my-3">
+            <div class="card-header">
+                Headers
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <tbody>
+                    <tr *ngIf="!isNullOrEmpty(log.userAgent)">
+                        <td>User-Agent</td>
+                        <td>{{log.userAgent}}</td>
+                    </tr>
+                    <tr *ngIf="!isNullOrEmpty(log.referer)">
+                        <td>Referer</td>
+                        <td>{{log.referer}}</td>
+                    </tr>
+                    <tr *ngIf="!isNullOrEmpty(log.origin)">
+                        <td>Origin</td>
+                        <td>{{log.origin}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>

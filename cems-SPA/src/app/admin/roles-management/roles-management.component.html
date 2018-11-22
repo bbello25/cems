@@ -1,0 +1,39 @@
+<div class="row">
+    <table class="table border text-center">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let role of (roles$ | async)">
+            <td>{{role.id}}</td>
+            <td>{{role.name}}</td>
+            <td>
+                <button [disabled]="canDeleteRole(role.name)" class="btn btn-danger"
+                        (click)="deleteRole(role.id, role.name)">Delete
+                </button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <form id="addRoleForm" #addRoleForm="ngForm" (ngSubmit)="addRole()">
+                    <div class="form-group">
+                        <input type="text" class="form-control" required name="roleName" [(ngModel)]="roleToAdd"
+                               placeholder="Role name">
+                    </div>
+                </form>
+            </td>
+            <td>
+                <button class="btn btn-success mr-2" form="addRoleForm" type="submit">Add</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="row">
+
+
+</div>

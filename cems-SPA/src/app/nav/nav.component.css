@@ -1,0 +1,10 @@
+.dropdown-toggle, .dropdown-item {
+    cursor:pointer;
+}
+.navbar-light .navbar-nav .nav-link {
+    color: white;
+}
+
+.navbar-brand {
+    color: white;
+}

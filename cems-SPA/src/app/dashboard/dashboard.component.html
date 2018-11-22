@@ -1,0 +1,29 @@
+<div class="container p-3 text-center">
+  <!--
+    <div class="row">
+        <div class="col">
+            <app-log-list [logs]="logs"></app-log-list>
+        </div>
+    </div>
+  -->
+  <table class="table table-stripped table-hover table-bordered">
+    <thead class="thead-light">
+      <tr>
+        <th>Id</th>
+        <th>Message</th>
+        <th>Source</th>
+        <th>Timestamp</th>
+        <th>Programming language</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let log of (logs$ | async)" [routerLink]="['/logDetails', log.id]">
+        <td>{{ log.id }}</td>
+        <td>{{ log.message }}</td>
+        <td>{{ log.source }}</td>
+        <td>{{ log.timestamp | date: 'medium' }}</td>
+        <td>{{ log.progLanguage }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

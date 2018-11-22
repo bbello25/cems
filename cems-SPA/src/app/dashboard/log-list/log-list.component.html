@@ -1,0 +1,20 @@
+<table class="table table-stripped table-hover table-bordered">
+  <thead class="thead-light">
+    <tr>
+      <th>Id</th>
+      <th>Message</th>
+      <th>Source</th>
+      <th>Timestamp</th>
+      <th>Programming language</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let log of logs" [routerLink]="['/logDetails', log.id]">
+      <td>{{log.id}}</td>
+      <td>{{log.message}}</td>
+      <td>{{log.source}}</td>
+      <td>{{log.timestamp | date:'medium'}}</td>
+      <td>{{log.progLanguage}}</td>
+    </tr>
+  </tbody>
+</table>
