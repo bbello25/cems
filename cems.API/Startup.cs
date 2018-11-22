@@ -49,7 +49,7 @@ namespace cems.API
                     }
             ));*/
 
-            services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("MssqlDocker")));
+            services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Docker")));
 
             //change for prod
             IdentityBuilder builder = services.AddIdentityCore<User>(opt =>
