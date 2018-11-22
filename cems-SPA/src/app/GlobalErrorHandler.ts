@@ -10,7 +10,7 @@ import { log } from 'util';
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
   url = 'http://localhost:5000/api/log/browserError';
-  apiKey = 'k1n3te68fw';
+  apiKey = 'oifkk97xcl';
 
   constructor(private authservice: AuthService) {
 
