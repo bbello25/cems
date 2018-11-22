@@ -1,0 +1,8 @@
+docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=Bello1+25B" -p 1433:1433 -d microsoft/mssql-server-linux:latest
+
+sudo docker run --name cemsDB \
+   -e 'ACCEPT_EULA=Y' -e 'MSSQL_SA_PASSWORD=Bello1+25B' \
+   -p 1433:1433 \
+   -d microsoft/mssql-server-linux:latest
+   
+   sudo docker container start cemsDB

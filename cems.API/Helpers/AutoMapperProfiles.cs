@@ -28,7 +28,8 @@ namespace cems.API.Helpers
             CreateMap<User, UserForListDTO>();
             CreateMap<ErrorLogBase, LogEntryForListDTO>();
             CreateMap<User, UserForDetailedDTO>();
-            CreateMap<UserForRegisterDTO, User>();
+            CreateMap<UserForDetailedDTO, User>();
+            CreateMap<UserForRegisterDto, User>();
         }
     }
 }

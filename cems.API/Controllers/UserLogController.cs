@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -31,12 +32,21 @@ namespace cems.API.Controllers
             var username = User.FindFirst(ClaimTypes.Name).Value;
             var userFromDb = await _context.Users.Include(u => u.WebApiKey)
                 .Where(u => u.NormalizedUserName == username.ToUpper()).FirstOrDefaultAsync();
+            if (userFromDb == null)
+                return NotFound();
+            List<ErrorLogBase> logs;
+            if (await _userManager.IsInRoleAsync(userFromDb, "admin"))
+            {
+                logs = await _context.LogEntries.Include(log => log.WebApiKey)
+                    .ThenInclude(webApikey => webApikey.User).ToListAsync();
+            }
+            else
+            {
+                logs = await _context.LogEntries.Include(l => l.WebApiKey)
+                    .Where(l => l.WebApiKeyId == userFromDb.WebApiKey.Id).ToListAsync();
+            }
 
-            var logs = await _context.LogEntries.Include(l => l.WebApiKey)
-                .Where(l => l.WebApiKeyId == userFromDb.WebApiKey.Id).ToListAsync();
 
-  
-            
             return Ok(logs);
         }
 

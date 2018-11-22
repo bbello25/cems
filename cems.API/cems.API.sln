@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cems.API", "cems.API.csproj", "{1937BC91-B7F9-422B-BF00-4266360C5429}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cems.Logger-csharp", "..\cems.Logger-csharp\cems.Logger-csharp.csproj", "{F5B8DC9C-FC46-468A-A2A8-E9829AB4F3C0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cems.ExampleApp-csharp", "..\cems.ExampleApp-csharp\cems.ExampleApp-csharp.csproj", "{12F77E00-36CD-439C-8D4A-AFC3782390ED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{1937BC91-B7F9-422B-BF00-4266360C5429}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1937BC91-B7F9-422B-BF00-4266360C5429}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1937BC91-B7F9-422B-BF00-4266360C5429}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5B8DC9C-FC46-468A-A2A8-E9829AB4F3C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5B8DC9C-FC46-468A-A2A8-E9829AB4F3C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5B8DC9C-FC46-468A-A2A8-E9829AB4F3C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5B8DC9C-FC46-468A-A2A8-E9829AB4F3C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12F77E00-36CD-439C-8D4A-AFC3782390ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12F77E00-36CD-439C-8D4A-AFC3782390ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12F77E00-36CD-439C-8D4A-AFC3782390ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12F77E00-36CD-439C-8D4A-AFC3782390ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

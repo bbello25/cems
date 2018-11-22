@@ -1,10 +1,12 @@
 stages:
-  - test
+  - build
   
 job1:
-  stage: test
+  stage: build
   script:
   - ls
-  - cd cems.API
+  - cd cems-SPA
+  - ng build --prod
+  - cd ../cems.API
   - sudo docker-compose build 
-  - sudo docker-compose up -d
+  - sudo docker-compose up

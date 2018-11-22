@@ -40,9 +40,9 @@ namespace cems.API.Controllers
         }
 
         [HttpPost("Register")]
-        public async Task<IActionResult> Register(UserForRegisterDTO userForRegisterDTO)
+        public async Task<IActionResult> Register(UserForRegisterDto userForRegisterDto)
         {
-            var userToCreate = _mapper.Map<User>(userForRegisterDTO);
+            var userToCreate = _mapper.Map<User>(userForRegisterDto);
 
             var generator = new ApiKeyGenerator(_dataContext);
             userToCreate.WebApiKey = new WebApiKey
@@ -50,7 +50,7 @@ namespace cems.API.Controllers
                 ApiKey = generator.GenerateApiKey()
             };
 
-            var result = await _userManager.CreateAsync(userToCreate, userForRegisterDTO.Password);
+            var result = await _userManager.CreateAsync(userToCreate, userForRegisterDto.Password);
 
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
@@ -70,14 +70,16 @@ namespace cems.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserForLoginDTO userForLoginDto)
         {
-            var user = await _userManager.FindByNameAsync(userForLoginDto.UserName);
+            var user = await _userManager.FindByNameAsync(userForLoginDto.Username);
+            if (user == null)
+                return Unauthorized();
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, userForLoginDto.Password, false);
 
             if (result.Succeeded)
             {
                 var appUser = await _userManager.Users.FirstOrDefaultAsync(u =>
-                    u.NormalizedUserName == userForLoginDto.UserName.ToUpper());
+                    u.NormalizedUserName == userForLoginDto.Username.ToUpper());
 
                 var userToReturn = _mapper.Map<UserForListDTO>(appUser);
 

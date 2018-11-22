@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using cems.API.Data;
@@ -17,11 +18,13 @@ namespace cems.API.Controllers
     {
         private readonly DataContext _context;
         private readonly UserManager<User> _userManager;
+        private readonly RoleManager<Role> _roleManager;
 
-        public AdminController(DataContext context, UserManager<User> userManager)
+        public AdminController(DataContext context, UserManager<User> userManager, RoleManager<Role> roleManager)
         {
             _context = context;
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         [HttpGet("usersWithRoles")]
@@ -32,20 +35,19 @@ namespace cems.API.Controllers
                 select new
                 {
                     Id = user.Id,
-                    UserName = user.UserName,
+                    Username = user.UserName,
                     Roles = (from userRole in user.UserRoles
                         join role in _context.Roles on userRole.RoleId equals role.Id
                         select role.Name).ToList()
                 }).ToListAsync();
             return Ok(userList);
         }
-        
-        [HttpPost("editRoles/{userName}")]
+
+        [HttpPut("{username}")]
         public async Task<IActionResult> EditRoles(string username, RoleEditDTO roleEditDto)
         {
             var user = await _userManager.FindByNameAsync(username);
-
-            var userRoles =await _userManager.GetRolesAsync(user);
+            var userRoles = await _userManager.GetRolesAsync(user);
 
             var selectedRoles = roleEditDto.RoleNames;
 
@@ -64,7 +66,8 @@ namespace cems.API.Controllers
                 BadRequest("Failed to remove the roles");
             }
 
-            return Ok(await _userManager.GetRolesAsync(user));
+            var roles = await _userManager.GetRolesAsync(user);
+            return roles != null ? Ok() : StatusCode(500);
         }
 
         [HttpDelete("delete/{userName}")]
@@ -83,10 +86,8 @@ namespace cems.API.Controllers
             {
                 return BadRequest("Failed to delete user");
             }
-            
-            return Ok();
 
+            return Ok();
         }
-        
     }
 }

@@ -48,7 +48,7 @@ namespace cems.API
                     }
             ));*/
 
-            services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Docker")));
+            services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("MssqlDocker")));
 
             //change for prod
             IdentityBuilder builder = services.AddIdentityCore<User>(opt =>
@@ -57,6 +57,7 @@ namespace cems.API
                 opt.Password.RequiredLength = 6;
                 opt.Password.RequireNonAlphanumeric = false;
                 opt.Password.RequireUppercase = true;
+                opt.Password.RequireLowercase = true;
             });
 
             builder = new IdentityBuilder(builder.UserType, typeof(Role), builder.Services);
@@ -140,7 +141,7 @@ namespace cems.API
             {
                 routes.MapSpaFallbackRoute(
                     name: "spa-fallback",
-                    defaults: new { controller = "Fallback", action = "Inderx" }
+                    defaults: new { controller = "Fallback", action = "Index" }
 
                 );
             });
