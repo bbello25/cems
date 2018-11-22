@@ -6,7 +6,7 @@ job1:
   script:
   - ls
   - cd cems-SPA
-  - npm install
+#  - npm install
   - ng build --prod
   - cd ../cems.API
   - sudo docker-compose build 
