@@ -8,6 +8,7 @@ import { MemberEditResolver } from './_resolvers/user-edit.resolver';
 import { LogDetailComponent } from './dashboard/log-detail/log-detail.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { ErrorThrowComponent } from './error-throw/error-throw.component';
 
 export const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -19,6 +20,7 @@ export const appRoutes: Routes = [
     children: [
       { path: '', component: DashboardComponent },
       { path: 'dashboard', component: DashboardComponent },
+      { path: 'throwError', component: ErrorThrowComponent },
       {
         path: 'user/edit',
         component: UsersEditComponent,

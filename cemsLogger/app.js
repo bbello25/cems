@@ -1,15 +1,12 @@
 import Logger from './dist/cemslogger.es5.js'
-import StrackTrace from './node_modules/stack-trace'
 
-//const logger = new Logger('localhost:5000', 'fudlis0k4b')
+const logger = new Logger('localhost:5000', 'k1n3te68fw')
 
 window.onerror = (msg, url, lineNo, columnNo, error) => {
   const _string = msg.toLowerCase()
   const substring = 'script error'
 
 
-  StackTrace.fromError(error)
-    .then(console.log);
 
   if (_string.indexOf(substring) > -1) {
     alert('Script Error: See Browser Console for Detail')
@@ -22,7 +19,7 @@ window.onerror = (msg, url, lineNo, columnNo, error) => {
       timestamp: "Nov 5, 2018, 8:25:32 PM"
     }
 
-    // logger.logString(errorData)
+     logger.logString(errorData)
   }
 
   return false

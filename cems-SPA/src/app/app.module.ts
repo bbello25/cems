@@ -33,6 +33,7 @@ import {AlertifyService} from './_services/alertify.service';
 import { RolesManagementComponent } from './admin/roles-management/roles-management.component';
 import { LoginComponent } from './login/login.component';
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
+import { ErrorThrowComponent } from './error-throw/error-throw.component';
 
 export function tokenGetter() {
     return localStorage.getItem('token');
@@ -56,6 +57,7 @@ export function tokenGetter() {
         RolesManagementComponent,
         LoginComponent,
         ConfirmModalComponent,
+        ErrorThrowComponent,
     ],
     imports: [
         BrowserModule,

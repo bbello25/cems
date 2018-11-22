@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,7 +49,7 @@ namespace cems.API
                     }
             ));*/
 
-            services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Docker")));
+            services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("MssqlDocker")));
 
             //change for prod
             IdentityBuilder builder = services.AddIdentityCore<User>(opt =>
@@ -145,6 +146,12 @@ namespace cems.API
 
                 );
             });
+            
+            /*app.Run( async (context) =>
+            {
+                context.Response.ContentType = "text/html";
+                await context.Response.SendFileAsync(Path.Combine(env.WebRootPath,"index.html"));
+            });*/
             /*app.UseSignalR((options) =>
              {
                  options.MapHub<LoggerHub>("/Hubs/Logger");
