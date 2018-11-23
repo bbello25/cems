@@ -47,6 +47,6 @@ export class LogDetailComponent implements OnInit {
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
     this.log$ = this.logService.getLog(this.id);
-    this.log$.subscribe(log => console.log(log));
+    // this.log$.subscribe(log => console.log(log));
   }
 }

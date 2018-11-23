@@ -54,7 +54,7 @@ export class GlobalErrorHandler implements ErrorHandler {
       headers: {
         Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
-        'api-key': this.currentUser.user.webApiKey
+        'api-key': this.currentUser.webApiKey.apiKey
       },
       body: JSON.stringify(errorLog)
     })

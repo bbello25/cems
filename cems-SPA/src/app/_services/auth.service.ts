@@ -5,6 +5,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { User } from '../_models/user';
 import { environment } from '../../environments/environment';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { WebApiKey } from '../_models/webApiKey';
 
 @Injectable({
   providedIn: 'root'
@@ -33,8 +34,14 @@ export class AuthService {
         // login successful if there's a jwt token in the response
         if (user && user.token) {
           // store user details and jwt token in local storage to keep user logged in between page refreshes
-          localStorage.setItem('token', user.token);
-          localStorage.setItem('currentUser', JSON.stringify(user));
+          const userToSave = new User();
+          userToSave.id = user.user.id;
+          userToSave.username = user.user.username;
+          const webApiKey = new WebApiKey();
+          webApiKey.apiKey = user.user.webApiKey;
+          userToSave.webApiKey = webApiKey;
+          userToSave.token = user.token;
+          localStorage.setItem('currentUser', JSON.stringify(userToSave));
           this.decodedToken = this.jwtHelper.decodeToken(user.token);
           this.currentUserSubject.next(user.user);
         }
@@ -49,14 +56,13 @@ export class AuthService {
   logout() {
     // remove user from local storage to log user out
     localStorage.removeItem('currentUser');
-    localStorage.removeItem('token');
     this.currentUserSubject.next(null);
     this.decodedToken = null;
   }
 
   loggedIn() {
-    const token = localStorage.getItem('token');
-    return !this.jwtHelper.isTokenExpired(token);
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    return !this.jwtHelper.isTokenExpired(user.token);
   }
 
   roleMatch(allowedRoles): boolean {
