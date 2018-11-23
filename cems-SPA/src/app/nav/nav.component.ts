@@ -10,16 +10,13 @@ import { User } from '../_models/user';
   styleUrls: ['./nav.component.css']
 })
 export class NavComponent implements OnInit {
-  currentUser: User;
 
 
   constructor(
     public authService: AuthService,
     private router: Router,
     private alertify: AlertifyService
-  ) {
-    this.authService.currentUser.subscribe(x => this.currentUser = x);
-  }
+  ) {}
 
   ngOnInit() {
   }

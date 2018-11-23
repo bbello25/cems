@@ -17,7 +17,7 @@ export class GlobalErrorHandler implements ErrorHandler {
   currentUser: User;
 
   constructor(private authService: AuthService, private alertify: AlertifyService) {
-    this.authService.currentUser.subscribe(x => this.currentUser = x);
+    // this.authService.currentUser.subscribe(x => this.currentUser = x);
   }
 
   handleError(error) {
@@ -40,7 +40,7 @@ export class GlobalErrorHandler implements ErrorHandler {
   }
 
   log(error: Error) {
-    this.authService.currentUser.subscribe(x => this.currentUser = x);
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     const errorLog = {
       name: error.name,
       source: name,

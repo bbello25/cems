@@ -23,7 +23,7 @@ export class RegisterComponent implements OnInit {
     private userService: UserService,
     private alertify: AlertifyService
   ) {
-    if (this.authService.currentUserValue) {
+    if (this.authService.currentUser) {
       this.router.navigate(['/']);
     }
   }

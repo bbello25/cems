@@ -15,19 +15,17 @@ export class AppComponent implements OnInit {
   jwtHelper = new JwtHelperService();
   currentUser: User;
 
-  constructor(private authService: AuthService) {
-    this.authService.currentUser.subscribe(x => this.currentUser = x);
-  }
+  constructor(private authService: AuthService) {}
 
   ngOnInit() {
     const token = localStorage.getItem('token');
-    // const user: User = JSON.parse(localStorage.getItem('user'));
     if (token) {
       this.authService.decodedToken = this.jwtHelper.decodeToken(token);
     }
 
-    // if (user) {
-    //   this.authService.currentUser = user;
-    // }
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    if (user) {
+      this.authService.currentUser = user;
+    }
   }
 }

@@ -6,6 +6,7 @@ import { User } from '../_models/user';
 import { environment } from '../../environments/environment';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { WebApiKey } from '../_models/webApiKey';
+import { Local } from 'protractor/built/driverProviders';
 
 @Injectable({
   providedIn: 'root'
@@ -14,39 +15,42 @@ export class AuthService {
   baseUrl = environment.apiUrl + 'auth/';
   jwtHelper = new JwtHelperService();
   decodedToken: any;
+  currentUser: User;
 
-  private currentUserSubject: BehaviorSubject<User>;
-  public currentUser: Observable<User>;
 
   constructor(private http: HttpClient) {
-    this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
-    this.currentUser = this.currentUserSubject.asObservable();
   }
 
-  public get currentUserValue(): User {
-    return this.currentUserSubject.value;
-  }
+  // public get currentUserValue(): User {
+  //   return this.currentUserSubject.value;
+  // }
 
 
   login(username: string, password: string) {
     return this.http.post<any>(this.baseUrl + 'login', { username, password })
-      .pipe(map(user => {
-        // login successful if there's a jwt token in the response
-        if (user && user.token) {
-          // store user details and jwt token in local storage to keep user logged in between page refreshes
-          const userToSave = new User();
-          userToSave.id = user.user.id;
-          userToSave.username = user.user.username;
-          const webApiKey = new WebApiKey();
-          webApiKey.apiKey = user.user.webApiKey;
-          userToSave.webApiKey = webApiKey;
-          userToSave.token = user.token;
-          localStorage.setItem('currentUser', JSON.stringify(userToSave));
-          this.decodedToken = this.jwtHelper.decodeToken(user.token);
-          this.currentUserSubject.next(user.user);
+      .pipe(map(response => {
+        if (response && response.token) {
+          if (response.user) {
+            const userToSave = this.userFromToken(response.user);
+            localStorage.setItem('currentUser', JSON.stringify(userToSave));
+            this.currentUser = userToSave;
+          }
+          localStorage.setItem('token', response.token);
+          this.decodedToken = this.jwtHelper.decodeToken(response.token);
         }
-        return user;
+        return response;
       }));
+  }
+
+  userFromToken(userFromToken): User {
+    const user = new User();
+    user.id = userFromToken.id;
+    user.username = userFromToken.username;
+    const webApiKey = new WebApiKey();
+    webApiKey.apiKey = userFromToken.webApiKey;
+    user.webApiKey = webApiKey;
+    user.token = userFromToken.token;
+    return user;
   }
 
   register(model: any) {
@@ -56,16 +60,14 @@ export class AuthService {
   logout() {
     // remove user from local storage to log user out
     localStorage.removeItem('currentUser');
-    this.currentUserSubject.next(null);
+    localStorage.removeItem('token');
     this.decodedToken = null;
+    this.currentUser = null;
   }
 
   loggedIn() {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    if (!user) {
-      return false;
-    }
-    return !this.jwtHelper.isTokenExpired(user.token);
+    const token = localStorage.getItem('token');
+    return !this.jwtHelper.isTokenExpired(token);
   }
 
   roleMatch(allowedRoles): boolean {
