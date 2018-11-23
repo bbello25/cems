@@ -34,6 +34,7 @@ import { RolesManagementComponent } from './admin/roles-management/roles-managem
 import { LoginComponent } from './login/login.component';
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 import { ErrorThrowComponent } from './error-throw/error-throw.component';
+import { environment } from '../environments/environment';
 
 export function tokenGetter() {
     return localStorage.getItem('token');
@@ -71,8 +72,8 @@ export function tokenGetter() {
         JwtModule.forRoot({
             config: {
                 tokenGetter: tokenGetter,
-                whitelistedDomains: ['localhost:5000'],
-                blacklistedRoutes: ['localhost:5000/api/auth']
+                whitelistedDomains: [environment.whitelistedDomain],
+                blacklistedRoutes: [environment.blacklistedRoute]
             }
         })
     ],
