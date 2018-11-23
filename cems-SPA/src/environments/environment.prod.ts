@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'api/'
+  apiUrl: 'https://cems.sde.cz:5443/api/'
 };
