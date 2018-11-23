@@ -35,7 +35,7 @@ namespace cems.API.Controllers
             if (userFromDb == null)
                 return NotFound();
             List<ErrorLogBase> logs;
-            if (await _userManager.IsInRoleAsync(userFromDb, "admin"))
+            if (await _userManager.IsInRoleAsync(userFromDb, "Admin"))
             {
                 logs = await _context.LogEntries.Include(log => log.WebApiKey)
                     .ThenInclude(webApikey => webApikey.User).ToListAsync();
@@ -45,8 +45,7 @@ namespace cems.API.Controllers
                 logs = await _context.LogEntries.Include(l => l.WebApiKey)
                     .Where(l => l.WebApiKeyId == userFromDb.WebApiKey.Id).ToListAsync();
             }
-
-
+            
             return Ok(logs);
         }
 
@@ -57,13 +56,20 @@ namespace cems.API.Controllers
             var userFromDb = await _context.Users.Include(u => u.WebApiKey)
                 .Where(u => u.NormalizedUserName == username.ToUpper()).FirstOrDefaultAsync();
 
-            var log = await _context.LogEntries.Include(l => l.WebApiKey)
-                .Where(l => l.WebApiKeyId == userFromDb.WebApiKey.Id && l.Id == id).FirstOrDefaultAsync();
-
+            ErrorLogBase log;
+            if (await _userManager.IsInRoleAsync(userFromDb, "Admin"))
+            {
+                log = await _context.LogEntries.FirstOrDefaultAsync(l => l.Id == id);
+            }
+            else
+            {
+                log = await _context.LogEntries.Include(l => l.WebApiKey)
+                    .Where(l => l.WebApiKeyId == userFromDb.WebApiKey.Id && l.Id == id).FirstOrDefaultAsync();
+            }
 
             if (log == null)
             {
-                return BadRequest("Log not found");
+                return NotFound();
             }
 
             return Ok(log);

@@ -1,19 +1,14 @@
 import { ErrorHandler, Injectable } from '@angular/core';
-// import { Logger } from 'cemslogger';
 
 const { name: name } = require('../../package.json');
-import * as StackTrace from 'stacktrace-js';
 import { AuthService } from './_services/auth.service';
-import { BehaviorSubject } from 'rxjs';
-import { log } from 'util';
 import { User } from './_models/user';
-import { BrowserError } from 'protractor/built/exitCodes';
-import { BrowserErrorLog } from './_models/BrowserErrorLog';
 import { AlertifyService } from './_services/alertify.service';
+import { environment } from '../environments/environment';
 
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
-  url = 'http://localhost:5000/api/log/browserError';
+  url = environment.apiUrl + 'log/browserError';
   currentUser: User;
 
   constructor(private authService: AuthService, private alertify: AlertifyService) {
@@ -63,7 +58,7 @@ export class GlobalErrorHandler implements ErrorHandler {
       body: JSON.stringify(errorLog)
     })
       .then(res => {
-        this.alertify.warning(res.status.toString());
+        console.log(res.status.toString());
       })
       // .then(res => console.log(res)
       .catch(err => this.alertify.error(err));
