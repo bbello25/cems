@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -78,10 +79,22 @@ namespace cems.API.Controllers
 
             if (result.Succeeded)
             {
-                var appUser = await _userManager.Users.FirstOrDefaultAsync(u =>
-                    u.NormalizedUserName == userForLoginDto.Username.ToUpper());
+                var appUser = await _userManager.Users.Where(u =>
+                        u.NormalizedUserName == userForLoginDto.Username.ToUpper()).Include(u => u.WebApiKey)
+                    .FirstOrDefaultAsync();
 
-                var userToReturn = _mapper.Map<UserForListDTO>(appUser);
+                var appUser2 =await (from u in _userManager.Users
+                    where u.NormalizedUserName == userForLoginDto.Username.ToUpper()
+                    select
+                        new
+                        {
+                            Id = u.Id,
+                            username = u.UserName,
+                            WebApiKey = u.WebApiKey.ApiKey
+                        }).FirstOrDefaultAsync();
+                                                                     
+                
+                var userToReturn = _mapper.Map<UserForListDTO>(appUser2);
 
                 return Ok(new
                 {

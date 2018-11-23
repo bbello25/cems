@@ -36,21 +36,10 @@ export class AuthService {
           localStorage.setItem('token', user.token);
           localStorage.setItem('currentUser', JSON.stringify(user));
           this.decodedToken = this.jwtHelper.decodeToken(user.token);
-          this.currentUserSubject.next(user);
+          this.currentUserSubject.next(user.user);
         }
         return user;
       }));
-    // .pipe(
-    // map((response: any) => {
-    //   const user = response;
-    //   if (user) {
-    //     localStorage.setItem('token', user.token);
-    //     // localStorage.setItem('user', JSON.stringify(user.user));
-    //     this.decodedToken = this.jwtHelper.decodeToken(user.token);
-    //     // this.currentUser = user.user;
-    //   }
-    // })
-    // );
   }
 
   register(model: any) {

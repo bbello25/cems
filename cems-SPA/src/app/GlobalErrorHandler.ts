@@ -6,14 +6,18 @@ import * as StackTrace from 'stacktrace-js';
 import { AuthService } from './_services/auth.service';
 import { BehaviorSubject } from 'rxjs';
 import { log } from 'util';
+import { User } from './_models/user';
+import { BrowserError } from 'protractor/built/exitCodes';
+import { BrowserErrorLog } from './_models/BrowserErrorLog';
+import { AlertifyService } from './_services/alertify.service';
 
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
   url = 'http://localhost:5000/api/log/browserError';
-  apiKey = 'k1n3te68fw';
+  currentUser: User;
 
-  constructor(private authservice: AuthService) {
-
+  constructor(private authService: AuthService, private alertify: AlertifyService) {
+    this.authService.currentUser.subscribe(x => this.currentUser = x);
   }
 
   handleError(error) {
@@ -41,7 +45,8 @@ export class GlobalErrorHandler implements ErrorHandler {
       source: name,
       message: error.message,
       stacktrace: error.stack,
-      timestamp: new Date().toLocaleString()
+      timestamp: new Date().toLocaleString(),
+      progLanguage: 'JavaScript'
     };
 
     fetch(this.url, {
@@ -49,12 +54,15 @@ export class GlobalErrorHandler implements ErrorHandler {
       headers: {
         Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
-        'api-key': this.apiKey
+        'api-key': this.currentUser.user.webApiKey
       },
       body: JSON.stringify(errorLog)
     })
-      .then(res => res.json())
-      .then(res => console.log(res));
+      .then(res => {
+        this.alertify.warning(res.status.toString());
+      })
+      // .then(res => console.log(res)
+      .catch(err => this.alertify.error(err));
   }
 
 }

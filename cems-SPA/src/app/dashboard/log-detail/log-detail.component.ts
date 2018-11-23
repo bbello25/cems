@@ -33,12 +33,12 @@ export class LogDetailComponent implements OnInit {
 
   isNullOrEmpty(field: string | Array<string>): boolean {
     if (field instanceof Array) {
-      for (const _field in field) {
-        if (_field === undefined || _field === '') {
-          return false;
+      for (let i = 0; i < field.length; i++) {
+        if (field[i] === undefined || field[i] === '') {
+          return true;
         }
       }
-      return true;
+      return false;
     } else {
       return (field === undefined || field === '');
     }
@@ -47,6 +47,6 @@ export class LogDetailComponent implements OnInit {
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
     this.log$ = this.logService.getLog(this.id);
-    // this.log$.subscribe(log => console.log(log));
+    this.log$.subscribe(log => console.log(log));
   }
 }
