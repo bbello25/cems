@@ -40,6 +40,7 @@ export class GlobalErrorHandler implements ErrorHandler {
   }
 
   log(error: Error) {
+    this.authService.currentUser.subscribe(x => this.currentUser = x);
     const errorLog = {
       name: error.name,
       source: name,
@@ -48,7 +49,10 @@ export class GlobalErrorHandler implements ErrorHandler {
       timestamp: new Date().toLocaleString(),
       progLanguage: 'JavaScript'
     };
-
+    if (this.currentUser == null) {
+      this.alertify.error('Api key is null');
+      return;
+    }
     fetch(this.url, {
       method: 'post',
       headers: {
