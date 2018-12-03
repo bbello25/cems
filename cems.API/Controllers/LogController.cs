@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using cems.API.Models;
@@ -27,6 +28,24 @@ namespace cems.API.Controllers
         {
             _context = context;
             _mapper = mapper;
+        }
+
+        [HttpGet("healthCheck")]
+        public async Task<IActionResult> CheckStatus()
+        {
+            var apiKeyFromRequest = HttpContext.Request.Headers["api-key"];
+            if (apiKeyFromRequest.ToString().Length == 0)
+            {
+                return Unauthorized();
+            }
+
+            var apiKeyFromDb = await _context.WebApiKeys.FirstOrDefaultAsync(k => k.ApiKey == apiKeyFromRequest);
+            if (apiKeyFromDb == null)
+            {
+                return BadRequest("Unregistered API Key");
+            }
+
+            return Ok();
         }
 
         [HttpPost("browserError")]

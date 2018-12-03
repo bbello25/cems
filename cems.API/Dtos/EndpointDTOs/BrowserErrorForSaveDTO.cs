@@ -8,5 +8,6 @@ namespace cems.API.Dtos.EndpointDTOs
         public string UserAgent { get; set; }
         public string Origin { get; set; }
         public string Referer { get; set; }
+        public string sessionInfo { get; set; }
     }
 }

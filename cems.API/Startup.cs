@@ -40,7 +40,6 @@ namespace cems.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-
             /*services.AddDbContextPool<DataContext>(
                 options => options.UseMySql(Configuration.GetConnectionString("DefaultConnection"), // replace with your Connection String
                     mysqlOptions =>
@@ -49,8 +48,10 @@ namespace cems.API
                     }
             ));*/
 
-            services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Docker")));
+            services.AddDbContext<DataContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("MssqlDocker")));
 
+            services.AddScoped<ILogRepository, LogRepository>();
             //change for prod
             IdentityBuilder builder = services.AddIdentityCore<User>(opt =>
             {
@@ -68,16 +69,18 @@ namespace cems.API
             builder.AddSignInManager<SignInManager<User>>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                 .AddJwtBearer(options =>
-                 {
-                     options.TokenValidationParameters = new TokenValidationParameters
-                     {
-                         ValidateIssuerSigningKey = true,
-                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
-                         ValidateIssuer = false,
-                         ValidateAudience = false
-                     };
-                 });
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey =
+                            new SymmetricSecurityKey(
+                                Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
 
             services.AddAuthorization(options =>
             {
@@ -89,21 +92,20 @@ namespace cems.API
             services.AddAutoMapper();
             services.AddTransient<Seed>();
             services.AddMvc(options =>
-            {
-                var policy = new AuthorizationPolicyBuilder()
-                .RequireAuthenticatedUser()
-                .Build();
-                options.Filters.Add(new AuthorizeFilter(policy));
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
-              .AddJsonOptions(opt =>
+                {
+                    var policy = new AuthorizationPolicyBuilder()
+                        .RequireAuthenticatedUser()
+                        .Build();
+                    options.Filters.Add(new AuthorizeFilter(policy));
+                }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .AddJsonOptions(opt =>
                 {
                     opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-      
+
                     //not working for signalR
                     opt.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 });
             services.BuildServiceProvider().GetService<DataContext>().Database.Migrate();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -119,7 +121,7 @@ namespace cems.API
                 {
                     builder.Run(async contex =>
                     {
-                        contex.Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
+                        contex.Response.StatusCode = (int) System.Net.HttpStatusCode.InternalServerError;
 
                         var error = contex.Features.Get<IExceptionHandlerFeature>();
                         if (error != null)
@@ -138,15 +140,15 @@ namespace cems.API
             app.UseAuthentication();
             app.UseDefaultFiles();
             app.UseStaticFiles();
+
             app.UseMvc(routes =>
             {
                 routes.MapSpaFallbackRoute(
                     name: "spa-fallback",
-                    defaults: new { controller = "Fallback", action = "Index" }
-
+                    defaults: new {controller = "Fallback", action = "Index"}
                 );
             });
-            
+
             /*app.Run( async (context) =>
             {
                 context.Response.ContentType = "text/html";

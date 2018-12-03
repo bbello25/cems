@@ -263,6 +263,8 @@ namespace cems.API.Migrations
 
                     b.Property<string>("Referer");
 
+                    b.Property<string>("SessionInfo");
+
                     b.Property<string>("UserAgent");
 
                     b.ToTable("BrowserErrorLog");

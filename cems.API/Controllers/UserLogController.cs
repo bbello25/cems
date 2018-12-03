@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using cems.API.Models;
 using cems.Collector.DTO;
 using cems.API.Data;
+using cems.API.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -19,33 +20,23 @@ namespace cems.API.Controllers
     {
         private readonly DataContext _context;
         private readonly UserManager<User> _userManager;
+        private readonly ILogRepository _logRepository;
 
-        public UserLogController(DataContext context, UserManager<User> userManager)
+        public UserLogController(DataContext context, UserManager<User> userManager, ILogRepository logRepository)
         {
             _context = context;
             _userManager = userManager;
+            _logRepository = logRepository;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetUserLogs()
+        public async Task<IActionResult> GetUserLogs([FromQuery]UserParams userParams)
         {
             var username = User.FindFirst(ClaimTypes.Name).Value;
-            var userFromDb = await _context.Users.Include(u => u.WebApiKey)
-                .Where(u => u.NormalizedUserName == username.ToUpper()).FirstOrDefaultAsync();
-            if (userFromDb == null)
-                return NotFound();
-            List<ErrorLogBase> logs;
-            if (await _userManager.IsInRoleAsync(userFromDb, "Admin"))
-            {
-                logs = await _context.LogEntries.Include(log => log.WebApiKey)
-                    .ThenInclude(webApikey => webApikey.User).ToListAsync();
-            }
-            else
-            {
-                logs = await _context.LogEntries.Include(l => l.WebApiKey)
-                    .Where(l => l.WebApiKeyId == userFromDb.WebApiKey.Id).ToListAsync();
-            }
             
+            var logs = await _logRepository.GetLogs(userParams, username);
+            Response.AddPagination(logs.CurrentPage, logs.PageSize, logs.TotalCount, logs.TotalPages);
+
             return Ok(logs);
         }
 

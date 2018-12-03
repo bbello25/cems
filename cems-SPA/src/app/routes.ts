@@ -9,6 +9,7 @@ import { LogDetailComponent } from './dashboard/log-detail/log-detail.component'
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { ErrorThrowComponent } from './error-throw/error-throw.component';
+import { LogsListResolver } from './_resolvers/logs-list.resolver';
 
 export const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -18,8 +19,8 @@ export const appRoutes: Routes = [
     runGuardsAndResolvers: 'always',
     canActivate: [AuthGuard],
     children: [
-      { path: '', component: DashboardComponent },
-      { path: 'dashboard', component: DashboardComponent },
+      { path: '', component: DashboardComponent, resolve: { logs: LogsListResolver } },
+      { path: 'dashboard', component: DashboardComponent, resolve: { logs: LogsListResolver } },
       { path: 'throwError', component: ErrorThrowComponent },
       {
         path: 'user/edit',
