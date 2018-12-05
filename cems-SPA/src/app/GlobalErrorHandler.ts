@@ -13,11 +13,17 @@ export class GlobalErrorHandler implements ErrorHandler {
   logger = null;
 
   constructor() {
-    this.logger = new CemsLogger(environment.cemsLoggerURL, environment.cemsLoggerApiKey);
+    this.logger = CemsLogger.initLogger({
+      endPointUrl: environment.cemsLoggerURL,
+      apiKey: environment.cemsLoggerApiKey,
+      appName: name,
+      email: 'b.bellovic@gmail.com'
+    });
   }
 
-  handleError(error) {
-    
-    throw error;
+  handleError(error: Error) {
+
+    this.logger.sendLog(error);
+    // throw error;
   }
 }

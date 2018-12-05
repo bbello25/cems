@@ -70,7 +70,7 @@ namespace cems.API.Controllers
             return roles != null ? Ok() : StatusCode(500);
         }
 
-        [HttpDelete("delete/{userName}")]
+        [HttpDelete("delete/{username}")]
         public async Task<IActionResult> DeleteUser(string username)
         {
             var user = await _userManager.FindByNameAsync(username);
