@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace cems.API.Controllers
 {
@@ -63,6 +64,19 @@ namespace cems.API.Controllers
                 return NotFound();
             }
 
+            /*var retyped = (BrowserErrorLog) log;
+            if (retyped.Headers != null)
+            {
+                retyped.Headers = JsonConvert.DeserializeObject(retyped.Headers);
+            }
+
+            if (retyped.SessionInfo != null)
+            {
+                retyped.SessionInfo = JsonConvert.DeserializeObject(retyped.SessionInfo);
+
+            }*/
+           
+            
             return Ok(log);
         }
     }

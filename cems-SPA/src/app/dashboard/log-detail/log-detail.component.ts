@@ -9,7 +9,8 @@ import { ActivatedRoute } from '@angular/router';
 import { LogService } from 'src/app/_services/log.service';
 import { Observable } from 'rxjs';
 import { BrowserErrorLog } from 'src/app/_models/BrowserErrorLog';
-import { BrowserError } from 'protractor/built/exitCodes';
+import { BrowserErrorLogFromServer } from '../../_models/BrowerErrorLogFromServer';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-log-detail',
@@ -44,9 +45,21 @@ export class LogDetailComponent implements OnInit {
     }
   }
 
+
+  test(obj: any) {
+    console.log(obj);
+  }
+
+
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
     this.log$ = this.logService.getLog(this.id);
     // this.log$.subscribe(log => console.log(log));
   }
 }
+
+// map((val: BrowserErrorLogFromServer) => {
+//   const headers = JSON.parse(val.headers);
+//   val.headers = headers;
+//   return val as BrowserErrorLog;
+// })

@@ -13,7 +13,8 @@ namespace cems.API.Models
         public string Source { get; set; }
         public DateTime Timestamp { get; set; }
         public string ProgLanguage { get; set; }
-        public String Protocol { get; set; }
+        public string Protocol { get; set; }
+        public string Ip { get; set; }
 
         [JsonIgnore] public int WebApiKeyId { get; set; }
         [JsonIgnore] public WebApiKey WebApiKey { get; set; }

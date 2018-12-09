@@ -11,7 +11,17 @@
         <div *ngIf="!isNullOrEmpty(log.timestamp)" class="row">
             <div class="col p-2 m-2">{{ log.timestamp | date: 'medium' }}</div>
         </div>
-        <div *ngIf="!isNullOrEmpty(log.message)" class="card">
+
+        <div *ngIf="!isNullOrEmpty(log.ip)" class="card  my-3">
+            <div class="card-header">
+                Client public ip address
+            </div>
+            <div class="card-body">
+                {{log.ip}}
+            </div>
+        </div>
+        
+        <div *ngIf="!isNullOrEmpty(log.message)" class="card  my-3">
             <div class="card-header">
                 Message
             </div>
@@ -29,28 +39,82 @@
             </div>
         </div>
 
-        <div *ngIf="!isNullOrEmpty([log.userAgent, log.referer, log.origin])" class="card my-3">
+        <div *ngIf="log.headers" class="card">
             <div class="card-header">
                 Headers
             </div>
-            <div class="card-body">
-                <table class="table">
+            <div class="card-body p-0">
+                <table class="table m-0 table-sm">
                     <tbody>
-                    <tr *ngIf="!isNullOrEmpty(log.userAgent)">
-                        <td>User-Agent</td>
-                        <td>{{log.userAgent}}</td>
-                    </tr>
-                    <tr *ngIf="!isNullOrEmpty(log.referer)">
-                        <td>Referer</td>
-                        <td>{{log.referer}}</td>
-                    </tr>
-                    <tr *ngIf="!isNullOrEmpty(log.origin)">
-                        <td>Origin</td>
-                        <td>{{log.origin}}</td>
+                    <tr *ngFor="let obj of log.headers">
+                        <td class="border-right pl-3">{{obj.Key}}</td>
+                        <td>{{obj.Value}}</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
         </div>
+        
+        <div *ngIf="log.sessionInfo.screenProperties" class="card mb-5 mt-3 w-50">
+            <div class="card-header">
+                Screen Properties
+            </div>
+            <div class="card-body p-0">
+                <table class="table m-0 table-sm">
+                    <tbody  *ngIf="log.sessionInfo.screenProperties as props">
+                    <tr>
+                        <td class="border-right  pl-3">Screen width</td>
+                        <td>{{props.screenScreenW}} px</td>
+                    </tr>
+                    <tr>
+                        <td class="border-right  pl-3 ">Screen height</td>
+                        <td>{{props.screenScreenH}} px</td>
+                    </tr>
+                    <tr>
+                        <td class="border-right  pl-3 ">Screen available width</td>
+                        <td>{{props.screenAvailW}} px</td>
+                    </tr>
+                    <tr>
+                        <td class="border-right  pl-3 ">Screen available height</td>
+                        <td>{{props.screenAvailH}} px</td>
+                    </tr>
+                    <tr>
+                        <td class="border-right  pl-3 ">Screen inner width</td>
+                        <td>{{props.sizeInnerW}} px</td>
+                    </tr>
+                    <tr>
+                        <td class="border-right  pl-3 ">Screen inner height</td>
+                        <td>{{props.sizeInnerH}} px</td>
+                    </tr>
+                    </tbody>
+                </table>
+            
+            </div>
+        </div>
+
+        <!--<div *ngIf="!isNullOrEmpty([log.userAgent, log.referer, log.origin])" class="card my-3">-->
+        <!--<div class="card-header">-->
+        <!--Headers-->
+        <!--</div>-->
+        <!--<div class="card-body">-->
+        <!--<table class="table">-->
+        <!--<tbody>-->
+        <!--<tr *ngIf="!isNullOrEmpty(log.userAgent)">-->
+        <!--<td>User-Agent</td>-->
+        <!--<td>{{log.userAgent}}</td>-->
+        <!--</tr>-->
+        <!--<tr *ngIf="!isNullOrEmpty(log.referer)">-->
+        <!--<td>Referer</td>-->
+        <!--<td>{{log.referer}}</td>-->
+        <!--</tr>-->
+        <!--<tr *ngIf="!isNullOrEmpty(log.origin)">-->
+        <!--<td>Origin</td>-->
+        <!--<td>{{log.origin}}</td>-->
+        <!--</tr>-->
+        <!--</tbody>-->
+        <!--</table>-->
+        <!--</div>-->
+        <!--</div>-->
 
     </div>
+</div>

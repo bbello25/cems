@@ -6,4 +6,5 @@ export class ErrorLog {
   timestamp: Date;
   progLanguage: string;
   protocol: string;
+  ip: string;
 }

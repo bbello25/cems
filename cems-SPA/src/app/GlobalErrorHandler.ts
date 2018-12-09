@@ -1,6 +1,7 @@
 import { ErrorHandler, Injectable } from '@angular/core';
 
-import { CemsLogger } from '@bbellovic/cems-logger-js/dist/es2015/CemsLogger';
+// import { CemsLogger } from '@bbellovic/cems-logger-js/dist/es2015/CemsLogger';
+import { CemsLogger } from '../../../../cems-logger-javascript2/dist/es2015/CemsLogger';
 
 const { name: name } = require('../../package.json');
 import { User } from './_models/user';
@@ -22,7 +23,7 @@ export class GlobalErrorHandler implements ErrorHandler {
   }
 
   handleError(error: Error) {
-
+    console.log(error);
     this.logger.sendLog(error);
     // throw error;
   }

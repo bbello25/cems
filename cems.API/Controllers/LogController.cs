@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using cems.API.Models;
@@ -13,6 +15,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace cems.API.Controllers
 {
@@ -49,7 +52,7 @@ namespace cems.API.Controllers
         }
 
         [HttpPost("browserError")]
-        public async Task<IActionResult> Post(BrowserErrorLog errorLog)
+        public async Task<IActionResult> Post([FromBody]dynamic data)
         {
             var apiKeyFromRequest = HttpContext.Request.Headers["api-key"];
             if (apiKeyFromRequest.ToString().Length == 0)
@@ -63,10 +66,19 @@ namespace cems.API.Controllers
                 return BadRequest("Unregistered API Key");
             }
 
+            var errorLog = new BrowserErrorForSaveDto
+            {
+                Timestamp = data.timestamp,
+                Email = data.email,
+                Ip = data.ip,
+                Message = data.message,
+                Name = data.name,
+                Source = data.source,
+                StackTrace = data.stacktrace,
+                SessionInfo = data.sessionInfo.ToString()
+            };
             var errorLogToSave = _mapper.Map<BrowserErrorLog>(errorLog);
-            errorLogToSave.UserAgent = Request.Headers["User-agent"].ToString();
-            errorLogToSave.Origin = Request.Headers["Origin"].ToString();
-            errorLogToSave.Referer = Request.Headers["Referer"].ToString();
+            errorLogToSave.Headers = JsonConvert.SerializeObject( Request.Headers.Where(h => h.Value.Count > 0).ToList());
             errorLogToSave.Protocol = Request.Protocol;
             errorLogToSave.ProgLanguage = "JavaScript";
             errorLogToSave.WebApiKey = apiKeyFromDb;

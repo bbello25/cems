@@ -9,6 +9,7 @@ import { BrowserErrorLog } from '../_models/BrowserErrorLog';
 import { PaginationResult } from '../_models/Pagination';
 import { Logs } from 'selenium-webdriver';
 import { User } from '../_models/user';
+import { BrowserErrorLogFromServer } from '../_models/BrowerErrorLogFromServer';
 
 @Injectable({
   providedIn: 'root'
@@ -45,10 +46,13 @@ export class LogService {
       );
   }
 
-  getLog(id: number): Observable<BrowserErrorLog> | Observable<ErrorLog> {
+  getLog(id: number): Observable<BrowserErrorLogFromServer> | Observable<ErrorLog> {
     return this.http.get(`${this.baseUrl}${id}`).pipe(
       map(log => {
-        if (log.hasOwnProperty('userAgent')) {
+        if (log.hasOwnProperty('progLanguage')) {
+            const _log = log as BrowserErrorLogFromServer;
+          _log.headers = JSON.parse(_log.headers);
+          _log.sessionInfo = JSON.parse(_log.sessionInfo);
           return log as BrowserErrorLog;
         } else {
           return log as ErrorLog;
