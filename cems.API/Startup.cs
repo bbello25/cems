@@ -49,7 +49,7 @@ namespace cems.API
             ));*/
 
             services.AddDbContext<DataContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("MssqlDocker")));
+                options.UseSqlServer(Configuration.GetConnectionString("Docker")));
 
             services.AddScoped<ILogRepository, LogRepository>();
             //change for prod

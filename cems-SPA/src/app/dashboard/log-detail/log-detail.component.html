@@ -1,96 +1,231 @@
 <div *ngIf="log$ | async as log">
-
-
     <div class="container">
-        <div class="row">
-            <div class="col col-2">
-                <h1>{{log.name}}</h1>
-            </div>
-        </div>
 
-        <div *ngIf="!isNullOrEmpty(log.timestamp)" class="row">
-            <div class="col p-2 m-2">{{ log.timestamp | date: 'medium' }}</div>
-        </div>
+        <tabset>
+            <tab heading="Info" id="tab1">
+                <div *ngIf="!isNullOrEmpty(log.stackTrace)" class="card my-3 ">
+                    <div class="card-header">
+                        Basic Info
+                    </div>
+                    <div class="card-body">
+                        <div class="px-2">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="h2"><code> {{log.name}}</code></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    {{ log.timestamp | date: 'medium' }}
+                                </div>
+                            </div>
+                            <div class="card mt-3">
+                                <div class="card-header">
+                                    Message
+                                </div>
+                                <div class="card-body ">
+                                    <div class=""><code>{{log.message}}</code></div>
+                                </div>
+                            </div>
+                            <div class="card mt-3">
+                                <div class="card-header">
+                                    Stacktrace
+                                </div>
+                                <div class="card-body">
+                                    <div class="row  p-0" *ngFor="let obj of log.stackTrace">
+                                        <div class="col">
+                                            <code class="js">{{obj.fileName}}:{{obj.lineNumber}}:{{obj.columnNumber}}</code>
+                                            in
+                                            function
+                                            <code class="js">{{obj.functionName}}</code>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-        <div *ngIf="!isNullOrEmpty(log.ip)" class="card  my-3">
-            <div class="card-header">
-                Client public ip address
-            </div>
-            <div class="card-body">
-                {{log.ip}}
-            </div>
-        </div>
-        
-        <div *ngIf="!isNullOrEmpty(log.message)" class="card  my-3">
-            <div class="card-header">
-                Message
-            </div>
-            <div class="card-body">
-                {{log.message}}
-            </div>
-        </div>
 
-        <div *ngIf="!isNullOrEmpty(log.stackTrace)" class="card my-3">
-            <div class="card-header">
-                StackTrace
-            </div>
-            <div class="card-body">
-                {{log.stackTrace}}
-            </div>
-        </div>
+                        </div>
+                    </div>
+                </div>
+            </tab>
+            <tab heading="User">
+                <div *ngIf="!isNullOrEmpty(log.ip)" class="card  my-3">
+                    <div class="card-header">
+                        Client public ip address
+                    </div>
+                    <div class="card-body">
+                        {{log.ip}}
+                    </div>
+                </div>
+            </tab>
+            <tab heading="Headers">
+                <div *ngIf="log.headers" class="card my-3">
+                    <div class="card-header">
+                        Headers
+                    </div>
+                    <div class="card-body p-0">
+                        <table class="table m-0 table-sm">
+                            <tbody>
+                            <tr *ngFor="let obj of log.headers">
+                                <td class="border-right pl-3">{{obj.Key}}</td>
+                                <td>{{obj.Value}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </tab>
+            <tab heading="Screen">
+                <div *ngIf="log.sessionInfo.screenProperties" class="card mb-5 mt-3 w-50">
+                    <div class="card-header">
+                        Screen Properties
+                    </div>
+                    <div class="card-body p-0">
+                        <table class="table m-0 table-sm">
+                            <tbody *ngIf="log.sessionInfo.screenProperties as props">
+                            <tr>
+                                <td class="border-right  pl-3">Screen width</td>
+                                <td>{{props.screenScreenW}} px</td>
+                            </tr>
+                            <tr>
+                                <td class="border-right  pl-3 ">Screen height</td>
+                                <td>{{props.screenScreenH}} px</td>
+                            </tr>
+                            <tr>
+                                <td class="border-right  pl-3 ">Screen available width</td>
+                                <td>{{props.screenAvailW}} px</td>
+                            </tr>
+                            <tr>
+                                <td class="border-right  pl-3 ">Screen available height</td>
+                                <td>{{props.screenAvailH}} px</td>
+                            </tr>
+                            <tr>
+                                <td class="border-right  pl-3 ">Screen inner width</td>
+                                <td>{{props.sizeInnerW}} px</td>
+                            </tr>
+                            <tr>
+                                <td class="border-right  pl-3 ">Screen inner height</td>
+                                <td>{{props.sizeInnerH}} px</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </tab>
+            <tab heading="Session">
+                <div *ngIf="log.sessionInfo" class="card mb-5 mt-3 w-50">
+                    <div class="card-header">
+                        Session
+                    </div>
+                    <div class="card-body ">
+                        <div *ngIf="log.sessionInfo.sessionDuration" class="row">
+                            <div class="col">
+                                <strong>Session duration: </strong> {{log.sessionInfo.sessionDuration}} seconds
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">TODO: Events</div>
+                        </div>
+                    </div>
+                </div>
+            </tab>
+        </tabset>
 
-        <div *ngIf="log.headers" class="card">
-            <div class="card-header">
-                Headers
-            </div>
-            <div class="card-body p-0">
-                <table class="table m-0 table-sm">
-                    <tbody>
-                    <tr *ngFor="let obj of log.headers">
-                        <td class="border-right pl-3">{{obj.Key}}</td>
-                        <td>{{obj.Value}}</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        
-        <div *ngIf="log.sessionInfo.screenProperties" class="card mb-5 mt-3 w-50">
-            <div class="card-header">
-                Screen Properties
-            </div>
-            <div class="card-body p-0">
-                <table class="table m-0 table-sm">
-                    <tbody  *ngIf="log.sessionInfo.screenProperties as props">
-                    <tr>
-                        <td class="border-right  pl-3">Screen width</td>
-                        <td>{{props.screenScreenW}} px</td>
-                    </tr>
-                    <tr>
-                        <td class="border-right  pl-3 ">Screen height</td>
-                        <td>{{props.screenScreenH}} px</td>
-                    </tr>
-                    <tr>
-                        <td class="border-right  pl-3 ">Screen available width</td>
-                        <td>{{props.screenAvailW}} px</td>
-                    </tr>
-                    <tr>
-                        <td class="border-right  pl-3 ">Screen available height</td>
-                        <td>{{props.screenAvailH}} px</td>
-                    </tr>
-                    <tr>
-                        <td class="border-right  pl-3 ">Screen inner width</td>
-                        <td>{{props.sizeInnerW}} px</td>
-                    </tr>
-                    <tr>
-                        <td class="border-right  pl-3 ">Screen inner height</td>
-                        <td>{{props.sizeInnerH}} px</td>
-                    </tr>
-                    </tbody>
-                </table>
-            
-            </div>
-        </div>
+        <!--<div class="row">-->
+        <!--<div class="col col-2">-->
+        <!--<h1>{{log.name}}</h1>-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <!--<div *ngIf="!isNullOrEmpty(log.timestamp)" class="row">-->
+        <!--<div class="col p-2 m-2">{{ log.timestamp | date: 'medium' }}</div>-->
+        <!--</div>-->
+
+        <!--<div *ngIf="!isNullOrEmpty(log.ip)" class="card  my-3">-->
+        <!--<div class="card-header">-->
+        <!--Client public ip address-->
+        <!--</div>-->
+        <!--<div class="card-body">-->
+        <!--{{log.ip}}-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <!--<div *ngIf="!isNullOrEmpty(log.message)" class="card  my-3">-->
+        <!--<div class="card-header">-->
+        <!--Message-->
+        <!--</div>-->
+        <!--<div class="card-body">-->
+        <!--{{log.message}}-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <!--<div *ngIf="!isNullOrEmpty(log.stackTrace)" class="card my-3">-->
+        <!--<div class="card-header">-->
+        <!--StackTrace-->
+        <!--</div>-->
+        <!--<div class="card-body">-->
+
+        <!--<div class="row" *ngFor="let obj of log.stackTrace">-->
+        <!--<div class="col">-->
+        <!--<code class="js">{{obj.fileName}}:{{obj.lineNumber}}:{{obj.columnNumber}}</code> in function-->
+        <!--<code class="js">{{obj.functionName}}</code>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <!--<div *ngIf="log.headers" class="card">-->
+        <!--<div class="card-header">-->
+        <!--Headers-->
+        <!--</div>-->
+        <!--<div class="card-body p-0">-->
+        <!--<table class="table m-0 table-sm">-->
+        <!--<tbody>-->
+        <!--<tr *ngFor="let obj of log.headers">-->
+        <!--<td class="border-right pl-3">{{obj.Key}}</td>-->
+        <!--<td>{{obj.Value}}</td>-->
+        <!--</tr>-->
+        <!--</tbody>-->
+        <!--</table>-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <!--<div *ngIf="log.sessionInfo.screenProperties" class="card mb-5 mt-3 w-50">-->
+        <!--<div class="card-header">-->
+        <!--Screen Properties-->
+        <!--</div>-->
+        <!--<div class="card-body p-0">-->
+        <!--<table class="table m-0 table-sm">-->
+        <!--<tbody *ngIf="log.sessionInfo.screenProperties as props">-->
+        <!--<tr>-->
+        <!--<td class="border-right  pl-3">Screen width</td>-->
+        <!--<td>{{props.screenScreenW}} px</td>-->
+        <!--</tr>-->
+        <!--<tr>-->
+        <!--<td class="border-right  pl-3 ">Screen height</td>-->
+        <!--<td>{{props.screenScreenH}} px</td>-->
+        <!--</tr>-->
+        <!--<tr>-->
+        <!--<td class="border-right  pl-3 ">Screen available width</td>-->
+        <!--<td>{{props.screenAvailW}} px</td>-->
+        <!--</tr>-->
+        <!--<tr>-->
+        <!--<td class="border-right  pl-3 ">Screen available height</td>-->
+        <!--<td>{{props.screenAvailH}} px</td>-->
+        <!--</tr>-->
+        <!--<tr>-->
+        <!--<td class="border-right  pl-3 ">Screen inner width</td>-->
+        <!--<td>{{props.sizeInnerW}} px</td>-->
+        <!--</tr>-->
+        <!--<tr>-->
+        <!--<td class="border-right  pl-3 ">Screen inner height</td>-->
+        <!--<td>{{props.sizeInnerH}} px</td>-->
+        <!--</tr>-->
+        <!--</tbody>-->
+        <!--</table>-->
+
+        <!--</div>-->
+        <!--</div>-->
 
         <!--<div *ngIf="!isNullOrEmpty([log.userAgent, log.referer, log.origin])" class="card my-3">-->
         <!--<div class="card-header">-->

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using cems.API.Helpers;
 using cems.API.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http2.HPack;
 using Microsoft.EntityFrameworkCore;
 
 namespace cems.API.Data
@@ -18,6 +19,22 @@ namespace cems.API.Data
         {
             _context = context;
             _userManager = userManager;
+        }
+
+
+        public async Task<PagedList<ErrorLogBase>> GetLogList(UserParams userParams, string username)
+        {
+            var userFromDb = await _context.Users.Include(u => u.WebApiKey)
+                .Where(u => u.NormalizedUserName == username.ToUpper()).FirstOrDefaultAsync();
+
+            var isAdmin = await _userManager.IsInRoleAsync(userFromDb, "Admin");
+
+            var logs = _context.LogEntries.Include(log => log.WebApiKey)
+                .OrderByDescending(log => log.Timestamp).GroupBy(log => log.Message)
+                .AsQueryable();
+
+
+            return null;
         }
 
         public async Task<PagedList<ErrorLogBase>> GetLogs(UserParams userParams, string username)

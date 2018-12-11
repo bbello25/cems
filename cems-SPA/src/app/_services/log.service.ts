@@ -53,6 +53,8 @@ export class LogService {
             const _log = log as BrowserErrorLogFromServer;
           _log.headers = JSON.parse(_log.headers);
           _log.sessionInfo = JSON.parse(_log.sessionInfo);
+          _log.stackTrace = JSON.parse(_log.stackTrace);
+          // _log.stacktrace = JSON.parse(_log.stacktrace);
           return log as BrowserErrorLog;
         } else {
           return log as ErrorLog;

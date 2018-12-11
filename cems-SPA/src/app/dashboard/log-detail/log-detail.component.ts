@@ -1,7 +1,6 @@
 import {
   Component,
   OnInit,
-  Input,
   ChangeDetectionStrategy
 } from '@angular/core';
 import { ErrorLog } from 'src/app/_models/ErrorLog';
@@ -9,8 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 import { LogService } from 'src/app/_services/log.service';
 import { Observable } from 'rxjs';
 import { BrowserErrorLog } from 'src/app/_models/BrowserErrorLog';
-import { BrowserErrorLogFromServer } from '../../_models/BrowerErrorLogFromServer';
-import { map } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-log-detail',
@@ -50,11 +48,10 @@ export class LogDetailComponent implements OnInit {
     console.log(obj);
   }
 
-
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
     this.log$ = this.logService.getLog(this.id);
-    // this.log$.subscribe(log => console.log(log));
+     // this.log$.pipe().subscribe(log => console.log(log));
   }
 }
 

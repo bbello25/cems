@@ -7,7 +7,7 @@
 /*! exports provided: name, version, scripts, private, dependencies, devDependencies, default */
 /***/ (function(module) {
 
-module.exports = {"name":"cems-spa","version":"0.0.0","scripts":{"ng":"ng","start":"ng serve","build":"ng build","test":"ng test","lint":"ng lint","e2e":"ng e2e"},"private":true,"dependencies":{"@angular/animations":"^7.0.2","@angular/common":"^7.0.2","@angular/compiler":"^7.0.2","@angular/core":"^7.0.2","@angular/forms":"^7.0.2","@angular/http":"^7.0.2","@angular/platform-browser":"^7.0.2","@angular/platform-browser-dynamic":"^7.0.2","@angular/router":"^7.0.2","@auth0/angular-jwt":"^2.0.0","@bbellovic/cems-logger-js":"^1.3.1","alertifyjs":"^1.11.2","bootstrap":"^4.1.3","bootswatch":"^4.1.3","core-js":"^2.5.7","font-awesome":"^4.7.0","ngx-bootstrap":"^3.1.1","rxjs":"^6.3.3","stacktrace-js":"^2.0.0","zone.js":"~0.8.26"},"devDependencies":{"@angular-devkit/build-angular":"~0.10.0","@angular/cli":"~7.0.4","@angular/compiler-cli":"^7.0.2","@angular/language-service":"^7.0.2","@types/jasmine":"^2.8.9","@types/jasminewd2":"^2.0.5","@types/node":"^8.10.37","@types/stacktrace-js":"0.0.32","codelyzer":"~4.2.1","jasmine-core":"~2.99.1","jasmine-spec-reporter":"~4.2.1","karma":"~1.7.1","karma-chrome-launcher":"~2.2.0","karma-coverage-istanbul-reporter":"^2.0.4","karma-jasmine":"~1.1.1","karma-jasmine-html-reporter":"^0.2.2","protractor":"^5.4.1","ts-node":"~5.0.1","tslint":"~5.9.1","typescript":"^3.1.6"}};
+module.exports = {"name":"cems-spa","version":"0.0.0","scripts":{"ng":"ng","start":"ng serve","build":"ng build","test":"ng test","lint":"ng lint","e2e":"ng e2e"},"private":true,"dependencies":{"@angular/animations":"^7.1.1","@angular/common":"^7.1.1","@angular/compiler":"^7.1.1","@angular/core":"^7.1.1","@angular/forms":"^7.1.1","@angular/http":"^7.1.1","@angular/platform-browser":"^7.1.1","@angular/platform-browser-dynamic":"^7.1.1","@angular/router":"^7.1.1","@auth0/angular-jwt":"^2.0.0","@bbellovic/cems-logger-js":"^1.6.0","alertifyjs":"^1.11.2","bootstrap":"^4.1.3","bootswatch":"^4.1.3","core-js":"^2.6.0","font-awesome":"^4.7.0","highlight.js":"^9.13.1","ngx-bootstrap":"^3.1.2","rxjs":"^6.3.3","stacktrace-js":"^2.0.0","zone.js":"~0.8.26"},"devDependencies":{"@angular-devkit/build-angular":"^0.10.7","@angular/cli":"^7.0.7","@angular/compiler-cli":"^7.1.1","@angular/language-service":"^7.1.1","@types/jasmine":"^2.8.12","@types/jasminewd2":"^2.0.5","@types/node":"^8.10.37","@types/stacktrace-js":"0.0.32","codelyzer":"~4.2.1","jasmine-core":"~2.99.1","jasmine-spec-reporter":"~4.2.1","karma":"~1.7.1","karma-chrome-launcher":"~2.2.0","karma-coverage-istanbul-reporter":"^2.0.4","karma-jasmine":"~1.1.1","karma-jasmine-html-reporter":"^0.2.2","protractor":"^5.4.1","ts-node":"~5.0.1","tslint":"~5.9.1","typescript":"^3.1.6"}};
 
 /***/ }),
 
@@ -46,9 +46,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GlobalErrorHandler", function() { return GlobalErrorHandler; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
 /* harmony import */ var _bbellovic_cems_logger_js_dist_es2015_CemsLogger__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @bbellovic/cems-logger-js/dist/es2015/CemsLogger */ "./node_modules/@bbellovic/cems-logger-js/dist/es2015/CemsLogger.js");
-/* harmony import */ var _services_auth_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./_services/auth.service */ "./src/app/_services/auth.service.ts");
-/* harmony import */ var _services_alertify_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./_services/alertify.service */ "./src/app/_services/alertify.service.ts");
-/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../environments/environment */ "./src/environments/environment.ts");
+/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../environments/environment */ "./src/environments/environment.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -60,25 +58,29 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 };
 
 
+// import { CemsLogger } from '../../../../cems-logger-javascript2/dist/es2015/CemsLogger';
 const { name: name } = __webpack_require__(/*! ../../package.json */ "./package.json");
 
-
-
 let GlobalErrorHandler = class GlobalErrorHandler {
-    constructor(authService, alertify) {
-        this.authService = authService;
-        this.alertify = alertify;
-        this.url = _environments_environment__WEBPACK_IMPORTED_MODULE_4__["environment"].apiUrl + 'log/browserError';
+    constructor() {
+        this.url = _environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + 'log/browserError';
         this.logger = null;
-        this.logger = new _bbellovic_cems_logger_js_dist_es2015_CemsLogger__WEBPACK_IMPORTED_MODULE_1__["CemsLogger"]('localhost:5000', 'wdpvly3wwb');
+        this.logger = _bbellovic_cems_logger_js_dist_es2015_CemsLogger__WEBPACK_IMPORTED_MODULE_1__["CemsLogger"].initLogger({
+            endPointUrl: _environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].cemsLoggerURL,
+            apiKey: _environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].cemsLoggerApiKey,
+            appName: name,
+            email: 'b.bellovic@gmail.com'
+        });
     }
     handleError(error) {
-        throw error;
+        console.error(error);
+        this.logger.sendLog(error);
+        // throw error;
     }
 };
 GlobalErrorHandler = __decorate([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
-    __metadata("design:paramtypes", [_services_auth_service__WEBPACK_IMPORTED_MODULE_2__["AuthService"], _services_alertify_service__WEBPACK_IMPORTED_MODULE_3__["AlertifyService"]])
+    __metadata("design:paramtypes", [])
 ], GlobalErrorHandler);
 
 
@@ -213,6 +215,22 @@ AuthGuard = __decorate([
 
 /***/ }),
 
+/***/ "./src/app/_models/Pagination.ts":
+/*!***************************************!*\
+  !*** ./src/app/_models/Pagination.ts ***!
+  \***************************************/
+/*! exports provided: PaginationResult */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PaginationResult", function() { return PaginationResult; });
+class PaginationResult {
+}
+
+
+/***/ }),
+
 /***/ "./src/app/_models/Role.ts":
 /*!*********************************!*\
   !*** ./src/app/_models/Role.ts ***!
@@ -260,6 +278,59 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WebApiKey", function() { return WebApiKey; });
 class WebApiKey {
 }
+
+
+/***/ }),
+
+/***/ "./src/app/_resolvers/logs-list.resolver.ts":
+/*!**************************************************!*\
+  !*** ./src/app/_resolvers/logs-list.resolver.ts ***!
+  \**************************************************/
+/*! exports provided: LogsListResolver */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LogsListResolver", function() { return LogsListResolver; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm2015/index.js");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
+/* harmony import */ var _services_alertify_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../_services/alertify.service */ "./src/app/_services/alertify.service.ts");
+/* harmony import */ var _services_log_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../_services/log.service */ "./src/app/_services/log.service.ts");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+let LogsListResolver = class LogsListResolver {
+    constructor(router, alertify, logService) {
+        this.router = router;
+        this.alertify = alertify;
+        this.logService = logService;
+    }
+    resolve(route) {
+        return this.logService.getLogs().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["catchError"])(err => {
+            this.alertify.error('Problem retrieving data');
+            return Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["of"])(null);
+        }));
+    }
+};
+LogsListResolver = __decorate([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
+    __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"], _services_alertify_service__WEBPACK_IMPORTED_MODULE_4__["AlertifyService"], _services_log_service__WEBPACK_IMPORTED_MODULE_5__["LogService"]])
+], LogsListResolver);
+
 
 
 /***/ }),
@@ -617,6 +688,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var src_environments_environment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! src/environments/environment */ "./src/environments/environment.ts");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
+/* harmony import */ var _models_Pagination__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../_models/Pagination */ "./src/app/_models/Pagination.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -630,17 +702,41 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
 let LogService = class LogService {
     constructor(http) {
         this.http = http;
         this.baseUrl = src_environments_environment__WEBPACK_IMPORTED_MODULE_1__["environment"].apiUrl + 'userLog/';
     }
-    getLogs() {
-        return this.http.get(this.baseUrl);
+    getLogs(page, itemsPerPage, userParams) {
+        const paginatedResult = new _models_Pagination__WEBPACK_IMPORTED_MODULE_4__["PaginationResult"]();
+        let params = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpParams"]();
+        if (page != null && itemsPerPage != null) {
+            params = params.append('pageNumber', page);
+            params = params.append('pageSize', itemsPerPage);
+        }
+        if (userParams != null) {
+            params = params.append('timeUnits', userParams.timeUnits);
+            params = params.append('timeValue', userParams.timeValue);
+            params = params.append('orderBy', userParams.orderBy);
+        }
+        return this.http.get(this.baseUrl, { observe: 'response', params })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(response => {
+            paginatedResult.result = response.body;
+            if (response.headers.get('Pagination') != null) {
+                paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
+            }
+            return paginatedResult;
+        }));
     }
     getLog(id) {
         return this.http.get(`${this.baseUrl}${id}`).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(log => {
-            if (log.hasOwnProperty('userAgent')) {
+            if (log.hasOwnProperty('progLanguage')) {
+                const _log = log;
+                _log.headers = JSON.parse(_log.headers);
+                _log.sessionInfo = JSON.parse(_log.sessionInfo);
+                _log.stackTrace = JSON.parse(_log.stackTrace);
+                // _log.stacktrace = JSON.parse(_log.stacktrace);
                 return log;
             }
             else {
@@ -1255,12 +1351,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _confirm_modal_confirm_modal_component__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./confirm-modal/confirm-modal.component */ "./src/app/confirm-modal/confirm-modal.component.ts");
 /* harmony import */ var _error_throw_error_throw_component__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./error-throw/error-throw.component */ "./src/app/error-throw/error-throw.component.ts");
 /* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ../environments/environment */ "./src/environments/environment.ts");
+/* harmony import */ var _resolvers_logs_list_resolver__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ./_resolvers/logs-list.resolver */ "./src/app/_resolvers/logs-list.resolver.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -1328,6 +1426,8 @@ AppModule = __decorate([
             _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormsModule"],
             _angular_forms__WEBPACK_IMPORTED_MODULE_3__["ReactiveFormsModule"],
             ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__["BsDropdownModule"].forRoot(),
+            ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__["PaginationModule"].forRoot(),
+            ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__["ButtonsModule"].forRoot(),
             ngx_bootstrap_tabs__WEBPACK_IMPORTED_MODULE_5__["TabsModule"].forRoot(),
             _angular_router__WEBPACK_IMPORTED_MODULE_6__["RouterModule"].forRoot(_routes__WEBPACK_IMPORTED_MODULE_14__["appRoutes"]),
             ngx_bootstrap__WEBPACK_IMPORTED_MODULE_4__["ModalModule"].forRoot(),
@@ -1347,6 +1447,7 @@ AppModule = __decorate([
             _services_admin_service__WEBPACK_IMPORTED_MODULE_22__["AdminService"],
             _services_user_service__WEBPACK_IMPORTED_MODULE_25__["UserService"],
             _resolvers_user_edit_resolver__WEBPACK_IMPORTED_MODULE_26__["MemberEditResolver"],
+            _resolvers_logs_list_resolver__WEBPACK_IMPORTED_MODULE_35__["LogsListResolver"],
             _services_alertify_service__WEBPACK_IMPORTED_MODULE_29__["AlertifyService"],
             {
                 provide: _angular_core__WEBPACK_IMPORTED_MODULE_1__["ErrorHandler"],
@@ -1457,7 +1558,7 @@ ConfirmModalComponent = __decorate([
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2Rhc2hib2FyZC9kYXNoYm9hcmQuY29tcG9uZW50LmNzcyJ9 */"
+module.exports = ".thActive {\r\n    color: #007bff !important;\r\n    cursor: pointer;\r\n}\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvZGFzaGJvYXJkL2Rhc2hib2FyZC5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0lBQ0ksMEJBQTBCO0lBQzFCLGdCQUFnQjtDQUNuQiIsImZpbGUiOiJzcmMvYXBwL2Rhc2hib2FyZC9kYXNoYm9hcmQuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi50aEFjdGl2ZSB7XHJcbiAgICBjb2xvcjogIzAwN2JmZiAhaW1wb3J0YW50O1xyXG4gICAgY3Vyc29yOiBwb2ludGVyO1xyXG59Il19 */"
 
 /***/ }),
 
@@ -1468,7 +1569,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container p-3 text-center\">\n  <!--\n    <div class=\"row\">\n        <div class=\"col\">\n            <app-log-list [logs]=\"logs\"></app-log-list>\n        </div>\n    </div>\n  -->\n  <table class=\"table table-stripped table-hover table-bordered\">\n    <thead class=\"thead-light\">\n      <tr>\n        <th>Id</th>\n        <th>Message</th>\n        <th>Source</th>\n        <th>Timestamp</th>\n        <th>Programming language</th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr *ngFor=\"let log of (logs$ | async)\" [routerLink]=\"['/logDetails', log.id]\">\n        <td>{{ log.id }}</td>\n        <td>{{ log.message }}</td>\n        <td>{{ log.source }}</td>\n        <td>{{ log.timestamp | date: 'medium' }}</td>\n        <td>{{ log.progLanguage }}</td>\n      </tr>\n    </tbody>\n  </table>\n</div>"
+module.exports = "<div class=\"container p-3 text-center\">\n    <!--\n      <div class=\"row\">\n          <div class=\"col\">\n              <app-log-list [logs]=\"logs\"></app-log-list>\n          </div>\n      </div>\n    -->\n    <form class=\"form-inline justify-content-end\" #form=\"ngForm\" (ngSubmit)=\"loadLogs()\" novalidate>\n        <div class=\"form-group\">\n            <label for=\"timeValue\">Last </label>\n            <input type=\"number\" class=\"form-control ml-1\" style=\"width:70px\" id=\"timeValue\" name=\"timeValue\"\n                   [(ngModel)]=\"userParams.timeValue\"/>\n        </div>\n        <div class=\"form-group\">\n            <label for=\"timeUnits\"></label>\n            <select class=\"form-control ml-1\" style=\"width: 110px;\" id=\"timeUnits\" name=\"timeUnits\"\n                    [(ngModel)]=\"userParams.timeUnits\">\n                <option *ngFor=\"let unit of timeUnits\" [value]=\"unit.value\">\n                    {{unit.display}}\n                </option>\n            </select>\n            <button type=\"submit\" class=\"btn btn-primary\" style=\"margin-left: 10px\">Apply Filters</button>\n            <button type=\"button\" class=\"btn btn-info\" (click)=\"resetFilters()\" style=\"margin-left: 10px\">Reset\n                Filters\n            </button>\n\n        </div>\n    </form>\n    <br>\n\n    <table class=\"table table-stripped table-hover table-bordered\">\n        <thead class=\"thead-light\">\n        <tr>\n            <th [class]=\"currentOrderBy == 'id' ? 'thActive' : '' \" (click)=\"sort('id')\">Id</th>\n            <th>Message</th>\n            <th [class]=\"currentOrderBy == 'source' ? 'thActive' : '' \" (click)=\"sort('source')\"> Source</th>\n            <th [class]=\"currentOrderBy == 'timestamp' ? 'thActive' : '' \" (click)=\"sort('timestamp')\">Timestamp</th>\n            <th [class]=\"currentOrderBy == 'progLng' ? 'thActive' : '' \" (click)=\"sort('progLng')\">Programming language\n            </th>\n        </tr>\n        </thead>\n        <tbody>\n        <tr *ngFor=\"let log of logs\" [routerLink]=\"['/logDetails', log.id]\">\n            <td>{{ log.id }}</td>\n            <td>{{ log.message }}</td>\n            <td>{{ log.source }}</td>\n            <td>{{ log.timestamp | date: 'medium' }}</td>\n            <td>{{ log.progLanguage }}</td>\n        </tr>\n        </tbody>\n    </table>\n</div>\n\n<div class=\"d-flex justify-content-center\">\n    <pagination [boundaryLinks]=\"true\"\n                [totalItems]=\"pagination.totalItems\"\n                [(ngModel)]=\"pagination.currentPage\"\n                [itemsPerPage]=\"pagination.itemsPerPage\"\n                (pageChanged)=\"pageChanged($event)\"\n                previousText=\"&lsaquo;\" nextText=\"&rsaquo;\" firstText=\"&laquo;\"\n                lastText=\"&raquo;\">\n    </pagination>\n</div>"
 
 /***/ }),
 
@@ -1485,6 +1586,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
 /* harmony import */ var _services_log_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../_services/log.service */ "./src/app/_services/log.service.ts");
 /* harmony import */ var _services_auth_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../_services/auth.service */ "./src/app/_services/auth.service.ts");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
+/* harmony import */ var _services_alertify_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../_services/alertify.service */ "./src/app/_services/alertify.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1497,19 +1600,56 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
+
 let DashboardComponent = class DashboardComponent {
-    constructor(logService, authService) {
+    constructor(logService, authService, route, alertify, ref) {
         this.logService = logService;
         this.authService = authService;
+        this.route = route;
+        this.alertify = alertify;
+        this.ref = ref;
+        this.timeUnits = [
+            { value: 'min', display: 'minutes' },
+            { value: 'h', display: 'hours' },
+            { value: 'd', display: 'days' }
+            // { value: 'm', display: 'months' }
+        ];
+        this.userParams = {};
     }
     ngOnInit() {
-        this.logs$ = this.logService.getLogs();
-        // throw Error('test');
-        // this.logService.getLogs().subscribe((response: Log[]) => {
-        //   this.logs$ = response;
-        //   console.log(this.logs);
-        // });
-        // throw new Error('Angular test error');
+        this.route.data.subscribe(data => {
+            this.logs = data['logs'].result;
+            this.pagination = data['logs'].pagination;
+        });
+        this.userParams.timeValue = 1;
+        this.userParams.timeUnits = 'd';
+        this.userParams.orderBy = 'timestamp';
+    }
+    resetFilters() {
+        this.userParams.timeValue = 1;
+        this.userParams.timeUnits = 'd';
+        this.loadLogs();
+    }
+    sort(orderBy) {
+        this.userParams.orderBy = orderBy;
+        this.currentOrderBy = orderBy;
+        this.loadLogs();
+    }
+    pageChanged(event) {
+        this.pagination.currentPage = event.page;
+        console.log(event.page);
+        this.loadLogs();
+    }
+    loadLogs() {
+        this.logService.getLogs(this.pagination.currentPage, this.pagination.itemsPerPage, this.userParams)
+            .subscribe((res) => {
+            this.logs = res.result;
+            this.pagination = res.pagination;
+            this.ref.detectChanges();
+        }, error1 => {
+            this.alertify.error(error1);
+        });
     }
 };
 DashboardComponent = __decorate([
@@ -1519,7 +1659,10 @@ DashboardComponent = __decorate([
         styles: [__webpack_require__(/*! ./dashboard.component.css */ "./src/app/dashboard/dashboard.component.css")]
     }),
     __metadata("design:paramtypes", [_services_log_service__WEBPACK_IMPORTED_MODULE_1__["LogService"],
-        _services_auth_service__WEBPACK_IMPORTED_MODULE_2__["AuthService"]])
+        _services_auth_service__WEBPACK_IMPORTED_MODULE_2__["AuthService"],
+        _angular_router__WEBPACK_IMPORTED_MODULE_3__["ActivatedRoute"],
+        _services_alertify_service__WEBPACK_IMPORTED_MODULE_4__["AlertifyService"],
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ChangeDetectorRef"]])
 ], DashboardComponent);
 
 
@@ -1544,7 +1687,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"log$ | async as log\">\n\n\n    <div class=\"container\">\n        <div class=\"row\">\n            <div class=\"col col-2\">\n                <h1>{{log.name}}</h1>\n            </div>\n        </div>\n\n        <div *ngIf=\"!isNullOrEmpty(log.timestamp)\" class=\"row\">\n            <div class=\"col p-2 m-2\">{{ log.timestamp | date: 'medium' }}</div>\n        </div>\n        <div *ngIf=\"!isNullOrEmpty(log.message)\" class=\"card\">\n            <div class=\"card-header\">\n                Message\n            </div>\n            <div class=\"card-body\">\n                {{log.message}}\n            </div>\n        </div>\n\n        <div *ngIf=\"!isNullOrEmpty(log.stackTrace)\" class=\"card my-3\">\n            <div class=\"card-header\">\n                StackTrace\n            </div>\n            <div class=\"card-body\">\n                {{log.stackTrace}}\n            </div>\n        </div>\n\n        <div *ngIf=\"!isNullOrEmpty([log.userAgent, log.referer, log.origin])\" class=\"card my-3\">\n            <div class=\"card-header\">\n                Headers\n            </div>\n            <div class=\"card-body\">\n                <table class=\"table\">\n                    <tbody>\n                    <tr *ngIf=\"!isNullOrEmpty(log.userAgent)\">\n                        <td>User-Agent</td>\n                        <td>{{log.userAgent}}</td>\n                    </tr>\n                    <tr *ngIf=\"!isNullOrEmpty(log.referer)\">\n                        <td>Referer</td>\n                        <td>{{log.referer}}</td>\n                    </tr>\n                    <tr *ngIf=\"!isNullOrEmpty(log.origin)\">\n                        <td>Origin</td>\n                        <td>{{log.origin}}</td>\n                    </tr>\n                    </tbody>\n                </table>\n            </div>\n        </div>\n\n    </div>"
+module.exports = "<div *ngIf=\"log$ | async as log\">\n    <div class=\"container\">\n\n        <tabset>\n            <tab heading=\"Info\" id=\"tab1\">\n                <div *ngIf=\"!isNullOrEmpty(log.stackTrace)\" class=\"card my-3 \">\n                    <div class=\"card-header\">\n                        Basic Info\n                    </div>\n                    <div class=\"card-body\">\n                        <div class=\"px-2\">\n                            <div class=\"row\">\n                                <div class=\"col\">\n                                    <div class=\"h2\"><code> {{log.name}}</code></div>\n                                </div>\n                            </div>\n                            <div class=\"row\">\n                                <div class=\"col\">\n                                    {{ log.timestamp | date: 'medium' }}\n                                </div>\n                            </div>\n                            <div class=\"card mt-3\">\n                                <div class=\"card-header\">\n                                    Message\n                                </div>\n                                <div class=\"card-body \">\n                                    <div class=\"\"><code>{{log.message}}</code></div>\n                                </div>\n                            </div>\n                            <div class=\"card mt-3\">\n                                <div class=\"card-header\">\n                                    Stacktrace\n                                </div>\n                                <div class=\"card-body\">\n                                    <div class=\"row  p-0\" *ngFor=\"let obj of log.stackTrace\">\n                                        <div class=\"col\">\n                                            <code class=\"js\">{{obj.fileName}}:{{obj.lineNumber}}:{{obj.columnNumber}}</code>\n                                            in\n                                            function\n                                            <code class=\"js\">{{obj.functionName}}</code>\n                                        </div>\n                                    </div>\n                                </div>\n                            </div>\n\n\n                        </div>\n                    </div>\n                </div>\n            </tab>\n            <tab heading=\"User\">\n                <div *ngIf=\"!isNullOrEmpty(log.ip)\" class=\"card  my-3\">\n                    <div class=\"card-header\">\n                        Client public ip address\n                    </div>\n                    <div class=\"card-body\">\n                        {{log.ip}}\n                    </div>\n                </div>\n            </tab>\n            <tab heading=\"Headers\">\n                <div *ngIf=\"log.headers\" class=\"card my-3\">\n                    <div class=\"card-header\">\n                        Headers\n                    </div>\n                    <div class=\"card-body p-0\">\n                        <table class=\"table m-0 table-sm\">\n                            <tbody>\n                            <tr *ngFor=\"let obj of log.headers\">\n                                <td class=\"border-right pl-3\">{{obj.Key}}</td>\n                                <td>{{obj.Value}}</td>\n                            </tr>\n                            </tbody>\n                        </table>\n                    </div>\n                </div>\n            </tab>\n            <tab heading=\"Screen\">\n                <div *ngIf=\"log.sessionInfo.screenProperties\" class=\"card mb-5 mt-3 w-50\">\n                    <div class=\"card-header\">\n                        Screen Properties\n                    </div>\n                    <div class=\"card-body p-0\">\n                        <table class=\"table m-0 table-sm\">\n                            <tbody *ngIf=\"log.sessionInfo.screenProperties as props\">\n                            <tr>\n                                <td class=\"border-right  pl-3\">Screen width</td>\n                                <td>{{props.screenScreenW}} px</td>\n                            </tr>\n                            <tr>\n                                <td class=\"border-right  pl-3 \">Screen height</td>\n                                <td>{{props.screenScreenH}} px</td>\n                            </tr>\n                            <tr>\n                                <td class=\"border-right  pl-3 \">Screen available width</td>\n                                <td>{{props.screenAvailW}} px</td>\n                            </tr>\n                            <tr>\n                                <td class=\"border-right  pl-3 \">Screen available height</td>\n                                <td>{{props.screenAvailH}} px</td>\n                            </tr>\n                            <tr>\n                                <td class=\"border-right  pl-3 \">Screen inner width</td>\n                                <td>{{props.sizeInnerW}} px</td>\n                            </tr>\n                            <tr>\n                                <td class=\"border-right  pl-3 \">Screen inner height</td>\n                                <td>{{props.sizeInnerH}} px</td>\n                            </tr>\n                            </tbody>\n                        </table>\n                    </div>\n                </div>\n            </tab>\n            <tab heading=\"Session\">\n                <div *ngIf=\"log.sessionInfo\" class=\"card mb-5 mt-3 w-50\">\n                    <div class=\"card-header\">\n                        Session\n                    </div>\n                    <div class=\"card-body \">\n                        <div *ngIf=\"log.sessionInfo.sessionDuration\" class=\"row\">\n                            <div class=\"col\">\n                                <strong>Session duration: </strong> {{log.sessionInfo.sessionDuration}} seconds\n                            </div>\n                        </div>\n                        <div class=\"row\">\n                            <div class=\"col\">TODO: Events</div>\n                        </div>\n                    </div>\n                </div>\n            </tab>\n        </tabset>\n\n        <!--<div class=\"row\">-->\n        <!--<div class=\"col col-2\">-->\n        <!--<h1>{{log.name}}</h1>-->\n        <!--</div>-->\n        <!--</div>-->\n\n        <!--<div *ngIf=\"!isNullOrEmpty(log.timestamp)\" class=\"row\">-->\n        <!--<div class=\"col p-2 m-2\">{{ log.timestamp | date: 'medium' }}</div>-->\n        <!--</div>-->\n\n        <!--<div *ngIf=\"!isNullOrEmpty(log.ip)\" class=\"card  my-3\">-->\n        <!--<div class=\"card-header\">-->\n        <!--Client public ip address-->\n        <!--</div>-->\n        <!--<div class=\"card-body\">-->\n        <!--{{log.ip}}-->\n        <!--</div>-->\n        <!--</div>-->\n\n        <!--<div *ngIf=\"!isNullOrEmpty(log.message)\" class=\"card  my-3\">-->\n        <!--<div class=\"card-header\">-->\n        <!--Message-->\n        <!--</div>-->\n        <!--<div class=\"card-body\">-->\n        <!--{{log.message}}-->\n        <!--</div>-->\n        <!--</div>-->\n\n        <!--<div *ngIf=\"!isNullOrEmpty(log.stackTrace)\" class=\"card my-3\">-->\n        <!--<div class=\"card-header\">-->\n        <!--StackTrace-->\n        <!--</div>-->\n        <!--<div class=\"card-body\">-->\n\n        <!--<div class=\"row\" *ngFor=\"let obj of log.stackTrace\">-->\n        <!--<div class=\"col\">-->\n        <!--<code class=\"js\">{{obj.fileName}}:{{obj.lineNumber}}:{{obj.columnNumber}}</code> in function-->\n        <!--<code class=\"js\">{{obj.functionName}}</code>-->\n        <!--</div>-->\n        <!--</div>-->\n        <!--</div>-->\n        <!--</div>-->\n\n        <!--<div *ngIf=\"log.headers\" class=\"card\">-->\n        <!--<div class=\"card-header\">-->\n        <!--Headers-->\n        <!--</div>-->\n        <!--<div class=\"card-body p-0\">-->\n        <!--<table class=\"table m-0 table-sm\">-->\n        <!--<tbody>-->\n        <!--<tr *ngFor=\"let obj of log.headers\">-->\n        <!--<td class=\"border-right pl-3\">{{obj.Key}}</td>-->\n        <!--<td>{{obj.Value}}</td>-->\n        <!--</tr>-->\n        <!--</tbody>-->\n        <!--</table>-->\n        <!--</div>-->\n        <!--</div>-->\n\n        <!--<div *ngIf=\"log.sessionInfo.screenProperties\" class=\"card mb-5 mt-3 w-50\">-->\n        <!--<div class=\"card-header\">-->\n        <!--Screen Properties-->\n        <!--</div>-->\n        <!--<div class=\"card-body p-0\">-->\n        <!--<table class=\"table m-0 table-sm\">-->\n        <!--<tbody *ngIf=\"log.sessionInfo.screenProperties as props\">-->\n        <!--<tr>-->\n        <!--<td class=\"border-right  pl-3\">Screen width</td>-->\n        <!--<td>{{props.screenScreenW}} px</td>-->\n        <!--</tr>-->\n        <!--<tr>-->\n        <!--<td class=\"border-right  pl-3 \">Screen height</td>-->\n        <!--<td>{{props.screenScreenH}} px</td>-->\n        <!--</tr>-->\n        <!--<tr>-->\n        <!--<td class=\"border-right  pl-3 \">Screen available width</td>-->\n        <!--<td>{{props.screenAvailW}} px</td>-->\n        <!--</tr>-->\n        <!--<tr>-->\n        <!--<td class=\"border-right  pl-3 \">Screen available height</td>-->\n        <!--<td>{{props.screenAvailH}} px</td>-->\n        <!--</tr>-->\n        <!--<tr>-->\n        <!--<td class=\"border-right  pl-3 \">Screen inner width</td>-->\n        <!--<td>{{props.sizeInnerW}} px</td>-->\n        <!--</tr>-->\n        <!--<tr>-->\n        <!--<td class=\"border-right  pl-3 \">Screen inner height</td>-->\n        <!--<td>{{props.sizeInnerH}} px</td>-->\n        <!--</tr>-->\n        <!--</tbody>-->\n        <!--</table>-->\n\n        <!--</div>-->\n        <!--</div>-->\n\n        <!--<div *ngIf=\"!isNullOrEmpty([log.userAgent, log.referer, log.origin])\" class=\"card my-3\">-->\n        <!--<div class=\"card-header\">-->\n        <!--Headers-->\n        <!--</div>-->\n        <!--<div class=\"card-body\">-->\n        <!--<table class=\"table\">-->\n        <!--<tbody>-->\n        <!--<tr *ngIf=\"!isNullOrEmpty(log.userAgent)\">-->\n        <!--<td>User-Agent</td>-->\n        <!--<td>{{log.userAgent}}</td>-->\n        <!--</tr>-->\n        <!--<tr *ngIf=\"!isNullOrEmpty(log.referer)\">-->\n        <!--<td>Referer</td>-->\n        <!--<td>{{log.referer}}</td>-->\n        <!--</tr>-->\n        <!--<tr *ngIf=\"!isNullOrEmpty(log.origin)\">-->\n        <!--<td>Origin</td>-->\n        <!--<td>{{log.origin}}</td>-->\n        <!--</tr>-->\n        <!--</tbody>-->\n        <!--</table>-->\n        <!--</div>-->\n        <!--</div>-->\n\n    </div>\n</div>"
 
 /***/ }),
 
@@ -1597,10 +1740,13 @@ let LogDetailComponent = class LogDetailComponent {
             return (field === undefined || field === '');
         }
     }
+    test(obj) {
+        console.log(obj);
+    }
     ngOnInit() {
         this.id = this.route.snapshot.params['id'];
         this.log$ = this.logService.getLog(this.id);
-        // this.log$.subscribe(log => console.log(log));
+        // this.log$.pipe().subscribe(log => console.log(log));
     }
 };
 LogDetailComponent = __decorate([
@@ -1613,6 +1759,11 @@ LogDetailComponent = __decorate([
     __metadata("design:paramtypes", [src_app_services_log_service__WEBPACK_IMPORTED_MODULE_2__["LogService"], _angular_router__WEBPACK_IMPORTED_MODULE_1__["ActivatedRoute"]])
 ], LogDetailComponent);
 
+// map((val: BrowserErrorLogFromServer) => {
+//   const headers = JSON.parse(val.headers);
+//   val.headers = headers;
+//   return val as BrowserErrorLog;
+// })
 
 
 /***/ }),
@@ -2002,7 +2153,7 @@ module.exports = ".dropdown-toggle, .dropdown-item {\n    cursor:pointer;\n}\n.n
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-expand-md navbar-light bg-primary\">\n    <button class=\"navbar-toggler navbar-toggler-right\" type=\"button\" data-toggle=\"collapse\"\n            data-target=\"#navbarNavAltMarkup\" aria-controls=\"navbarNavAltMarkup\" aria-expanded=\"false\"\n            aria-label=\"Toggle navigation\">\n        <span class=\"navbar-toggler-icon\"></span>\n    </button>\n    <div class=\"container\">\n        <a class=\"navbar-brand\" href=\"#\">CEMS</a>\n        <div *ngIf=\"loggedIn()\" class=\"collapse navbar-collapse\" id=\"navbarNavAltMarkup\">\n            <div class=\"navbar-nav \">\n                <a class=\"nav-item nav-link\" routerLinkActive=\"active\" [routerLink]=\"['/dashboard']\">Dashboard</a>\n                <a *appHasRole=\"['Admin']\" class=\"nav-item nav-link\" routerLinkActive=\"active\"\n                   [routerLink]=\"['/admin']\">Admin</a>\n            </div>\n        </div>\n\n        <div *ngIf=\"loggedIn() \" class=\"dropdown \" dropdown>\n            <a class=\"dropdown-toggle text-light \" dropdownToggle>\n                Welcome {{authService.decodedToken.unique_name | titlecase}}\n            </a>\n\n            <div class=\"dropdown-menu mt-3 \" *dropdownMenu>\n                <a class=\"dropdown-item\" routerLinkActive=\"active\" [routerLink]=\"['user/edit']\">\n                    <i class=\"fa fa-user \"></i> Edit Profile</a>\n                <div class=\"dropdown-divider \"></div>\n                <a class=\"dropdown-item \" (click)=\"logout() \">\n                    <i class=\"fa fa-sign-out \"></i>Logout</a>\n            </div>\n        </div>\n\n        <!--<form *ngIf=\"!loggedIn()\" #loginForm=\"ngForm\" class=\"form-inline my-2 my-lg-0\" (ngSubmit)=\"login()\">-->\n        <!--<input class=\"form-control mr-sm-2\" type=\"text\" name=\"username\" placeholder=\"Username\" required [(ngModel)]=\"model.username\">-->\n        <!--<input class=\"form-control mr-sm-2\" type=\"password\" name=\"password\" placeholder=\"Password\" required [(ngModel)]=\"model.password\">-->\n        <!--<button [disabled]=\"!loginForm.valid\" class=\"btn btn-success my-2 my-sm-0\" type=\"submit\">Login</button>-->\n        <!--</form>-->\n    </div>\n</nav>"
+module.exports = "<nav class=\"navbar navbar-expand-md navbar-light bg-primary\">\n    <button class=\"navbar-toggler navbar-toggler-right\" type=\"button\" data-toggle=\"collapse\"\n            data-target=\"#navbarNavAltMarkup\" aria-controls=\"navbarNavAltMarkup\" aria-expanded=\"false\"\n            aria-label=\"Toggle navigation\">\n        <span class=\"navbar-toggler-icon\"></span>\n    </button>\n    <div class=\"container\">\n        <div class=\"navbar-brand\"  routerLinkActive=\"active\" [routerLink]=\"['/']\">CEMS</div>\n        <div *ngIf=\"loggedIn()\" class=\"collapse navbar-collapse\" id=\"navbarNavAltMarkup\">\n            <div class=\"navbar-nav \">\n                <a class=\"nav-item nav-link\" routerLinkActive=\"active\" [routerLink]=\"['/dashboard']\">Dashboard</a>\n                <a *appHasRole=\"['Admin']\" class=\"nav-item nav-link\" routerLinkActive=\"active\"\n                   [routerLink]=\"['/admin']\">Admin</a>\n            </div>\n        </div>\n\n        <div *ngIf=\"loggedIn() \" class=\"dropdown \" dropdown>\n            <a class=\"dropdown-toggle text-light \" dropdownToggle>\n                Welcome {{authService.decodedToken.unique_name | titlecase}}\n            </a>\n\n            <div class=\"dropdown-menu mt-3 \" *dropdownMenu>\n                <a class=\"dropdown-item\" routerLinkActive=\"active\" [routerLink]=\"['user/edit']\">\n                    <i class=\"fa fa-user \"></i> Edit Profile</a>\n                <div class=\"dropdown-divider \"></div>\n                <a class=\"dropdown-item \" (click)=\"logout() \">\n                    <i class=\"fa fa-sign-out \"></i>Logout</a>\n            </div>\n        </div>\n\n        <!--<form *ngIf=\"!loggedIn()\" #loginForm=\"ngForm\" class=\"form-inline my-2 my-lg-0\" (ngSubmit)=\"login()\">-->\n        <!--<input class=\"form-control mr-sm-2\" type=\"text\" name=\"username\" placeholder=\"Username\" required [(ngModel)]=\"model.username\">-->\n        <!--<input class=\"form-control mr-sm-2\" type=\"password\" name=\"password\" placeholder=\"Password\" required [(ngModel)]=\"model.password\">-->\n        <!--<button [disabled]=\"!loginForm.valid\" class=\"btn btn-success my-2 my-sm-0\" type=\"submit\">Login</button>-->\n        <!--</form>-->\n    </div>\n</nav>"
 
 /***/ }),
 
@@ -2198,6 +2349,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _login_login_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./login/login.component */ "./src/app/login/login.component.ts");
 /* harmony import */ var _register_register_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./register/register.component */ "./src/app/register/register.component.ts");
 /* harmony import */ var _error_throw_error_throw_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./error-throw/error-throw.component */ "./src/app/error-throw/error-throw.component.ts");
+/* harmony import */ var _resolvers_logs_list_resolver__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./_resolvers/logs-list.resolver */ "./src/app/_resolvers/logs-list.resolver.ts");
+
 
 
 
@@ -2215,8 +2368,8 @@ const appRoutes = [
         runGuardsAndResolvers: 'always',
         canActivate: [_guards_auth_guard__WEBPACK_IMPORTED_MODULE_1__["AuthGuard"]],
         children: [
-            { path: '', component: _dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_0__["DashboardComponent"] },
-            { path: 'dashboard', component: _dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_0__["DashboardComponent"] },
+            { path: '', component: _dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_0__["DashboardComponent"], resolve: { logs: _resolvers_logs_list_resolver__WEBPACK_IMPORTED_MODULE_9__["LogsListResolver"] } },
+            { path: 'dashboard', component: _dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_0__["DashboardComponent"], resolve: { logs: _resolvers_logs_list_resolver__WEBPACK_IMPORTED_MODULE_9__["LogsListResolver"] } },
             { path: 'throwError', component: _error_throw_error_throw_component__WEBPACK_IMPORTED_MODULE_8__["ErrorThrowComponent"] },
             {
                 path: 'user/edit',
@@ -2259,7 +2412,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container mt-4\">\n    <div class=\"row\">\n        <div class=\"col-sm-\">\n            <h1>Your Profile</h1>\n        </div>\n        <div class=\"col-sm-8\">\n            <!-- <div *ngIf=\"editForm.dirty\" class=\"alert alert-info\">\n              <strong>Information:</strong> You have made changes.  Any unsaved changes will be lost!\n            </div> -->\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col-sm-4 text-center\">\n            <div class=\"card\">\n                <div class=\"card-header\">\n                    <h4>Api Key</h4>\n                </div>\n                <div class=\"card-body\">\n                    <div>\n                        <p>{{user.webApiKey.apiKey}}</p>\n                    </div>\n\n                </div>\n                <!-- <div class=\"card-footer\">\n                  <button [disabled]=\"!editForm.dirty\" form=\"editForm\" class=\"btn btn-success btn-block\">Save Changes</button>\n                </div> -->\n            </div>\n        </div>\n        <div class=\"col-sm-8 text-center\">\n            <div class=\"card\">\n                <div class=\"card-header\">\n                    <h3>Trusted Host</h3>(Not Working)\n                </div>\n                <div class=\"card-body\">\n                    <div class=\"row\">\n                        <div class=\"col-sm-10\">\n                            <form #trustedHosts=\"ngForm\">\n                                <input type=\"text\" class=\"w-75\" [(ngModel)]=\"hostToAdd.host\" name=\"hostToAdd\"\n                                       placeholder=\"Host\">\n                            </form>\n                        </div>\n                        <div class=\"col-sm-2\">\n                            <button class=\"btn btn-success\" (click)=\"AddHost()\" form=\"trustedHosts\" type=\"submit\">Add\n                            </button>\n                        </div>\n\n                    </div>\n                    <div *ngFor=\"let host of user.webApiKey.trustedHosts\" class=\"row p-1 m-1\">\n                        <div class=\"col-sm-10\"><input type=\"text\" name=\"host\" disabled value=\"{{host.host}}\"></div>\n                        <div class=\"col-sm-2\">\n                            <button class=\"btn btn-danger\" (click)=\"AddHost()\" type=\"submit\">Remove</button>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"row m-2 justify-content-end\">\n        <div class=\"col-6 \">\n            <form [formGroup]=\"userForm\" #f=\"ngForm\" (submit)=\"updateUser(userForm)\">\n                <div class=\"form-group\">\n                    <label for=\"username\">username</label>\n                    <input id=\"username\" type=\"text\" formControlName=\"username\"\n                           class=\"form-control\"\n                           [ngClass]=\"{ 'is-invalid': submitted && f.username.errors }\"/>\n                    <div *ngIf=\"submitted && f.username.errors\" class=\"invalid-feedback\">\n                        <div *ngIf=\"f.username.errors.required\">Username is required</div>\n                    </div>\n                </div>\n\n                <div class=\"form-group\">\n                    <label for=\"firstName\">First Name</label>\n                    <input [readonly]=\"!editMode\" type=\"text\" formControlName=\"firstName\" class=\"form-control\"/>\n                    <div *ngIf=\"submitted && f.firstName.errors\" class=\"invalid-feedback\">\n                        <div *ngIf=\"f.firstName.errors.required\">First Name is required</div>\n                    </div>\n                </div>\n\n                <div class=\"form-group\">\n                    <label for=\"lastName\">Last Name</label>\n                    <input [readonly]=\"!editMode\" id=\"lastName\" type=\"text\" formControlName=\"lastName\"\n                           class=\"form-control\"/>\n                    <div *ngIf=\"submitted && f.lastName.errors\" class=\"invalid-feedback\">\n                        <div *ngIf=\"f.lastName.errors.required\">Last Name is required</div>\n                    </div>\n                </div>\n\n\n                <div class=\"form-group\">\n                    <label for=\"email\">Email</label>\n                    <input [readonly]=\"!editMode\" id=\"email\" type=\"email\" formControlName=\"email\" class=\"form-control\"\n                           [ngClass]=\"{ 'is-invalid': submitted && f.email.errors }\"/>\n                    <div *ngIf=\"submitted && f.email.errors\" class=\"invalid-feedback\">\n                        <div *ngIf=\"f.email.errors.required\">Email is required</div>\n                    </div>\n                </div>\n\n                <div class=\"form-group\">\n                    <label for=\"phoneNumber\">Phone number</label>\n                    <input [readonly]=\"!editMode\" id=\"phoneNumber\" type=\"email\" formControlName=\"phoneNumber\"\n                           class=\"form-control\"\n                           [ngClass]=\"{ 'is-invalid': submitted && f.phoneNumber.errors }\"/>\n                    <div *ngIf=\"submitted && f.phoneNumber.errors\" class=\"invalid-feedback\">\n                        <div *ngIf=\"f.phoneNumber.errors.required\">Phone number is required</div>\n                    </div>\n                </div>\n\n                <div class=\"col\">\n                    <button *ngIf=\"editMode\" class=\"btn btn-success  m-2 float-right\" type=\"submit\">Submit</button>\n                    <button type=\"button\" (click)=\"toggleEditMode()\"\n                            [className]=\"!editMode ? 'btn float-right btn-warning' : 'btn  m-2 float-right btn-danger'\"\n                    >{{!editMode ? 'Edit' : 'Cancel' }}\n                    </button>\n                </div>\n            </form>\n        </div>\n    </div>\n</div>\n\n"
+module.exports = "<div class=\"container mt-4\">\n    <div class=\"row\">\n        <div class=\"col-sm-\">\n            <h1>Your Profile</h1>\n        </div>\n        <div class=\"col-sm-8\">\n            <!-- <div *ngIf=\"editForm.dirty\" class=\"alert alert-info\">\n              <strong>Information:</strong> You have made changes.  Any unsaved changes will be lost!\n            </div> -->\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col-sm-4 text-center\">\n            <div class=\"card\">\n                <div class=\"card-header\">\n                    <h4>Api Key</h4>\n                </div>\n                <div class=\"card-body\">\n                    <div>\n                        <p>{{user.webApiKey.apiKey}}</p>\n                    </div>\n\n                </div>\n                <!-- <div class=\"card-footer\">\n                  <button [disabled]=\"!editForm.dirty\" form=\"editForm\" class=\"btn btn-success btn-block\">Save Changes</button>\n                </div> -->\n            </div>\n        </div>\n        <div class=\"col-sm-8 text-center\">\n            <div class=\"card\">\n                <div class=\"card-header\">\n                    <h3>Trusted Host</h3>(Not Working)\n                </div>\n                <div class=\"card-body\">\n                    <div class=\"row\">\n                        <div class=\"col-sm-10\">\n                            <form #trustedHosts=\"ngForm\">\n                                <input type=\"text\" class=\"w-75\" [(ngModel)]=\"hostToAdd.host\" name=\"hostToAdd\"\n                                       placeholder=\"Host\">\n                            </form>\n                        </div>\n                        <div class=\"col-sm-2\">\n                            <button class=\"btn btn-success\" (click)=\"AddHost()\" form=\"trustedHosts\" type=\"submit\">Add\n                            </button>\n                        </div>\n\n                    </div>\n                    <div *ngFor=\"let host of user.webApiKey.trustedHosts\" class=\"row p-1 m-1\">\n                        <div class=\"col-sm-10\"><input type=\"text\" name=\"host\" disabled value=\"{{host.host}}\"></div>\n                        <div class=\"col-sm-2\">\n                            <button class=\"btn btn-danger\" (click)=\"AddHost()\" type=\"submit\">Remove</button>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"row m-2 justify-content-end\">\n        <div class=\"col-6 \">\n            <form [formGroup]=\"userForm\" #f=\"ngForm\" (submit)=\"updateUser(userForm)\">\n                <div class=\"form-group\">\n                    <label for=\"username\">username</label>\n                    <input readonly id=\"username\" type=\"text\" formControlName=\"username\"\n                           class=\"form-control\"\n                           [ngClass]=\"{ 'is-invalid': submitted && f.username.errors }\"/>\n                    <div *ngIf=\"submitted && f.username.errors\" class=\"invalid-feedback\">\n                        <div *ngIf=\"f.username.errors.required\">Username is required</div>\n                    </div>\n                </div>\n\n                <div class=\"form-group\">\n                    <label for=\"firstName\">First Name</label>\n                    <input [readonly]=\"!editMode\" type=\"text\" formControlName=\"firstName\" class=\"form-control\"/>\n                    <div *ngIf=\"submitted && f.firstName.errors\" class=\"invalid-feedback\">\n                        <div *ngIf=\"f.firstName.errors.required\">First Name is required</div>\n                    </div>\n                </div>\n\n                <div class=\"form-group\">\n                    <label for=\"lastName\">Last Name</label>\n                    <input [readonly]=\"!editMode\" id=\"lastName\" type=\"text\" formControlName=\"lastName\"\n                           class=\"form-control\"/>\n                    <div *ngIf=\"submitted && f.lastName.errors\" class=\"invalid-feedback\">\n                        <div *ngIf=\"f.lastName.errors.required\">Last Name is required</div>\n                    </div>\n                </div>\n\n\n                <div class=\"form-group\">\n                    <label for=\"email\">Email</label>\n                    <input [readonly]=\"!editMode\" id=\"email\" type=\"email\" formControlName=\"email\" class=\"form-control\"\n                           [ngClass]=\"{ 'is-invalid': submitted && f.email.errors }\"/>\n                    <div *ngIf=\"submitted && f.email.errors\" class=\"invalid-feedback\">\n                        <div *ngIf=\"f.email.errors.required\">Email is required</div>\n                    </div>\n                </div>\n\n                <div class=\"form-group\">\n                    <label for=\"phoneNumber\">Phone number</label>\n                    <input [readonly]=\"!editMode\" id=\"phoneNumber\" type=\"email\" formControlName=\"phoneNumber\"\n                           class=\"form-control\"\n                           [ngClass]=\"{ 'is-invalid': submitted && f.phoneNumber.errors }\"/>\n                    <div *ngIf=\"submitted && f.phoneNumber.errors\" class=\"invalid-feedback\">\n                        <div *ngIf=\"f.phoneNumber.errors.required\">Phone number is required</div>\n                    </div>\n                </div>\n\n                <div class=\"col\">\n                    <button *ngIf=\"editMode\" class=\"btn btn-success  m-2 float-right\" type=\"submit\">Submit</button>\n                    <button type=\"button\" (click)=\"toggleEditMode()\"\n                            [className]=\"!editMode ? 'btn float-right btn-warning' : 'btn  m-2 float-right btn-danger'\"\n                    >{{!editMode ? 'Edit' : 'Cancel' }}\n                    </button>\n                </div>\n            </form>\n        </div>\n    </div>\n</div>\n\n"
 
 /***/ }),
 
@@ -2313,7 +2466,7 @@ let UsersEditComponent = class UsersEditComponent {
         return this.formBuilder.group({
             firstName: [this.user.firstName, _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required],
             lastName: [this.user.lastName, _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required],
-            username: [{ value: this.user.username, disabled: true }],
+            username: [{ value: this.user.username, disabled: false }],
             phoneNumber: this.user.phone,
             email: this.user.email
         });
@@ -2387,7 +2540,9 @@ const environment = {
     production: false,
     apiUrl: 'http://localhost:5000/api/',
     whitelistedDomain: 'localhost:5000',
-    blacklistedRoute: 'localhost:5000/api/auth'
+    blacklistedRoute: 'localhost:5000/api/auth',
+    cemsLoggerURL: 'http://localhost:5000/',
+    cemsLoggerApiKey: '9xstnwwacs'
 };
 /*
  * In development mode, for easier debugging, you can ignore zone related error

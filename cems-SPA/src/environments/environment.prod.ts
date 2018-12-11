@@ -4,5 +4,5 @@ export const environment = {
   whitelistedDomain: 'cems.sde.cz:5443',
   blacklistedRoute: 'cems.sde.cz:5443//api/auth',
   cemsLoggerURL: 'cems.sde.cz:5443',
-  cemsLoggerApiKey: '8w4ngewo9w'
+  cemsLoggerApiKey: 'm1ldnomzs7'
 };

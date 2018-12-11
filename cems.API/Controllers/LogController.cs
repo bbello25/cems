@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -74,7 +75,7 @@ namespace cems.API.Controllers
                 Message = data.message,
                 Name = data.name,
                 Source = data.source,
-                StackTrace = data.stacktrace,
+                StackTrace = data.stacktrace.ToString(),
                 SessionInfo = data.sessionInfo.ToString()
             };
             var errorLogToSave = _mapper.Map<BrowserErrorLog>(errorLog);

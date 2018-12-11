@@ -1,7 +1,7 @@
 export class ErrorLog {
   id: number;
   message: string;
-  stacktrace: string;
+  stackTrace: string;
   source: string;
   timestamp: Date;
   progLanguage: string;
