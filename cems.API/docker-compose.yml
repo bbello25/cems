@@ -3,13 +3,15 @@ services:
   web:
     build: .
     ports:
-    - "5000:5000"
+      - "5000:5000"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
     depends_on:
-    - db
+      - db
   db:
     image: "microsoft/mssql-server-linux:latest"
     volumes:
-    - /opt/data:/var/opt/mssql
+      - d:/data2:/var/opt/mssql
     environment:
       SA_PASSWORD: "Bello1+25B"
       ACCEPT_EULA: "Y"

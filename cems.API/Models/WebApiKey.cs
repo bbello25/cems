@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
@@ -11,7 +10,7 @@ namespace cems.API.Models
 
         public ICollection<TrustedHost> TrustedHosts { get; set; }
         public ICollection<ErrorLogBase> LogEntries { get; set; }
-        
+
         [JsonIgnore] public User User { get; set; }
         [JsonIgnore] public int UserId { get; set; }
     }

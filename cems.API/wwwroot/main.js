@@ -7,7 +7,7 @@
 /*! exports provided: name, version, scripts, private, dependencies, devDependencies, default */
 /***/ (function(module) {
 
-module.exports = {"name":"cems-spa","version":"0.0.0","scripts":{"ng":"ng","start":"ng serve","build":"ng build","test":"ng test","lint":"ng lint","e2e":"ng e2e"},"private":true,"dependencies":{"@angular/animations":"^7.1.1","@angular/common":"^7.1.1","@angular/compiler":"^7.1.1","@angular/core":"^7.1.1","@angular/forms":"^7.1.1","@angular/http":"^7.1.1","@angular/platform-browser":"^7.1.1","@angular/platform-browser-dynamic":"^7.1.1","@angular/router":"^7.1.1","@auth0/angular-jwt":"^2.0.0","@bbellovic/cems-logger-js":"^1.6.0","alertifyjs":"^1.11.2","bootstrap":"^4.1.3","bootswatch":"^4.1.3","core-js":"^2.6.0","font-awesome":"^4.7.0","highlight.js":"^9.13.1","ngx-bootstrap":"^3.1.2","rxjs":"^6.3.3","stacktrace-js":"^2.0.0","zone.js":"~0.8.26"},"devDependencies":{"@angular-devkit/build-angular":"^0.10.7","@angular/cli":"^7.0.7","@angular/compiler-cli":"^7.1.1","@angular/language-service":"^7.1.1","@types/jasmine":"^2.8.12","@types/jasminewd2":"^2.0.5","@types/node":"^8.10.37","@types/stacktrace-js":"0.0.32","codelyzer":"~4.2.1","jasmine-core":"~2.99.1","jasmine-spec-reporter":"~4.2.1","karma":"~1.7.1","karma-chrome-launcher":"~2.2.0","karma-coverage-istanbul-reporter":"^2.0.4","karma-jasmine":"~1.1.1","karma-jasmine-html-reporter":"^0.2.2","protractor":"^5.4.1","ts-node":"~5.0.1","tslint":"~5.9.1","typescript":"^3.1.6"}};
+module.exports = {"name":"cems-spa","version":"0.0.0","scripts":{"ng":"ng","start":"ng serve","build":"ng build","test":"ng test","lint":"ng lint","e2e":"ng e2e"},"private":true,"dependencies":{"@angular/animations":"^7.1.1","@angular/common":"^7.1.1","@angular/compiler":"^7.1.1","@angular/core":"^7.1.1","@angular/forms":"^7.1.1","@angular/http":"^7.1.1","@angular/platform-browser":"^7.1.1","@angular/platform-browser-dynamic":"^7.1.1","@angular/router":"^7.1.1","@auth0/angular-jwt":"^2.0.0","@bbellovic/cems-logger-js":"^1.6.0","alertifyjs":"^1.11.2","bootstrap":"^4.1.3","bootswatch":"^4.1.3","convert-source-map":"^1.6.0","core-js":"^2.6.0","font-awesome":"^4.7.0","highlight.js":"^9.13.1","ngx-bootstrap":"^3.1.2","rxjs":"^6.3.3","stacktrace-js":"^2.0.0","zone.js":"~0.8.26"},"devDependencies":{"@angular-devkit/build-angular":"^0.10.7","@angular/cli":"^7.0.7","@angular/compiler-cli":"^7.1.1","@angular/language-service":"^7.1.1","@types/jasmine":"^2.8.12","@types/jasminewd2":"^2.0.5","@types/node":"^8.10.37","@types/stacktrace-js":"0.0.32","codelyzer":"~4.2.1","jasmine-core":"~2.99.1","jasmine-spec-reporter":"~4.2.1","karma":"~1.7.1","karma-chrome-launcher":"~2.2.0","karma-coverage-istanbul-reporter":"^2.0.4","karma-jasmine":"~1.1.1","karma-jasmine-html-reporter":"^0.2.2","protractor":"^5.4.1","ts-node":"~5.0.1","tslint":"~5.9.1","typescript":"^3.1.6"}};
 
 /***/ }),
 
@@ -56,9 +56,17 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 
 
-// import { CemsLogger } from '../../../../cems-logger-javascript2/dist/es2015/CemsLogger';
+// import { CemsLogger } from '../../../../cems-logger-javascript2/src/CemsLogger';
 const { name: name } = __webpack_require__(/*! ../../package.json */ "./package.json");
 
 let GlobalErrorHandler = class GlobalErrorHandler {
@@ -73,9 +81,11 @@ let GlobalErrorHandler = class GlobalErrorHandler {
         });
     }
     handleError(error) {
-        console.error(error);
-        this.logger.sendLog(error);
-        // throw error;
+        return __awaiter(this, void 0, void 0, function* () {
+            console.error(error);
+            yield this.logger.sendLog(error);
+            // throw error;
+        });
     }
 };
 GlobalErrorHandler = __decorate([
@@ -421,22 +431,22 @@ let AdminService = class AdminService {
         this.baseUrl = _environments_environment__WEBPACK_IMPORTED_MODULE_1__["environment"].apiUrl;
     }
     getUsersWithRoles() {
-        return this.http.get(this.baseUrl + 'admin/usersWithRoles');
+        return this.http.get(this.baseUrl + 'admin/user/usersWithRoles');
     }
     updateUserRoles(user, roles) {
-        return this.http.put(this.baseUrl + 'admin/' + user.username, roles);
+        return this.http.put(this.baseUrl + 'admin/user/' + user.username, roles);
     }
     deleteUser(username) {
-        return this.http.delete(this.baseUrl + 'admin/delete/' + username);
+        return this.http.delete(this.baseUrl + 'admin/user/delete/' + username);
     }
     getRoles() {
-        return this.http.get(this.baseUrl + 'roles');
+        return this.http.get(this.baseUrl + 'admin/role');
     }
     deleteRole(id) {
-        return this.http.delete(this.baseUrl + 'roles/' + id);
+        return this.http.delete(this.baseUrl + 'admin/role/' + id);
     }
     addRole(roleToAdd) {
-        return this.http.post(this.baseUrl + 'roles', { roleNames: [roleToAdd] });
+        return this.http.post(this.baseUrl + 'admin/role', { roleNames: [roleToAdd] });
     }
 };
 AdminService = __decorate([
@@ -1344,21 +1354,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_user_service__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./_services/user.service */ "./src/app/_services/user.service.ts");
 /* harmony import */ var _resolvers_user_edit_resolver__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./_resolvers/user-edit.resolver */ "./src/app/_resolvers/user-edit.resolver.ts");
 /* harmony import */ var _GlobalErrorHandler__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./GlobalErrorHandler */ "./src/app/GlobalErrorHandler.ts");
-/* harmony import */ var _error_generator_error_generator_component__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./error-generator/error-generator.component */ "./src/app/error-generator/error-generator.component.ts");
-/* harmony import */ var _services_alertify_service__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./_services/alertify.service */ "./src/app/_services/alertify.service.ts");
-/* harmony import */ var _admin_roles_management_roles_management_component__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./admin/roles-management/roles-management.component */ "./src/app/admin/roles-management/roles-management.component.ts");
-/* harmony import */ var _login_login_component__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./login/login.component */ "./src/app/login/login.component.ts");
-/* harmony import */ var _confirm_modal_confirm_modal_component__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./confirm-modal/confirm-modal.component */ "./src/app/confirm-modal/confirm-modal.component.ts");
-/* harmony import */ var _error_throw_error_throw_component__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./error-throw/error-throw.component */ "./src/app/error-throw/error-throw.component.ts");
-/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ../environments/environment */ "./src/environments/environment.ts");
-/* harmony import */ var _resolvers_logs_list_resolver__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ./_resolvers/logs-list.resolver */ "./src/app/_resolvers/logs-list.resolver.ts");
+/* harmony import */ var _services_alertify_service__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./_services/alertify.service */ "./src/app/_services/alertify.service.ts");
+/* harmony import */ var _admin_roles_management_roles_management_component__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./admin/roles-management/roles-management.component */ "./src/app/admin/roles-management/roles-management.component.ts");
+/* harmony import */ var _login_login_component__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./login/login.component */ "./src/app/login/login.component.ts");
+/* harmony import */ var _confirm_modal_confirm_modal_component__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./confirm-modal/confirm-modal.component */ "./src/app/confirm-modal/confirm-modal.component.ts");
+/* harmony import */ var _error_throw_error_throw_component__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./error-throw/error-throw.component */ "./src/app/error-throw/error-throw.component.ts");
+/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ../environments/environment */ "./src/environments/environment.ts");
+/* harmony import */ var _resolvers_logs_list_resolver__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ./_resolvers/logs-list.resolver */ "./src/app/_resolvers/logs-list.resolver.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-
 
 
 
@@ -1414,11 +1422,10 @@ AppModule = __decorate([
             _admin_user_management_user_management_component__WEBPACK_IMPORTED_MODULE_21__["UserManagementComponent"],
             _admin_roles_modal_roles_modal_component__WEBPACK_IMPORTED_MODULE_23__["RolesModalComponent"],
             _users_users_edit_users_edit_component__WEBPACK_IMPORTED_MODULE_24__["UsersEditComponent"],
-            _error_generator_error_generator_component__WEBPACK_IMPORTED_MODULE_28__["ErrorGeneratorComponent"],
-            _admin_roles_management_roles_management_component__WEBPACK_IMPORTED_MODULE_30__["RolesManagementComponent"],
-            _login_login_component__WEBPACK_IMPORTED_MODULE_31__["LoginComponent"],
-            _confirm_modal_confirm_modal_component__WEBPACK_IMPORTED_MODULE_32__["ConfirmModalComponent"],
-            _error_throw_error_throw_component__WEBPACK_IMPORTED_MODULE_33__["ErrorThrowComponent"]
+            _admin_roles_management_roles_management_component__WEBPACK_IMPORTED_MODULE_29__["RolesManagementComponent"],
+            _login_login_component__WEBPACK_IMPORTED_MODULE_30__["LoginComponent"],
+            _confirm_modal_confirm_modal_component__WEBPACK_IMPORTED_MODULE_31__["ConfirmModalComponent"],
+            _error_throw_error_throw_component__WEBPACK_IMPORTED_MODULE_32__["ErrorThrowComponent"]
         ],
         imports: [
             _angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"],
@@ -1434,12 +1441,12 @@ AppModule = __decorate([
             _auth0_angular_jwt__WEBPACK_IMPORTED_MODULE_16__["JwtModule"].forRoot({
                 config: {
                     tokenGetter: tokenGetter,
-                    whitelistedDomains: [_environments_environment__WEBPACK_IMPORTED_MODULE_34__["environment"].whitelistedDomain],
-                    blacklistedRoutes: [_environments_environment__WEBPACK_IMPORTED_MODULE_34__["environment"].blacklistedRoute]
+                    whitelistedDomains: [_environments_environment__WEBPACK_IMPORTED_MODULE_33__["environment"].whitelistedDomain],
+                    blacklistedRoutes: [_environments_environment__WEBPACK_IMPORTED_MODULE_33__["environment"].blacklistedRoute]
                 }
             })
         ],
-        entryComponents: [_admin_roles_modal_roles_modal_component__WEBPACK_IMPORTED_MODULE_23__["RolesModalComponent"], _confirm_modal_confirm_modal_component__WEBPACK_IMPORTED_MODULE_32__["ConfirmModalComponent"]],
+        entryComponents: [_admin_roles_modal_roles_modal_component__WEBPACK_IMPORTED_MODULE_23__["RolesModalComponent"], _confirm_modal_confirm_modal_component__WEBPACK_IMPORTED_MODULE_31__["ConfirmModalComponent"]],
         providers: [
             _services_auth_service__WEBPACK_IMPORTED_MODULE_11__["AuthService"],
             _services_error_interceptor__WEBPACK_IMPORTED_MODULE_12__["ErrorInterceptorProvider"],
@@ -1447,8 +1454,8 @@ AppModule = __decorate([
             _services_admin_service__WEBPACK_IMPORTED_MODULE_22__["AdminService"],
             _services_user_service__WEBPACK_IMPORTED_MODULE_25__["UserService"],
             _resolvers_user_edit_resolver__WEBPACK_IMPORTED_MODULE_26__["MemberEditResolver"],
-            _resolvers_logs_list_resolver__WEBPACK_IMPORTED_MODULE_35__["LogsListResolver"],
-            _services_alertify_service__WEBPACK_IMPORTED_MODULE_29__["AlertifyService"],
+            _resolvers_logs_list_resolver__WEBPACK_IMPORTED_MODULE_34__["LogsListResolver"],
+            _services_alertify_service__WEBPACK_IMPORTED_MODULE_28__["AlertifyService"],
             {
                 provide: _angular_core__WEBPACK_IMPORTED_MODULE_1__["ErrorHandler"],
                 useClass: _GlobalErrorHandler__WEBPACK_IMPORTED_MODULE_27__["GlobalErrorHandler"]
@@ -1833,67 +1840,6 @@ LogListComponent = __decorate([
 
 /***/ }),
 
-/***/ "./src/app/error-generator/error-generator.component.css":
-/*!***************************************************************!*\
-  !*** ./src/app/error-generator/error-generator.component.css ***!
-  \***************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2Vycm9yLWdlbmVyYXRvci9lcnJvci1nZW5lcmF0b3IuY29tcG9uZW50LmNzcyJ9 */"
-
-/***/ }),
-
-/***/ "./src/app/error-generator/error-generator.component.html":
-/*!****************************************************************!*\
-  !*** ./src/app/error-generator/error-generator.component.html ***!
-  \****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "<p>\n  error-generator works!\n</p>\n"
-
-/***/ }),
-
-/***/ "./src/app/error-generator/error-generator.component.ts":
-/*!**************************************************************!*\
-  !*** ./src/app/error-generator/error-generator.component.ts ***!
-  \**************************************************************/
-/*! exports provided: ErrorGeneratorComponent */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ErrorGeneratorComponent", function() { return ErrorGeneratorComponent; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-let ErrorGeneratorComponent = class ErrorGeneratorComponent {
-    constructor() { }
-    ngOnInit() {
-    }
-};
-ErrorGeneratorComponent = __decorate([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
-        selector: 'app-error-generator',
-        template: __webpack_require__(/*! ./error-generator.component.html */ "./src/app/error-generator/error-generator.component.html"),
-        styles: [__webpack_require__(/*! ./error-generator.component.css */ "./src/app/error-generator/error-generator.component.css")]
-    }),
-    __metadata("design:paramtypes", [])
-], ErrorGeneratorComponent);
-
-
-
-/***/ }),
-
 /***/ "./src/app/error-throw/error-throw.component.css":
 /*!*******************************************************!*\
   !*** ./src/app/error-throw/error-throw.component.css ***!
@@ -1940,7 +1886,7 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 let ErrorThrowComponent = class ErrorThrowComponent {
     constructor() { }
     ngOnInit() {
-        throw new Error('Angular test error');
+        throw new Error(' test error');
     }
 };
 ErrorThrowComponent = __decorate([
@@ -2542,7 +2488,7 @@ const environment = {
     whitelistedDomain: 'localhost:5000',
     blacklistedRoute: 'localhost:5000/api/auth',
     cemsLoggerURL: 'http://localhost:5000/',
-    cemsLoggerApiKey: '9xstnwwacs'
+    cemsLoggerApiKey: 'daawsojiy51e5cc44xxrdff8d606k8'
 };
 /*
  * In development mode, for easier debugging, you can ignore zone related error
@@ -2588,7 +2534,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Projects\cems2\cems-SPA\src\main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! C:\Projects\cems\cems-SPA\src\main.ts */"./src/main.ts");
 
 
 /***/ })

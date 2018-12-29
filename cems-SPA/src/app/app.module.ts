@@ -27,7 +27,6 @@ import { UsersEditComponent } from './users/users-edit/users-edit.component';
 import { UserService } from './_services/user.service';
 import { MemberEditResolver } from './_resolvers/user-edit.resolver';
 import { GlobalErrorHandler } from './GlobalErrorHandler';
-import { ErrorGeneratorComponent } from './error-generator/error-generator.component';
 import { from } from 'rxjs';
 import { AlertifyService } from './_services/alertify.service';
 import { RolesManagementComponent } from './admin/roles-management/roles-management.component';
@@ -55,7 +54,6 @@ export function tokenGetter() {
     UserManagementComponent,
     RolesModalComponent,
     UsersEditComponent,
-    ErrorGeneratorComponent,
     RolesManagementComponent,
     LoginComponent,
     ConfirmModalComponent,
@@ -97,5 +95,4 @@ export function tokenGetter() {
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule {}

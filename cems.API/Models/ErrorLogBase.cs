@@ -1,6 +1,4 @@
 using System;
-using System.ComponentModel.DataAnnotations;
-using cems.API.Models;
 using Newtonsoft.Json;
 
 namespace cems.API.Models

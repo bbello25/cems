@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 using AutoMapper;
 using cems.API.Data;
+using cems.API.Features.Users;
 using cems.API.Helpers;
 using cems.API.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -14,16 +10,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 
@@ -40,20 +32,13 @@ namespace cems.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            /*services.AddDbContextPool<DataContext>(
-                options => options.UseMySql(Configuration.GetConnectionString("DefaultConnection"), // replace with your Connection String
-                    mysqlOptions =>
-                    {
-                        mysqlOptions.ServerVersion(new Version(5, 7, 23), ServerType.MySql); // replace with your Server Version and Type
-                    }
-            ));*/
-
+            var connString = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<DataContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("Docker")));
+                options.UseSqlServer(connString));
 
             services.AddScoped<ILogRepository, LogRepository>();
-            //change for prod
-            IdentityBuilder builder = services.AddIdentityCore<User>(opt =>
+
+            var builder = services.AddIdentityCore<User>(opt =>
             {
                 opt.Password.RequireDigit = true;
                 opt.Password.RequiredLength = 6;
@@ -87,10 +72,10 @@ namespace cems.API
                 options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
             });
 
-
             services.AddCors();
             services.AddAutoMapper();
             services.AddTransient<Seed>();
+
             services.AddMvc(options =>
                 {
                     var policy = new AuthorizationPolicyBuilder()
@@ -101,14 +86,13 @@ namespace cems.API
                 .AddJsonOptions(opt =>
                 {
                     opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-
-                    //not working for signalR
                     opt.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                });
-            services.BuildServiceProvider().GetService<DataContext>().Database.Migrate();
+                })
+                .AddFeatureFolders();
+            
+            services.AddSwaggerDocument();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, Seed seeder)
         {
             if (env.IsDevelopment())
@@ -131,16 +115,17 @@ namespace cems.API
                         }
                     });
                 });
-                //  app.UseHsts();
             }
 
-            //app.UseHttpsRedirection();
             seeder.SeedUsers();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials());
             app.UseAuthentication();
             app.UseDefaultFiles();
             app.UseStaticFiles();
 
+            app.UseSwagger();
+            app.UseSwaggerUi3();
+            
             app.UseMvc(routes =>
             {
                 routes.MapSpaFallbackRoute(
@@ -148,16 +133,6 @@ namespace cems.API
                     defaults: new {controller = "Fallback", action = "Index"}
                 );
             });
-
-            /*app.Run( async (context) =>
-            {
-                context.Response.ContentType = "text/html";
-                await context.Response.SendFileAsync(Path.Combine(env.WebRootPath,"index.html"));
-            });*/
-            /*app.UseSignalR((options) =>
-             {
-                 options.MapHub<LoggerHub>("/Hubs/Logger");
-             });*/
         }
     }
 }

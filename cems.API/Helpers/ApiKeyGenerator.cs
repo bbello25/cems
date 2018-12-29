@@ -17,7 +17,7 @@ namespace cems.API.Helpers
             string apiKey;
             do
             {
-                apiKey = RandomStringGenerator.RandomString(10);
+                apiKey = RandomStringGenerator.RandomString(30);
             } while (_dataContext.WebApiKeys.FirstOrDefaultAsync(key => key.ApiKey == apiKey).Result != null);
 
             return apiKey;

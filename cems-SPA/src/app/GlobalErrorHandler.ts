@@ -1,7 +1,6 @@
 import { ErrorHandler, Injectable } from '@angular/core';
-
 import { CemsLogger } from '@bbellovic/cems-logger-js/dist/es2015/CemsLogger';
-// import { CemsLogger } from '../../../../cems-logger-javascript2/dist/es2015/CemsLogger';
+// import { CemsLogger } from '../../../../cems-logger-javascript2/src/CemsLogger';
 
 const { name: name } = require('../../package.json');
 import { User } from './_models/user';
@@ -11,7 +10,7 @@ import { environment } from '../environments/environment';
 export class GlobalErrorHandler implements ErrorHandler {
   url = environment.apiUrl + 'log/browserError';
   currentUser: User;
-  logger = null;
+  logger: CemsLogger = null;
 
   constructor() {
     this.logger = CemsLogger.initLogger({
@@ -22,9 +21,9 @@ export class GlobalErrorHandler implements ErrorHandler {
     });
   }
 
-  handleError(error: Error) {
+  async handleError(error: Error) {
     console.error(error);
-    this.logger.sendLog(error);
+    await this.logger.sendLog(error);
     // throw error;
   }
 }

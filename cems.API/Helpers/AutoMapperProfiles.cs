@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
 using AutoMapper;
-using cems.API.Dtos;
-using cems.API.Dtos.EndpointDTOs;
+using cems.API.Features.Authorization;
+using cems.API.Features.LogCollector;
+using cems.API.Features.Users;
 using cems.API.Models;
 
 namespace cems.API.Helpers
@@ -25,10 +25,10 @@ namespace cems.API.Helpers
             CreateMap<BrowserErrorForSaveDto, BrowserErrorLog>();
             CreateMap<ErrorForSaveBaseDto, BrowserErrorLog>();
 
-            CreateMap<User, UserForListDTO>();
-            CreateMap<ErrorLogBase, LogEntryForListDTO>();
-            CreateMap<User, UserForDetailedDTO>();
-            CreateMap<UserForDetailedDTO, User>();
+            CreateMap<User, UserForListDto>();
+//            CreateMap<ErrorLogBase, LogEntryForListDto>();
+            CreateMap<User, UserDetailDto>();
+            CreateMap<UserDetailDto, User>();
             CreateMap<UserForRegisterDto, User>();
         }
     }

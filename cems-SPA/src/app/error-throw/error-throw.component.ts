@@ -10,7 +10,7 @@ export class ErrorThrowComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    throw new Error('Angular test error');
+    throw new Error(' test error');
   }
 
 }

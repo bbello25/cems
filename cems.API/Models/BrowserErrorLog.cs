@@ -1,4 +1,3 @@
-using System;
 
 namespace cems.API.Models
 {
