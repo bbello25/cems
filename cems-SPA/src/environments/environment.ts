@@ -8,7 +8,7 @@ export const environment = {
   whitelistedDomain: 'localhost:5000',
   blacklistedRoute: 'localhost:5000/api/auth',
   cemsLoggerURL: 'http://localhost:5000/',
-  cemsLoggerApiKey: 'daawsojiy51e5cc44xxrdff8d606k8'
+  cemsLoggerApiKey: 'otktqinesgatepagsvv4fkcre4zm0i'
 };
 
 /*

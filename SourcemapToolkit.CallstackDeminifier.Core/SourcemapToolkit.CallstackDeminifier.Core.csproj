@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\AjaxMinExtensions\AjaxMinExtensions.csproj" />
+      <ProjectReference Include="..\SourcemapToolkit.SourcemapParser.Core\SourcemapToolkit.SourcemapParser.Core.csproj" />
+    </ItemGroup>
+
+</Project>

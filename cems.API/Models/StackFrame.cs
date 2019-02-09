@@ -2,21 +2,29 @@ namespace cems.API.Models
 {
     public class StackFrame
     {
-        public int ColumnNumber { get; set; }
-        public string FileName { get; set; }
-        public string FunctionName { get; set; }
-        public int LineNumber { get; set; }
+        public string FilePath { get; set; }
+        public string MethodName { get; set; }
+        public SourcePosition SourcePosition { get; set; }
 
-        public override bool Equals(object obj)
+        public bool areSame(StackFrame otheStackFrame)
         {
-            if (obj == null)
+            if (otheStackFrame == null)
                 return false;
-            if (this.GetType() != obj.GetType()) return false;
+            if (GetType() != otheStackFrame.GetType())
+                return false;
 
-            StackFrame stackFrame = (StackFrame) obj;
+            var areSame = true;
+            if (FilePath != otheStackFrame.FilePath)
+                areSame = false;
+            if (MethodName != otheStackFrame.MethodName)
+                areSame = false;
+            if (SourcePosition == otheStackFrame.SourcePosition)
+                areSame = false;
 
-            return stackFrame.FileName == FileName && stackFrame.FunctionName == FunctionName &&
-                   stackFrame.LineNumber == LineNumber && stackFrame.ColumnNumber == ColumnNumber;
+            return areSame;
+            
+            return FilePath == otheStackFrame.FilePath && MethodName == otheStackFrame.MethodName &&
+                   SourcePosition == otheStackFrame.SourcePosition;
         }
     }
 }

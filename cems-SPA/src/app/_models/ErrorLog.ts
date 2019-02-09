@@ -1,7 +1,9 @@
+import {StackTrace} from "./StackTrace";
+
 export class ErrorLog {
   id: number;
   message: string;
-  stackTrace: string;
+  stackTrace: StackTrace;
   source: string;
   timestamp: Date;
   progLanguage: string;

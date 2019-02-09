@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,29 +11,25 @@ namespace cems.API.Models
 
         public double Distance(StackTrace other)
         {
-            var stackFrames = StackFrames.Reverse().ToList();
-            var otherStackFrames = other.StackFrames.Reverse().ToList();
+//            var stackFrames = StackFrames.Reverse().ToList();
+//            var otherStackFrames = other.StackFrames.Reverse().ToList();
+            var stackFrames = StackFrames.ToList();
+            var otherStackFrames = other.StackFrames.ToList();
             var numberOfMatchigStackFrames = 0;
 
 
-            for (int i = 0; i < stackFrames.Count; i++)
+            for (var i = 0; i < stackFrames.Count; i++)
             {
-                if (stackFrames[i].Equals(otherStackFrames[i]))
+                if (i >= otherStackFrames.Count)
+                    break;
+
+                if (stackFrames[i].areSame(otherStackFrames[i]))
                     numberOfMatchigStackFrames++;
+                else
+                    break;
             }
 
-            foreach (var stackFrame in stackFrames)
-            {
-                foreach (var otherStackFrame in otherStackFrames)
-                {
-                    if (stackFrame.Equals(otherStackFrame))
-                        numberOfMatchigStackFrames++;
-                }
-            }
-
-            if (numberOfMatchigStackFrames == 0)
-                return 0.0;
-            return stackFrames.Count / (double) numberOfMatchigStackFrames;
+            return  Math.Round( numberOfMatchigStackFrames / (double) stackFrames.Count, 2);
         }
     }
 }

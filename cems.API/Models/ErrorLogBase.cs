@@ -1,5 +1,6 @@
 using System;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace cems.API.Models
 {
@@ -16,5 +17,16 @@ namespace cems.API.Models
 
         [JsonIgnore] public int WebApiKeyId { get; set; }
         [JsonIgnore] public WebApiKey WebApiKey { get; set; }
+        
+        
+        public StackTrace GetStackTrace()
+        {
+            var jss = JObject.Parse(StackTrace);
+            return new StackTrace
+            {
+                StackFrames = jss.GetValue("MinifiedStackFrames").ToObject<StackFrame[]>(),
+                LogId = Id
+            };
+        }
     }
 }

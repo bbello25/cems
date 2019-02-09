@@ -3,7 +3,7 @@
 
         <tabset>
             <tab heading="Info" id="tab1">
-                <div *ngIf="!isNullOrEmpty(log.stackTrace)" class="card my-3 ">
+                <div class="card my-3 ">
                     <div class="card-header">
                         Basic Info
                     </div>
@@ -31,15 +31,9 @@
                                 <div class="card-header">
                                     Stacktrace
                                 </div>
-                                <div class="card-body">
-                                    <div class="row  p-0" *ngFor="let obj of log.stackTrace">
-                                        <div class="col">
-                                            <code class="js">{{obj.fileName}}:{{obj.lineNumber}}:{{obj.columnNumber}}</code>
-                                            in
-                                            function
-                                            <code class="js">{{obj.functionName}}</code>
-                                        </div>
-                                    </div>
+                                <div class="card-body p-0">
+                                    <app-stacktrace class="w-100" [stackTrace]="log.stackTrace"></app-stacktrace>
+
                                 </div>
                             </div>
 
@@ -128,6 +122,26 @@
                         </div>
                     </div>
                 </div>
+            </tab>
+            <tab heading="Similar errors">
+                <table class="table table-stripped table-hover table-bordered">
+                    <thead class="thead-light">
+                    <tr>
+                        <th>Id</th>
+                        <th>Source</th>
+                        <th>Timestamp</th>
+                        <th>Distance</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="similar" *ngFor="let log of similarLogs" [routerLink]="['/logDetails', log.id]">
+                        <td>{{log.id}}</td>
+                        <td>{{log.source}}</td>
+                        <td>{{log.timestamp | date:'medium'}}</td>
+                        <td>{{log.distance}}</td>
+                    </tr>
+                    </tbody>
+                </table>
             </tab>
         </tabset>
 

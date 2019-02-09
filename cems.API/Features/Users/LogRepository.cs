@@ -93,7 +93,7 @@ namespace cems.API.Features.Users
                         logs = logs.OrderByDescending(l => l.Timestamp);
                         break;
                 }
-            }
+            }            
 
             return await PagedList<ErrorLogBase>.CreateAsync(logs, userParams.PageNumber, userParams.PageSize);
         }

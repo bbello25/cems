@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -8,7 +7,7 @@ using cems.API.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
+
 
 namespace cems.API.Features.Users
 {
@@ -19,12 +18,15 @@ namespace cems.API.Features.Users
         private readonly DataContext _context;
         private readonly UserManager<User> _userManager;
         private readonly ILogRepository _logRepository;
+        private readonly IStrackTraceDeminifierService _deminifier;
 
-        public UserLogController(DataContext context, UserManager<User> userManager, ILogRepository logRepository)
+        public UserLogController(DataContext context, UserManager<User> userManager, ILogRepository logRepository,
+            IStrackTraceDeminifierService deminifier)
         {
             _context = context;
             _userManager = userManager;
             _logRepository = logRepository;
+            _deminifier = deminifier;
         }
 
         [HttpGet]
@@ -61,7 +63,6 @@ namespace cems.API.Features.Users
                 return NotFound();
             }
 
-
             /*var retyped = (BrowserErrorLog) log;
             if (retyped.Headers != null)
             {
@@ -78,7 +79,7 @@ namespace cems.API.Features.Users
             return Ok(log);
         }
 
-        [HttpGet("/stackframes")]
+        [HttpGet("{id}/similarLogs")]
         public async Task<IActionResult> GetUserStackFrames(int id)
         {
             var username = User.FindFirst(ClaimTypes.Name).Value;
@@ -89,11 +90,16 @@ namespace cems.API.Features.Users
             log = await _context.LogEntries.Include(l => l.WebApiKey)
                 .Where(l => l.WebApiKeyId == userFromDb.WebApiKey.Id && l.Id == id).FirstOrDefaultAsync();
 
-            var stackTrace = new StackTrace();
-            stackTrace.StackFrames = JsonConvert.DeserializeObject<IEnumerable<StackFrame>>(log.StackTrace);
-            stackTrace.LogId = log.Id;
+       
+            var logs = await _context.LogEntries.Include(l => l.WebApiKey)
+                .Where(l => l.WebApiKeyId == userFromDb.WebApiKey.Id && l.ProgLanguage == log.ProgLanguage)
+                .ToListAsync();
 
-            return NotFound();
+
+            var res = KNN.Compute(logs, log, 10);
+      
+
+            return Ok(res);
         }
     }
 }

@@ -37,6 +37,7 @@ namespace cems.API
                 options.UseSqlServer(connString));
 
             services.AddScoped<ILogRepository, LogRepository>();
+            services.AddScoped<IStrackTraceDeminifierService, StackTraceDeminifierService>();
 
             var builder = services.AddIdentityCore<User>(opt =>
             {
@@ -118,7 +119,7 @@ namespace cems.API
             }
 
             seeder.SeedUsers();
-            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials());
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseAuthentication();
             app.UseDefaultFiles();
             app.UseStaticFiles();

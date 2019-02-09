@@ -1,0 +1,6 @@
+tr {
+   cursor: pointer;
+}
+tr:hover {
+    background: #e1e3e5;
+}

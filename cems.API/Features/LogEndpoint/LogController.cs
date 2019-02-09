@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using cems.API.Data;
+using cems.API.Features.Users;
 using cems.API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -19,11 +20,13 @@ namespace cems.API.Features.LogCollector
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
+        private readonly IStrackTraceDeminifierService _deminifier;
 
-        public LogController(DataContext context, IMapper mapper)
+        public LogController(DataContext context, IMapper mapper, IStrackTraceDeminifierService deminifier)
         {
             _context = context;
             _mapper = mapper;
+            _deminifier = deminifier;
         }
 
         [HttpGet("healthCheck")]
@@ -59,6 +62,8 @@ namespace cems.API.Features.LogCollector
                 return BadRequest("Unregistered API Key");
             }
 
+            var res = _deminifier.Deminfy(data.stacktrace.ToString()); 
+            
             var errorLog = new BrowserErrorForSaveDto
             {
                 Timestamp = data.timestamp,
@@ -67,7 +72,7 @@ namespace cems.API.Features.LogCollector
                 Message = data.message,
                 Name = data.name,
                 Source = data.source,
-                StackTrace = data.stacktrace.ToString(),
+                StackTrace = JsonConvert.SerializeObject(res),
                 SessionInfo = data.sessionInfo.ToString()
             };
             var errorLogToSave = _mapper.Map<BrowserErrorLog>(errorLog);
@@ -77,7 +82,7 @@ namespace cems.API.Features.LogCollector
             errorLogToSave.ProgLanguage = "JavaScript";
             errorLogToSave.WebApiKey = apiKeyFromDb;
             _context.LogEntries.Add(errorLogToSave);
-            
+
             return await _context.SaveChangesAsync() > 0 ? Ok() : StatusCode(StatusCodes.Status500InternalServerError);
         }
 
@@ -108,7 +113,7 @@ namespace cems.API.Features.LogCollector
             };
 
             _context.LogEntries.Add(errorLogBase);
-            
+
             return await _context.SaveChangesAsync() > 0 ? Ok() : StatusCode(StatusCodes.Status500InternalServerError);
         }
     }
