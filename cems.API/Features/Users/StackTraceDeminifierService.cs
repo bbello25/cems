@@ -59,7 +59,7 @@ namespace cems.API.Features.Users
             var uri = new Uri(minifiedStackFrame.FilePath);
             var lastSlash = uri.AbsoluteUri.LastIndexOf("/", StringComparison.Ordinal);
             var path = uri.AbsoluteUri.Substring(0, lastSlash);
-            var sourceUrl = string.Format($"{path}/{deminifiedStackFrame.FilePath}");
+            var sourceUrl = string.Format($"{uri.Scheme}://{uri.Host}:{uri.Port}/{deminifiedStackFrame.FilePath}");
             return sourceUrl;
         }
 

@@ -11,11 +11,12 @@ namespace cems.API.Models
 
         public double Distance(StackTrace other)
         {
-//            var stackFrames = StackFrames.Reverse().ToList();
-//            var otherStackFrames = other.StackFrames.Reverse().ToList();
+            //            var stackFrames = StackFrames.Reverse().ToList();
+            //            var otherStackFrames = other.StackFrames.Reverse().ToList();
             var stackFrames = StackFrames.ToList();
             var otherStackFrames = other.StackFrames.ToList();
-            var numberOfMatchigStackFrames = 0;
+            var numberOfMatchigStackFrames = 0.0;
+
 
 
             for (var i = 0; i < stackFrames.Count; i++)
@@ -29,7 +30,11 @@ namespace cems.API.Models
                     break;
             }
 
-            return  Math.Round( numberOfMatchigStackFrames / (double) stackFrames.Count, 2);
+            var countDiff = Math.Abs(stackFrames.Count - otherStackFrames.Count);
+            if (countDiff != 0 && numberOfMatchigStackFrames != 0.0)
+                numberOfMatchigStackFrames += (1.0 / countDiff / 10);
+
+            return numberOfMatchigStackFrames;
         }
     }
 }
