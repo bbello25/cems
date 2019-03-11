@@ -41,6 +41,7 @@ import javascript from 'node_modules/highlight.js/lib/languages/javascript.js';
 import { StacktraceComponent } from './dashboard/stacktrace/stacktrace.component';
 import { StackFrameComponent } from './dashboard/stack-frame/stack-frame.component';
 import { MinifiedStackFrameComponent } from './dashboard/minified-stack-frame/minified-stack-frame.component';
+import { LogEndpointService } from './_services/logEndpoint.service';
 
 export function hljsLanguages() {
     return [
@@ -110,7 +111,8 @@ export function tokenGetter() {
         {
             provide: ErrorHandler,
             useClass: GlobalErrorHandler
-        }
+        },
+        LogEndpointService
     ],
     bootstrap: [AppComponent]
 })

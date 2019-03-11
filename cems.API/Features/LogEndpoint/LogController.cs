@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using cems.API.Data;
-using cems.API.Features.Users;
+using cems.API.Features.LogEndpoint;
 using cems.API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -44,7 +44,9 @@ namespace cems.API.Features.LogCollector
                 return BadRequest("Unregistered API Key");
             }
 
-            return Ok();
+            var sessionId = Guid.NewGuid().ToString("N");
+
+            return Ok(sessionId);
         }
 
         [HttpPost("browserError")]

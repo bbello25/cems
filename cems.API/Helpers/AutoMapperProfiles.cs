@@ -1,7 +1,7 @@
 using System;
 using AutoMapper;
 using cems.API.Features.Authorization;
-using cems.API.Features.LogCollector;
+using cems.API.Features.LogEndpoint;
 using cems.API.Features.Users;
 using cems.API.Models;
 

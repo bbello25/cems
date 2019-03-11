@@ -2,6 +2,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using cems.API.Data;
+using cems.API.Features.LogEndpoint;
 using cems.API.Helpers;
 using cems.API.Models;
 using Microsoft.AspNetCore.Identity;

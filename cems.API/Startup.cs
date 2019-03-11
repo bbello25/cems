@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using AutoMapper;
 using cems.API.Data;
+using cems.API.Features.LogEndpoint;
 using cems.API.Features.Users;
 using cems.API.Helpers;
 using cems.API.Models;

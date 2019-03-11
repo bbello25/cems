@@ -1,5 +1,4 @@
-
-namespace cems.API.Features.LogCollector
+namespace cems.API.Features.LogEndpoint
 {
     public class BrowserErrorForSaveDto : ErrorForSaveBaseDto
     {

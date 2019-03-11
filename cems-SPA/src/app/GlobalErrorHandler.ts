@@ -1,29 +1,15 @@
-import { ErrorHandler, Injectable } from '@angular/core';
-import { CemsLogger } from '@bbellovic/cems-logger-js/dist/es2015/CemsLogger';
-// import { CemsLogger } from '../../../../cems-logger-javascript2/src/CemsLogger';
+import { ErrorHandler, Injectable, Injector } from '@angular/core';
 
-const { name: name } = require('../../package.json');
-import { User } from './_models/user';
-import { environment } from '../environments/environment';
+import { LogEndpointService } from './_services/logEndpoint.service';
 
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
-  url = environment.apiUrl + 'log/browserError';
-  currentUser: User;
-  logger: CemsLogger = null;
 
-  constructor() {
-    this.logger = CemsLogger.initLogger({
-      endPointUrl: environment.cemsLoggerURL,
-      apiKey: environment.cemsLoggerApiKey,
-      appName: name,
-      email: 'b.bellovic@gmail.com'
-    });
-  }
+  constructor(private injector: Injector) {}
 
   async handleError(error: Error) {
-    console.error(error);
-    await this.logger.sendLog(error);
+    const loggingService = this.injector.get(LogEndpointService);
+    loggingService.log(error);
     // throw error;
   }
 }

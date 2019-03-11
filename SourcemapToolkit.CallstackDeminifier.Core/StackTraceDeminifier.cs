@@ -30,7 +30,6 @@ namespace SourcemapToolkit.CallstackDeminifier.Core
 
             foreach (StackFrame minifiedStackFrame in result.MinifiedStackFrames)
             {
-
                 try
                 {
                     result.DeminifiedStackFrameResults.Add(_stackFrameDeminifier.DeminifyStackFrame(minifiedStackFrame));
@@ -38,7 +37,8 @@ namespace SourcemapToolkit.CallstackDeminifier.Core
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e);
+
+                    Console.WriteLine("Failed to parse stackfarame " + e);
                 }
             }
 

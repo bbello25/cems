@@ -1,4 +1,4 @@
-namespace cems.API.Features.LogCollector
+namespace cems.API.Features.LogEndpoint
 {
     public class ErrorForSaveBaseDto
     {
@@ -8,5 +8,5 @@ namespace cems.API.Features.LogCollector
         public string Timestamp { get; set; }
         public string Ip { get; set; }
         public string Email { get; set; }
-    }    
+    }
 }
