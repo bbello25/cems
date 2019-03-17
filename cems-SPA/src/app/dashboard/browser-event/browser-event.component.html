@@ -1,0 +1,11 @@
+<div class="border-primary border-dark">
+  <div class="row p-1" id="header" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="sourceCode">
+    <div class="col col-12" [innerHTML]="getHeader()"></div>
+    <div class="col col-12  text-right">{{ fortmatedTimestamp() }}</div>
+  </div>
+  <div class="row p-1" id="sourceCode" [collapse]="isCollapsed">
+    <div class="col bg-light">
+      <pre [innerHTML]="detailsJson()"></pre>
+    </div>
+  </div>
+</div>

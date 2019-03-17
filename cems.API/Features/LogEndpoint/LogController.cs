@@ -1,15 +1,20 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AjaxMinExtensions;
 using AutoMapper;
 using cems.API.Data;
 using cems.API.Features.LogEndpoint;
+using cems.API.Features.Shared;
 using cems.API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using StackTrace = System.Diagnostics.StackTrace;
 
 namespace cems.API.Features.LogCollector
 {
@@ -64,8 +69,8 @@ namespace cems.API.Features.LogCollector
                 return BadRequest("Unregistered API Key");
             }
 
-            var res = _deminifier.Deminfy(data.stacktrace.ToString()); 
-            
+            var res = _deminifier.Deminfy(data.stacktrace.ToString());
+
             var errorLog = new BrowserErrorForSaveDto
             {
                 Timestamp = data.timestamp,
@@ -89,8 +94,9 @@ namespace cems.API.Features.LogCollector
         }
 
 
-        [HttpPost]
-        public async Task<IActionResult> Post(ErrorForSaveBaseDto logEntryDto)
+
+        [HttpPost("apiError")]
+        public async Task<IActionResult> ApiError([FromBody]JObject data)
         {
             var apiKeyFromRequest = HttpContext.Request.Headers["api-key"];
             if (apiKeyFromRequest.ToString().Length == 0)
@@ -104,18 +110,9 @@ namespace cems.API.Features.LogCollector
                 return BadRequest("Unregistered API Key");
             }
 
-            var errorLogBase = new ErrorLogBase
-            {
-                Message = logEntryDto.Message,
-                StackTrace = logEntryDto.StackTrace,
-                Source = logEntryDto.Source,
-                WebApiKeyId = apiKeyFromDb.Id,
-                ProgLanguage = "C#",
-                Timestamp = DateTime.Now
-            };
 
-            _context.LogEntries.Add(errorLogBase);
-
+            var dataObj =  data.ToObject<DotnetExceptionDto>();
+            //_context.LogEntries.Add(errorLogBase);
             return await _context.SaveChangesAsync() > 0 ? Ok() : StatusCode(StatusCodes.Status500InternalServerError);
         }
     }

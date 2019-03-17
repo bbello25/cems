@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { CemsLogger } from '@bbellovic/cems-logger-js';
+import CemsLogger from '@bbellovic/cems-logger-js';
 const { name: name } = require('../../../package.json');
 
 @Injectable({

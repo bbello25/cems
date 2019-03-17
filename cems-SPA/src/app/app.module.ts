@@ -42,6 +42,7 @@ import { StacktraceComponent } from './dashboard/stacktrace/stacktrace.component
 import { StackFrameComponent } from './dashboard/stack-frame/stack-frame.component';
 import { MinifiedStackFrameComponent } from './dashboard/minified-stack-frame/minified-stack-frame.component';
 import { LogEndpointService } from './_services/logEndpoint.service';
+import { BrowserEventComponent } from './dashboard/browser-event/browser-event.component';
 
 export function hljsLanguages() {
     return [
@@ -73,7 +74,8 @@ export function tokenGetter() {
         ErrorThrowComponent,
         StacktraceComponent,
         StackFrameComponent,
-        MinifiedStackFrameComponent
+        MinifiedStackFrameComponent,
+        BrowserEventComponent
     ],
     imports: [
         BrowserModule,

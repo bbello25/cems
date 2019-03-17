@@ -18,7 +18,6 @@ namespace cems.API.Models
         [JsonIgnore] public int WebApiKeyId { get; set; }
         [JsonIgnore] public WebApiKey WebApiKey { get; set; }
         
-        
         public StackTrace GetStackTrace()
         {
             var jss = JObject.Parse(StackTrace);

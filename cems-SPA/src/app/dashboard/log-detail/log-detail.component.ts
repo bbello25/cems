@@ -52,7 +52,6 @@ export class LogDetailComponent implements OnInit {
 
     ngOnInit(): void {
         this.route.params.subscribe(params => {
-            console.log(params['id']);
             this.doOnInit();
         });
 
