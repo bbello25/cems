@@ -21,34 +21,34 @@ namespace cems.API.Features.Users
         }
 
 
-        public async Task<PagedList<ErrorLogBase>> GetLogList(UserParams userParams, string username)
+        public async Task<PagedList<BaseErrorLog>> GetLogList(UserParams userParams, string username)
         {
             var userFromDb = await _context.Users.Include(u => u.WebApiKey)
                 .Where(u => u.NormalizedUserName == username.ToUpper()).FirstOrDefaultAsync();
 
             var isAdmin = await _userManager.IsInRoleAsync(userFromDb, "Admin");
 
-            var logs = _context.LogEntries.Include(log => log.WebApiKey)
-                .OrderByDescending(log => log.Timestamp).GroupBy(log => log.Message)
+            var logs = _context.ErrorLogs.Include(log => log.WebApiKey)
+                .OrderByDescending(log => log.Timestamp).GroupBy(log => log.ExceptionMessage)
                 .AsQueryable();
 
 
             return null;
         }
 
-        public async Task<PagedList<ErrorLogBase>> GetLogs(UserParams userParams, string username)
+        public async Task<PagedList<BaseErrorLog>> GetLogs(UserParams userParams, string username)
         {
             var userFromDb = await _context.Users.Include(u => u.WebApiKey)
                 .Where(u => u.NormalizedUserName == username.ToUpper()).FirstOrDefaultAsync();
 
             var isAdmin = await _userManager.IsInRoleAsync(userFromDb, "Admin");
 
-            var logs = _context.LogEntries.Include(log => log.WebApiKey).OrderByDescending(log => log.Timestamp)
+            var logs = _context.ErrorLogs.Include(log => log.WebApiKey).OrderByDescending(log => log.Timestamp)
                 .AsQueryable();
 
             if (isAdmin)
             {
-                logs = _context.LogEntries.Include(log => log.WebApiKey)
+                logs = _context.ErrorLogs.Include(log => log.WebApiKey)
                     .ThenInclude(webApikey => webApikey.User);
             }
             else
@@ -95,7 +95,7 @@ namespace cems.API.Features.Users
                 }
             }            
 
-            return await PagedList<ErrorLogBase>.CreateAsync(logs, userParams.PageNumber, userParams.PageSize);
+            return await PagedList<BaseErrorLog>.CreateAsync(logs, userParams.PageNumber, userParams.PageSize);
         }
     }
 }

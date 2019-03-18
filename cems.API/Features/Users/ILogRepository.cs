@@ -6,6 +6,6 @@ namespace cems.API.Features.Users
 {
     public interface ILogRepository
     {
-        Task<PagedList<ErrorLogBase>> GetLogs(UserParams userParams, string username);
+        Task<PagedList<BaseErrorLog>> GetLogs(UserParams userParams, string username);
     }
 }

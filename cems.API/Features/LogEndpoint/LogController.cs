@@ -25,9 +25,9 @@ namespace cems.API.Features.LogCollector
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
-        private readonly IStrackTraceDeminifierService _deminifier;
+        private readonly IStackTraceDeminifierService _deminifier;
 
-        public LogController(DataContext context, IMapper mapper, IStrackTraceDeminifierService deminifier)
+        public LogController(DataContext context, IMapper mapper, IStackTraceDeminifierService deminifier)
         {
             _context = context;
             _mapper = mapper;
@@ -54,8 +54,10 @@ namespace cems.API.Features.LogCollector
             return Ok(sessionId);
         }
 
+        // TODO create model for data
+        // TODO refactor this following dotnetWebError
         [HttpPost("browserError")]
-        public async Task<IActionResult> Post([FromBody] dynamic data)
+        public async Task<IActionResult> BrowserErrorEndpoint([FromBody] dynamic data)
         {
             var apiKeyFromRequest = HttpContext.Request.Headers["api-key"];
             if (apiKeyFromRequest.ToString().Length == 0)
@@ -83,20 +85,19 @@ namespace cems.API.Features.LogCollector
                 SessionInfo = data.sessionInfo.ToString()
             };
             var errorLogToSave = _mapper.Map<BrowserErrorLog>(errorLog);
-            errorLogToSave.Headers =
-                JsonConvert.SerializeObject(Request.Headers.Where(h => h.Value.Count > 0).ToList());
+            errorLogToSave.Headers = JsonConvert.SerializeObject(Request.Headers.Where(h => h.Value.Count > 0).ToList());
             errorLogToSave.Protocol = Request.Protocol;
             errorLogToSave.ProgLanguage = "JavaScript";
             errorLogToSave.WebApiKey = apiKeyFromDb;
-            _context.LogEntries.Add(errorLogToSave);
+            _context.ErrorLogs.Add(errorLogToSave);
 
             return await _context.SaveChangesAsync() > 0 ? Ok() : StatusCode(StatusCodes.Status500InternalServerError);
         }
 
 
 
-        [HttpPost("apiError")]
-        public async Task<IActionResult> ApiError([FromBody]JObject data)
+        [HttpPost("dotnetWebError")]
+        public async Task<IActionResult> DotnetWebErrorEndpoint([FromBody]DotnetExceptionDto data)
         {
             var apiKeyFromRequest = HttpContext.Request.Headers["api-key"];
             if (apiKeyFromRequest.ToString().Length == 0)
@@ -110,9 +111,21 @@ namespace cems.API.Features.LogCollector
                 return BadRequest("Unregistered API Key");
             }
 
+            var errorLogToSave = new DotnetWebErrorLog
+            {
+                ExceptionMessage = data.Message,
+                Source = data.Source,
+                ProgLanguage = data.ProgLanguage,
+                Timestamp = DateTimeConverter.UnixTimestampToDateTime(data.Timestamp),
+                StackTraceJson = JsonConvert.SerializeObject(data.StackTrace),
+                RequestJson = JsonConvert.SerializeObject(data.Request),
+                ConnectionInfoRequest = JsonConvert.SerializeObject(data.ConnectionInfo),
+                Host = data.Host,
+                Port = data.Port,
+                WebApiKey = apiKeyFromDb
+            };
 
-            var dataObj =  data.ToObject<DotnetExceptionDto>();
-            //_context.LogEntries.Add(errorLogBase);
+            _context.ErrorLogs.Add(errorLogToSave);
             return await _context.SaveChangesAsync() > 0 ? Ok() : StatusCode(StatusCodes.Status500InternalServerError);
         }
     }

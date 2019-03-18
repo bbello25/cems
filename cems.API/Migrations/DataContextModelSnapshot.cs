@@ -15,7 +15,7 @@ namespace cems.API.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
+                .HasAnnotation("ProductVersion", "2.2.2-servicing-10034")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -89,7 +89,7 @@ namespace cems.API.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("cems.API.Models.ErrorLogBase", b =>
+            modelBuilder.Entity("cems.API.Models.BaseErrorLog", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -97,17 +97,13 @@ namespace cems.API.Migrations
 
                     b.Property<int>("ErrorLogType");
 
-                    b.Property<string>("Ip");
-
-                    b.Property<string>("Message");
+                    b.Property<string>("ExceptionMessage");
 
                     b.Property<string>("ProgLanguage");
 
-                    b.Property<string>("Protocol");
-
                     b.Property<string>("Source");
 
-                    b.Property<string>("StackTrace");
+                    b.Property<string>("StackTraceJson");
 
                     b.Property<DateTime>("Timestamp");
 
@@ -257,15 +253,34 @@ namespace cems.API.Migrations
 
             modelBuilder.Entity("cems.API.Models.BrowserErrorLog", b =>
                 {
-                    b.HasBaseType("cems.API.Models.ErrorLogBase");
+                    b.HasBaseType("cems.API.Models.BaseErrorLog");
 
                     b.Property<string>("Headers");
 
+                    b.Property<string>("Ip");
+
                     b.Property<string>("Name");
+
+                    b.Property<string>("Protocol");
 
                     b.Property<string>("SessionInfo");
 
                     b.HasDiscriminator().HasValue(2);
+                });
+
+            modelBuilder.Entity("cems.API.Models.DotnetWebErrorLog", b =>
+                {
+                    b.HasBaseType("cems.API.Models.BaseErrorLog");
+
+                    b.Property<string>("ConnectionInfoRequest");
+
+                    b.Property<string>("Host");
+
+                    b.Property<string>("Port");
+
+                    b.Property<string>("RequestJson");
+
+                    b.HasDiscriminator().HasValue(3);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -300,7 +315,7 @@ namespace cems.API.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("cems.API.Models.ErrorLogBase", b =>
+            modelBuilder.Entity("cems.API.Models.BaseErrorLog", b =>
                 {
                     b.HasOne("cems.API.Models.User")
                         .WithMany("LogEntries")

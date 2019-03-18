@@ -12,7 +12,7 @@ namespace cems.API.Data
         {
         }
 
-        public DbSet<ErrorLogBase> LogEntries { get; set; }
+        public DbSet<BaseErrorLog> ErrorLogs { get; set; }
         public DbSet<WebApiKey> WebApiKeys { get; set; }
         public DbSet<TrustedHost> TrustedHosts { get; set; }
 
@@ -62,18 +62,17 @@ namespace cems.API.Data
                     .HasForeignKey(t => t.WebApiKeyId);
             });
 
-            modelBuilder.Entity<ErrorLogBase>(logEntry =>
+            modelBuilder.Entity<BaseErrorLog>(logEntry =>
             {
                 logEntry.HasOne(e => e.WebApiKey).WithMany(w => w.LogEntries);
             });
 
-            modelBuilder.Entity<ErrorLogBase>()
+            modelBuilder.Entity<BaseErrorLog>()
                 .ToTable("ErrorLog")
                 .HasDiscriminator<int>("ErrorLogType")
-                .HasValue<ErrorLogBase>(1)
-                .HasValue<BrowserErrorLog>(2);
-
-
+                .HasValue<BaseErrorLog>(1)
+                .HasValue<BrowserErrorLog>(2)
+                .HasValue<DotnetWebErrorLog>(3);
         }
     }
 }

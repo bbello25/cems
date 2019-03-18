@@ -8,7 +8,7 @@ using StackFrame = SourcemapToolkit.CallstackDeminifier.Core.StackFrame;
 
 namespace cems.API.Features.LogEndpoint
 {
-    public class StackTraceDeminifierService : IStrackTraceDeminifierService
+    public class StackTraceDeminifierService : IStackTraceDeminifierService
     {
         private readonly CemsOriginalSourceCodeProvider _originalSourceCodeProvider;
         private readonly StackTraceDeminifier _sourceMapCallstackDeminifier;

@@ -10,14 +10,14 @@ using cems.API.Data;
 namespace cems.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20181229084448_initial")]
-    partial class initial
+    [Migration("20190318071700_dotnetLogSupport")]
+    partial class dotnetLogSupport
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
+                .HasAnnotation("ProductVersion", "2.2.2-servicing-10034")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -99,13 +99,9 @@ namespace cems.API.Migrations
 
                     b.Property<int>("ErrorLogType");
 
-                    b.Property<string>("Ip");
-
                     b.Property<string>("ExceptionMessage");
 
                     b.Property<string>("ProgLanguage");
-
-                    b.Property<string>("Protocol");
 
                     b.Property<string>("Source");
 
@@ -263,11 +259,30 @@ namespace cems.API.Migrations
 
                     b.Property<string>("Headers");
 
+                    b.Property<string>("Ip");
+
                     b.Property<string>("Name");
+
+                    b.Property<string>("Protocol");
 
                     b.Property<string>("SessionInfo");
 
                     b.HasDiscriminator().HasValue(2);
+                });
+
+            modelBuilder.Entity("cems.API.Models.DotnetWebErrorLog", b =>
+                {
+                    b.HasBaseType("cems.API.Models.BaseErrorLog");
+
+                    b.Property<string>("ConnectionInfoRequest");
+
+                    b.Property<string>("Host");
+
+                    b.Property<string>("Port");
+
+                    b.Property<string>("RequestJson");
+
+                    b.HasDiscriminator().HasValue(3);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -305,11 +320,11 @@ namespace cems.API.Migrations
             modelBuilder.Entity("cems.API.Models.BaseErrorLog", b =>
                 {
                     b.HasOne("cems.API.Models.User")
-                        .WithMany("ErrorLogs")
+                        .WithMany("LogEntries")
                         .HasForeignKey("UserId");
 
                     b.HasOne("cems.API.Models.WebApiKey", "WebApiKey")
-                        .WithMany("ErrorLogs")
+                        .WithMany("LogEntries")
                         .HasForeignKey("WebApiKeyId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

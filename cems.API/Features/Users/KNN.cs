@@ -7,11 +7,11 @@ namespace cems.API.Features.Users
 {
     public static class KNN
     {
-        public static IEnumerable<object> Compute(IEnumerable<ErrorLogBase> otherLogs,
-            ErrorLogBase currentLog, int k)
+        public static IEnumerable<object> Compute(IEnumerable<BaseErrorLog> otherLogs,
+            BaseErrorLog currentLog, int k)
         {
             var currentStackTrace = currentLog.GetStackTrace();
-            IEnumerable<ErrorLogBase> browserErrorLogs = otherLogs.ToList();
+            IEnumerable<BaseErrorLog> browserErrorLogs = otherLogs.ToList();
             var otherStackTraces = browserErrorLogs.Select(log => log.GetStackTrace())
                 .Where(log => log.LogId != currentLog.Id);
 

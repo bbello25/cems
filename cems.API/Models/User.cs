@@ -9,7 +9,7 @@ namespace cems.API.Models
         public string LastName { get; set; }
 
         public ICollection<UserRole> UserRoles { get; set; }
-        public ICollection<ErrorLogBase> LogEntries { get; set; }
+        public ICollection<BaseErrorLog> LogEntries { get; set; }
 
         public WebApiKey WebApiKey { get; set; }
     }

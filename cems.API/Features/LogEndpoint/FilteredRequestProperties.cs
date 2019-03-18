@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
-using Microsoft.Extensions.Primitives;
 
-namespace cems.API.Models
+namespace cems.API.Features.LogEndpoint
 {
     public class FilteredRequestProperties
     {

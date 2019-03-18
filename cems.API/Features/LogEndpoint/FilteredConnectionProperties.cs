@@ -1,4 +1,4 @@
-﻿namespace cems.API.Models
+﻿namespace cems.API.Features.LogEndpoint
 {
     public class FilteredConnectionProperties
     {

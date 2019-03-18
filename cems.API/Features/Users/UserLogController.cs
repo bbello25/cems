@@ -19,10 +19,10 @@ namespace cems.API.Features.Users
         private readonly DataContext _context;
         private readonly UserManager<User> _userManager;
         private readonly ILogRepository _logRepository;
-        private readonly IStrackTraceDeminifierService _deminifier;
+        private readonly IStackTraceDeminifierService _deminifier;
 
         public UserLogController(DataContext context, UserManager<User> userManager, ILogRepository logRepository,
-            IStrackTraceDeminifierService deminifier)
+            IStackTraceDeminifierService deminifier)
         {
             _context = context;
             _userManager = userManager;
@@ -48,14 +48,14 @@ namespace cems.API.Features.Users
             var userFromDb = await _context.Users.Include(u => u.WebApiKey)
                 .Where(u => u.NormalizedUserName == username.ToUpper()).FirstOrDefaultAsync();
 
-            ErrorLogBase log;
+            BaseErrorLog log;
             if (await _userManager.IsInRoleAsync(userFromDb, "Admin"))
             {
-                log = await _context.LogEntries.FirstOrDefaultAsync(l => l.Id == id);
+                log = await _context.ErrorLogs.FirstOrDefaultAsync(l => l.Id == id);
             }
             else
             {
-                log = await _context.LogEntries.Include(l => l.WebApiKey)
+                log = await _context.ErrorLogs.Include(l => l.WebApiKey)
                     .Where(l => l.WebApiKeyId == userFromDb.WebApiKey.Id && l.Id == id).FirstOrDefaultAsync();
             }
 
@@ -87,12 +87,12 @@ namespace cems.API.Features.Users
             var userFromDb = await _context.Users.Include(u => u.WebApiKey)
                 .Where(u => u.NormalizedUserName == username.ToUpper()).FirstOrDefaultAsync();
 
-            ErrorLogBase log;
-            log = await _context.LogEntries.Include(l => l.WebApiKey)
+            BaseErrorLog log;
+            log = await _context.ErrorLogs.Include(l => l.WebApiKey)
                 .Where(l => l.WebApiKeyId == userFromDb.WebApiKey.Id && l.Id == id).FirstOrDefaultAsync();
 
        
-            var logs = await _context.LogEntries.Include(l => l.WebApiKey)
+            var logs = await _context.ErrorLogs.Include(l => l.WebApiKey)
                 .Where(l => l.WebApiKeyId == userFromDb.WebApiKey.Id && l.ProgLanguage == log.ProgLanguage)
                 .ToListAsync();
 

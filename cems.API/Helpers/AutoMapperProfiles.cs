@@ -26,7 +26,7 @@ namespace cems.API.Helpers
             CreateMap<ErrorForSaveBaseDto, BrowserErrorLog>();
 
             CreateMap<User, UserForListDto>();
-//            CreateMap<ErrorLogBase, LogEntryForListDto>();
+//            CreateMap<BaseErrorLog, LogEntryForListDto>();
             CreateMap<User, UserDetailDto>();
             CreateMap<UserDetailDto, User>();
             CreateMap<UserForRegisterDto, User>();
