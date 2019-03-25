@@ -7,7 +7,7 @@ namespace cems.API.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "ConnectionInfoRequest",
+                name: "ConnectionInfoJson",
                 table: "ErrorLog",
                 nullable: true);
 
@@ -41,7 +41,7 @@ namespace cems.API.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "ConnectionInfoRequest",
+                name: "ConnectionInfoJson",
                 table: "ErrorLog");
 
             migrationBuilder.DropColumn(

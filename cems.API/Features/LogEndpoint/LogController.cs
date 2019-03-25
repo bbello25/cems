@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using StackTrace = System.Diagnostics.StackTrace;
 
 namespace cems.API.Features.LogCollector
@@ -26,12 +27,18 @@ namespace cems.API.Features.LogCollector
         private readonly DataContext _context;
         private readonly IMapper _mapper;
         private readonly IStackTraceDeminifierService _deminifier;
+        private readonly JsonSerializerSettings serializerSettings;
 
         public LogController(DataContext context, IMapper mapper, IStackTraceDeminifierService deminifier)
         {
             _context = context;
             _mapper = mapper;
             _deminifier = deminifier;
+
+            serializerSettings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
         }
 
         [HttpGet("healthCheck")]
@@ -111,21 +118,25 @@ namespace cems.API.Features.LogCollector
                 return BadRequest("Unregistered API Key");
             }
 
+            string stackTraceString = data.StackTrace;
+            //var stackTrace = new StackTrace(stackTraceString);
+
             var errorLogToSave = new DotnetWebErrorLog
             {
                 ExceptionMessage = data.Message,
                 Source = data.Source,
                 ProgLanguage = data.ProgLanguage,
                 Timestamp = DateTimeConverter.UnixTimestampToDateTime(data.Timestamp),
-                StackTraceJson = JsonConvert.SerializeObject(data.StackTrace),
-                RequestJson = JsonConvert.SerializeObject(data.Request),
-                ConnectionInfoRequest = JsonConvert.SerializeObject(data.ConnectionInfo),
+                StackTraceJson = JsonConvert.SerializeObject(JsonConvert.DeserializeObject(data.StackTrace), serializerSettings),
+                RequestJson = JsonConvert.SerializeObject(data.Request, serializerSettings),
+                ConnectionInfoJson = JsonConvert.SerializeObject(data.ConnectionInfo, serializerSettings),
                 Host = data.Host,
                 Port = data.Port,
                 WebApiKey = apiKeyFromDb
             };
 
             _context.ErrorLogs.Add(errorLogToSave);
+
             return await _context.SaveChangesAsync() > 0 ? Ok() : StatusCode(StatusCodes.Status500InternalServerError);
         }
     }

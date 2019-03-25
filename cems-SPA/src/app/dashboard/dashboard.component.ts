@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ErrorLog } from '../_models/ErrorLog';
 import { LogService } from '../_services/log.service';
 import { AuthService } from '../_services/auth.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Pagination, PaginationResult } from '../_models/Pagination';
 import { AlertifyService } from '../_services/alertify.service';
 
@@ -28,9 +28,9 @@ export class DashboardComponent implements OnInit {
     private authService: AuthService,
     private route: ActivatedRoute,
     private alertify: AlertifyService,
-    private ref: ChangeDetectorRef
-  ) {
-  }
+    private ref: ChangeDetectorRef,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.route.data.subscribe(data => {
@@ -55,7 +55,6 @@ export class DashboardComponent implements OnInit {
     this.loadLogs();
   }
 
-
   pageChanged(event: any): void {
     this.pagination.currentPage = event.page;
     console.log(event.page);
@@ -63,16 +62,35 @@ export class DashboardComponent implements OnInit {
   }
 
   loadLogs() {
-    this.logService.getLogs(this.pagination.currentPage, this.pagination.itemsPerPage, this.userParams)
-      .subscribe((res: PaginationResult<ErrorLog[]>) => {
-          this.logs = res.result;
-          this.pagination = res.pagination;
-          this.ref.detectChanges();
-        },
-        error1 => {
-          this.alertify.error(error1);
-        }
-      );
+    this.logService.getLogs(this.pagination.currentPage, this.pagination.itemsPerPage, this.userParams).subscribe(
+      (res: PaginationResult<ErrorLog[]>) => {
+        this.logs = res.result;
+        this.pagination = res.pagination;
+        this.ref.detectChanges();
+      },
+      error1 => {
+        this.alertify.error(error1);
+      }
+    );
   }
 
+  showLogDetail(logId: number) {
+    console.log('click');
+    const log = this.logs.find(l => {
+      return l.id === logId;
+    });
+
+    switch (log.progLanguage) {
+      case 'C#': {
+        this.router.navigate(['csharpLogDetail/' + logId]);
+        break;
+      }
+      case 'JavaScript': {
+        break;
+      }
+      default: {
+        this.alertify.error(`Unsupported language ${log.progLanguage}`);
+      }
+    }
+  }
 }

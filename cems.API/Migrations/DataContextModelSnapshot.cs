@@ -272,7 +272,7 @@ namespace cems.API.Migrations
                 {
                     b.HasBaseType("cems.API.Models.BaseErrorLog");
 
-                    b.Property<string>("ConnectionInfoRequest");
+                    b.Property<string>("ConnectionInfoJson");
 
                     b.Property<string>("Host");
 

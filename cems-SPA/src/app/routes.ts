@@ -10,6 +10,8 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { ErrorThrowComponent } from './error-throw/error-throw.component';
 import { LogsListResolver } from './_resolvers/logs-list.resolver';
+import { CsharpLogDetailComponent } from './dashboard/csharp/csharp-log-detail/csharp-log-detail.component';
+import { CsharpLogResolver } from './dashboard/csharp/csharp-log-detail/csharp-log.resolver';
 
 export const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -35,6 +37,11 @@ export const appRoutes: Routes = [
       {
         path: 'logDetails/:id',
         component: LogDetailComponent
+      },
+      {
+        path: 'csharpLogDetail/:id',
+        component: CsharpLogDetailComponent,
+        resolve: { log: CsharpLogResolver }
       }
       // next routes
     ]

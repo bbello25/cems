@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { LogListComponent } from './log-list.component';
+import { CsharpLogDetailComponent } from './csharp-log-detail.component';
 
-describe('LogListComponent', () => {
-  let component: LogListComponent;
-  let fixture: ComponentFixture<LogListComponent>;
+describe('CsharpLogDetailComponent', () => {
+  let component: CsharpLogDetailComponent;
+  let fixture: ComponentFixture<CsharpLogDetailComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LogListComponent ]
+      declarations: [ CsharpLogDetailComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LogListComponent);
+    fixture = TestBed.createComponent(CsharpLogDetailComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

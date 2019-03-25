@@ -5,7 +5,7 @@ namespace cems.API.Features.LogEndpoint
     public class DotnetExceptionDto
     {
         public string Message { get; set; }
-        public StackTrace StackTrace { get; set; }
+        public string StackTrace { get; set; }
         public string Source { get; set; }
         public long Timestamp { get; set; }
         public string ProgLanguage { get; set; }

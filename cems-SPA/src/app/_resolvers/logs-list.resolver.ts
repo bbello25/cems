@@ -8,11 +8,7 @@ import { LogService } from '../_services/log.service';
 
 @Injectable()
 export class LogsListResolver implements Resolve<ErrorLog[]> {
-
-
-  constructor(private router: Router, private alertify: AlertifyService, private logService: LogService
-  ) {
-  }
+  constructor(private router: Router, private alertify: AlertifyService, private logService: LogService) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<ErrorLog[]> {
     return this.logService.getLogs().pipe(
