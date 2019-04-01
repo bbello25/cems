@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using cems.API.Data;
 using cems.API.Helpers;
 using cems.API.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace cems.API.Features.Users
 {
@@ -13,11 +16,13 @@ namespace cems.API.Features.Users
     {
         private readonly DataContext _context;
         private readonly UserManager<User> _userManager;
+        private readonly IMapper _mapper;
 
-        public LogRepository(DataContext context, UserManager<User> userManager)
+        public LogRepository(DataContext context, UserManager<User> userManager, IMapper mapper)
         {
             _context = context;
             _userManager = userManager;
+            _mapper = mapper;
         }
 
 
@@ -96,6 +101,27 @@ namespace cems.API.Features.Users
             }            
 
             return await PagedList<BaseErrorLog>.CreateAsync(logs, userParams.PageNumber, userParams.PageSize);
+        }
+
+        public async Task<List<DotnetWebErrorLogWithDistance>> GetSimilarErrorLogs(DotnetWebErrorLog errorLog)
+        {
+
+            var errorlogWithDistance = _mapper.Map<DotnetWebErrorLogWithDistance>(errorLog);
+
+            var logs = await _context.ErrorLogs.Include(l => l.WebApiKey)
+                .Where(l => l.WebApiKeyId == errorLog.WebApiKeyId && l.ProgLanguage == errorLog.ProgLanguage && l.Id != errorLog.Id)
+                .ToListAsync();
+
+            var logsWithDistance = logs.ConvertAll(log => _mapper.Map<DotnetWebErrorLogWithDistance>(log));
+
+            logsWithDistance.ForEach(log => log.SetDistance(errorlogWithDistance));
+
+            return logsWithDistance.OrderByDescending(log => log.Distance).ToList();
+        }
+
+        public async Task<List<DotnetWebErrorLog>> GetSimilarErrorLogs(BrowserErrorLog errorLog)
+        {
+            return null;
         }
     }
 }

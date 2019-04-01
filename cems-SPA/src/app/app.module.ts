@@ -42,9 +42,9 @@ import { StackFrameComponent } from './dashboard/stack-frame/stack-frame.compone
 import { MinifiedStackFrameComponent } from './dashboard/minified-stack-frame/minified-stack-frame.component';
 import { LogEndpointService } from './_services/logEndpoint.service';
 import { BrowserEventComponent } from './dashboard/browser-event/browser-event.component';
-import { CsharpLogDetailComponent } from './dashboard/csharp/csharp-log-detail/csharp-log-detail.component';
-import { debug } from 'util';
 import { CsharpLogResolver } from './dashboard/csharp/csharp-log-detail/csharp-log.resolver';
+import { CsharpLogDetailComponent } from './dashboard/csharp/csharp-log-detail/csharp-log-detail.component';
+import { CsharpStackFrameComponent } from './dashboard/csharp/csharp-stack-frame/csharp-stack-frame.component';
 
 export function hljsLanguages() {
   return [{ name: 'typescript', func: javascript }];
@@ -75,7 +75,8 @@ export function tokenGetter() {
     StackFrameComponent,
     MinifiedStackFrameComponent,
     BrowserEventComponent,
-    CsharpLogDetailComponent
+    CsharpLogDetailComponent,
+    CsharpStackFrameComponent
   ],
   imports: [
     BrowserModule,

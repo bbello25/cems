@@ -91,16 +91,19 @@ namespace cems.API.Features.Users
             log = await _context.ErrorLogs.Include(l => l.WebApiKey)
                 .Where(l => l.WebApiKeyId == userFromDb.WebApiKey.Id && l.Id == id).FirstOrDefaultAsync();
 
-       
-            var logs = await _context.ErrorLogs.Include(l => l.WebApiKey)
-                .Where(l => l.WebApiKeyId == userFromDb.WebApiKey.Id && l.ProgLanguage == log.ProgLanguage)
-                .ToListAsync();
+            if (log.ProgLanguage == "C#")
+            {
+                var similarLogs = await _logRepository.GetSimilarErrorLogs(log as DotnetWebErrorLog);
+                return Ok(similarLogs);
+            }
 
 
-            var res = KNN.Compute(logs, log, 10);
+          
       
 
-            return Ok(res);
+            return NotFound();
         }
+
     }
+
 }

@@ -75,7 +75,6 @@ export class DashboardComponent implements OnInit {
   }
 
   showLogDetail(logId: number) {
-    console.log('click');
     const log = this.logs.find(l => {
       return l.id === logId;
     });

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using cems.API.Models;
-using StackTrace = cems.API.Models.StackTrace;
+using Newtonsoft.Json;
 
 namespace cems.API.Features.Users
 {
@@ -10,7 +10,11 @@ namespace cems.API.Features.Users
         public static IEnumerable<object> Compute(IEnumerable<BaseErrorLog> otherLogs,
             BaseErrorLog currentLog, int k)
         {
-            var currentStackTrace = currentLog.GetStackTrace();
+        
+           /* var currentStackTrace =  JsonConvert.DeserializeObject(currentLog.StackTraceJson);
+
+
+
             IEnumerable<BaseErrorLog> browserErrorLogs = otherLogs.ToList();
             var otherStackTraces = browserErrorLogs.Select(log => log.GetStackTrace())
                 .Where(log => log.LogId != currentLog.Id);
@@ -33,7 +37,8 @@ namespace cems.API.Features.Users
                 similarLogDtos.Add(withDistance);
             });
 
-            return similarLogDtos;
+            return similarLogDtos;*/
+           return null;
         }
     }
 }

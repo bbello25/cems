@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Resolve, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import CsharpErrorLog from './CsharpErrorLog.model';
+import CsharpErrorLog from '../models/CsharpErrorLog.model';
 import { LogService } from 'src/app/_services/log.service';
 import { AlertifyService } from 'src/app/_services/alertify.service';
 
@@ -19,7 +19,7 @@ export class CsharpLogResolver implements Resolve<any> {
           const log = new CsharpErrorLog(logObj);
           return log;
         } catch (error) {
-          this.alertify.error(error);
+          this.alertify.error(error.message);
           this.router.navigate(['/dashboard']);
         }
       })

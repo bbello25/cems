@@ -23,8 +23,7 @@ namespace cems.API.Models
 
             return areSame;
             
-            return FilePath == otheStackFrame.FilePath && MethodName == otheStackFrame.MethodName &&
-                   SourcePosition == otheStackFrame.SourcePosition;
+
         }
     }
 }

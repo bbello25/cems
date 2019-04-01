@@ -8,5 +8,6 @@ namespace cems.API.Features.LogEndpoint
         public string Timestamp { get; set; }
         public string Ip { get; set; }
         public string Email { get; set; }
+        public string Name { get; set; }
     }
 }

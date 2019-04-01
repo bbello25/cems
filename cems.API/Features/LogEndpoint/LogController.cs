@@ -118,16 +118,15 @@ namespace cems.API.Features.LogCollector
                 return BadRequest("Unregistered API Key");
             }
 
-            string stackTraceString = data.StackTrace;
-            //var stackTrace = new StackTrace(stackTraceString);
-
             var errorLogToSave = new DotnetWebErrorLog
             {
                 ExceptionMessage = data.Message,
                 Source = data.Source,
                 ProgLanguage = data.ProgLanguage,
+                Name  = data.Name,
                 Timestamp = DateTimeConverter.UnixTimestampToDateTime(data.Timestamp),
                 StackTraceJson = JsonConvert.SerializeObject(JsonConvert.DeserializeObject(data.StackTrace), serializerSettings),
+                StackTraceRaw = data.StackTraceRaw,
                 RequestJson = JsonConvert.SerializeObject(data.Request, serializerSettings),
                 ConnectionInfoJson = JsonConvert.SerializeObject(data.ConnectionInfo, serializerSettings),
                 Host = data.Host,

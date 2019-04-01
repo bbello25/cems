@@ -1,4 +1,8 @@
-﻿namespace cems.API.Models
+﻿using System;
+using System.Collections.Generic;
+using Newtonsoft.Json;
+
+namespace cems.API.Models
 {
     public class DotnetWebErrorLog : BaseErrorLog
     {
@@ -6,5 +10,7 @@
         public string ConnectionInfoJson { get; set; }
         public string Host { get; set; }
         public string Port { get; set; }
+
+     
     }
 }

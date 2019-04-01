@@ -1,16 +1,10 @@
 import { Injectable } from '@angular/core';
-// import { HubConnectionBuilder, HubConnection } from '@aspnet/signalr';
 import { ErrorLog } from '../_models/ErrorLog';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-import { BrowserErrorLog } from '../_models/BrowserErrorLog';
 import { PaginationResult } from '../_models/Pagination';
-import { Logs } from 'selenium-webdriver';
-import { User } from '../_models/user';
-import { BrowserErrorLogFromServer } from '../_models/BrowerErrorLogFromServer';
-import SimilarLog from '../_models/SimilarLog';
 
 @Injectable({
   providedIn: 'root'
@@ -49,7 +43,7 @@ export class LogService {
     return this.http.get<ErrorLog>(`${this.baseUrl}${id}`);
   }
 
-  getSimilarLogs(logId: number) {
-    return this.http.get<SimilarLog>(`${this.baseUrl}${logId}/similarLogs`);
+  getSimilarLogs(logId: number): Observable<ErrorLog[]> {
+    return this.http.get<ErrorLog[]>(`${this.baseUrl}${logId}/similarLogs`);
   }
 }

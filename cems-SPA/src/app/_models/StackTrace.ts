@@ -1,6 +1,14 @@
 export class StackTrace {
   DeminifiedStackFrameResults: DeminifiedStackFrameResult[];
   MinifiedStackFrames: StackFrame[];
+
+  constructor(stackTraceJson: string) {
+    const object = JSON.parse(stackTraceJson);
+    for (const stackFrameObj of object) {
+      const stackFrame: StackFrame = stackFrameObj;
+      this.MinifiedStackFrames.push(stackFrame);
+    }
+  }
 }
 
 export class DeminifiedStackFrameResult {

@@ -30,6 +30,8 @@ namespace cems.API.Helpers
             CreateMap<User, UserDetailDto>();
             CreateMap<UserDetailDto, User>();
             CreateMap<UserForRegisterDto, User>();
+
+           CreateMap<DotnetWebErrorLog, DotnetWebErrorLogWithDistance>();
         }
     }
 }

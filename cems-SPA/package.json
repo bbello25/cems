@@ -21,7 +21,7 @@
     "@angular/platform-browser-dynamic": "^7.2.9",
     "@angular/router": "^7.2.9",
     "@auth0/angular-jwt": "^2.1.0",
-    "@bbellovic/cems-logger-js": "^1.9.1",
+    "@bbellovic/cems-logger-js": "^1.9.2",
     "alertifyjs": "^1.11.2",
     "bootstrap": "^4.3.1",
     "bootswatch": "^4.3.1",
@@ -31,6 +31,7 @@
     "highlight.js": "^9.15.6",
     "ngx-bootstrap": "^3.2.0",
     "ngx-highlightjs": "^3.0.3",
+    "normalize-path": "^3.0.0",
     "rxjs": "^6.4.0",
     "zone.js": "^0.8.29"
   },
