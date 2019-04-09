@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { DeminifiedStackFrameResult, StackFrame } from '../../_models/StackTrace';
+import { Component, OnInit, Input } from '@angular/core';
+import { DeminfiedJsStackFrame } from '../javascript/models/JsStackTrace.model';
+import { StackFrame } from 'src/app/_models/StackFrame.model';
 
 @Component({
   selector: 'app-stack-frame',
@@ -7,46 +8,37 @@ import { DeminifiedStackFrameResult, StackFrame } from '../../_models/StackTrace
   styleUrls: ['./stack-frame.component.css']
 })
 export class StackFrameComponent implements OnInit {
-  @Input() stackFrame: DeminifiedStackFrameResult;
+  @Input() stackFrame: StackFrame | DeminfiedJsStackFrame;
 
   isCollapsed = true;
 
-  constructor() {
-  }
+  constructor() {}
 
-  ngOnInit() {
-    // console.log(this.stackFrame);
-  }
+  ngOnInit() {}
 
-
-  isNullOrEmpty(field: string | Array<string>): boolean {
-    if (field instanceof Array) {
-      for (let i = 0; i < field.length; i++) {
-        if (field[i] === undefined || field[i] === '') {
-          return true;
-        }
-      }
-      return false;
-    } else {
-      return (field === undefined || field === '' || field === null);
+  public getFormatedStackFrame() {
+    let formated = 'Invalid stackframe data';
+    if (this.stackFrame.file) {
+      formated = this.parseFileName(this.stackFrame.file);
     }
-  }
-
-  getMethodName(): string {
-    if (this.stackFrame.DeminificationError === 2) {
-      return 'top level call';
+    if (this.stackFrame.line) {
+      formated += `:${this.stackFrame.line}`;
     }
-    return this.isNullOrEmpty(this.stackFrame.DeminifiedStackFrame.MethodName) ?
-      'unknown function' : this.stackFrame.DeminifiedStackFrame.MethodName;
+    if (this.stackFrame.column) {
+      formated += `:${this.stackFrame.column}`;
+    }
+    if (this.stackFrame.method) {
+      formated += ` ${this.stackFrame.method}`;
+    }
+    if (formated === 'Invalid stackframe data' && this.stackFrame instanceof DeminfiedJsStackFrame) {
+      return `Deminification error number ${this.stackFrame.deminificationError}`;
+    }
+    return formated;
   }
 
-  getFileName(): string {
-    let res = this.isNullOrEmpty(this.stackFrame.DeminifiedStackFrame.FilePath) ?
-      'unknown file' : this.stackFrame.DeminifiedStackFrame.FilePath;
-    res += this.isNullOrEmpty(this.stackFrame.DeminifiedStackFrame.SourceCode) ?
-      '' : `:${this.stackFrame.DeminifiedStackFrame.SourcePosition.ZeroBasedLineNumber}:${
-        this.stackFrame.DeminifiedStackFrame.SourcePosition.ZeroBasedColumnNumber}`;
-    return res;
+  private parseFileName(fullPath: string) {
+    const lastSlash = fullPath.lastIndexOf('/');
+    const fileName = fullPath.substring(lastSlash + 1);
+    return fileName;
   }
-
 }

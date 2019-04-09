@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 
-namespace cems.API.Models
+namespace cems.API.Models.identity
 {
     public class Role : IdentityRole<int>
     {

@@ -1,0 +1,65 @@
+<div [ngClass]="{ 'border bg-success mb-3': !isTopLevel && !showErrorDetails }">
+  <div class="row m-2" [ngClass]="{ clickable: !isTopLevel }" (click)="!isTopLevel && toggleErrorDetails()">
+    <div class="col col-12 bg-light border py-2">
+      <div class=" d-flex flex-row ">
+        <div class="exception-type">{{ log.name }}</div>
+        <div class="exception-file ml-3 ">{{ parseFileName() }}</div>
+      </div>
+      <div class="row">
+        <div class="col exception-message">
+          {{ log.exceptionMessage }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col  exception-date">
+          {{ log.timestamp | date: 'medium' }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col exception-date">StackFrame similarity: {{ log.distance }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div [collapse]="!isTopLevel && showErrorDetails">
+    <div class="row m-2 ">
+      <div class="col col-12 bg-white border">
+        <tabset>
+          <tab heading="Info" id="tab1" class="mb-3">
+            <div class="row">
+              <div class="col h2">
+                StackTrace
+              </div>
+            </div>
+            <div class="row">
+              <div class="col"><button (click)="toggleStackTraceVariant('minified')" class="btn">Minified</button></div>
+              <div class="col"><button (click)="toggleStackTraceVariant('deminified')" class="btn">Deminified</button></div>
+              <div class="col"><button (click)="toggleStackTraceVariant('raw')" class="btn">RAW Minified</button></div>
+            </div>
+
+            <div *ngIf="showStacktraceVariant === 'minified'" class="border border-bottom-0">
+              <div *ngFor="let stackFrame of log.stackTrace.minifiedStackFrames">
+                <app-stack-frame class="clickable" [stackFrame]="stackFrame"></app-stack-frame>
+              </div>
+            </div>
+
+            <div *ngIf="showStacktraceVariant === 'deminified'" class="border border-bottom-0">
+              <div *ngFor="let stackFrame of log.stackTrace.deminifiedStackFrames">
+                <app-stack-frame class="clickable" [stackFrame]="stackFrame"></app-stack-frame>
+              </div>
+            </div>
+
+            <pre *ngIf="showStacktraceVariant === 'raw'" class="bg-light p-2 border" [innerHTML]="log.stackTraceRaw"></pre>
+
+            <div *ngIf="isTopLevel">
+              <div class="h2 mt-4">Similar logs</div>
+              <div *ngFor="let similarLog of similarLogs">
+                <app-js-log-detail [log]="similarLog" [isTopLevel]="false"> </app-js-log-detail>
+              </div>
+            </div>
+          </tab>
+        </tabset>
+      </div>
+    </div>
+  </div>
+</div>

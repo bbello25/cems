@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using cems.API.Helpers;
 using cems.API.Models;
+using cems.API.Models.identity;
+using cems.API.Models.user;
 using Microsoft.AspNetCore.Identity;
 
 namespace cems.API.Data

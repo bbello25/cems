@@ -5,6 +5,9 @@ using cems.API.Data;
 using cems.API.Features.LogEndpoint;
 using cems.API.Helpers;
 using cems.API.Models;
+using cems.API.Models.csharp;
+using cems.API.Models.identity;
+using cems.API.Models.javascript;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -81,7 +84,7 @@ namespace cems.API.Features.Users
         }
 
         [HttpGet("{id}/similarLogs")]
-        public async Task<IActionResult> GetUserStackFrames(int id)
+        public async Task<IActionResult> GetSimilarLogs(int id) 
         {
             var username = User.FindFirst(ClaimTypes.Name).Value;
             var userFromDb = await _context.Users.Include(u => u.WebApiKey)
@@ -96,6 +99,13 @@ namespace cems.API.Features.Users
                 var similarLogs = await _logRepository.GetSimilarErrorLogs(log as DotnetWebErrorLog);
                 return Ok(similarLogs);
             }
+
+            if (log.ProgLanguage == "javascript")
+            {
+                var similarLogs = await _logRepository.GetSimilarErrorLogs(log as BrowserErrorLog);
+                return Ok(similarLogs);
+            }
+
 
 
           

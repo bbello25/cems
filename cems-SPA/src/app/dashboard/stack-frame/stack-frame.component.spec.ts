@@ -1,16 +1,14 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { StackFrameComponent } from './stack-frame.component';
 
-describe('StackFrameComponent', () => {
+describe('CsharpStackFrameComponent', () => {
   let component: StackFrameComponent;
   let fixture: ComponentFixture<StackFrameComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ StackFrameComponent ]
-    })
-    .compileComponents();
+      declarations: [StackFrameComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

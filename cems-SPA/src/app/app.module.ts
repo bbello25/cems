@@ -26,7 +26,6 @@ import { UsersEditComponent } from './users/users-edit/users-edit.component';
 import { UserService } from './_services/user.service';
 import { MemberEditResolver } from './_resolvers/user-edit.resolver';
 import { GlobalErrorHandler } from './GlobalErrorHandler';
-import { from } from 'rxjs';
 import { AlertifyService } from './_services/alertify.service';
 import { RolesManagementComponent } from './admin/roles-management/roles-management.component';
 import { LoginComponent } from './login/login.component';
@@ -37,14 +36,13 @@ import { LogsListResolver } from './_resolvers/logs-list.resolver';
 import { HighlightModule } from 'ngx-highlightjs';
 
 import javascript from 'node_modules/highlight.js/lib/languages/javascript.js';
-import { StacktraceComponent } from './dashboard/stacktrace/stacktrace.component';
-import { StackFrameComponent } from './dashboard/stack-frame/stack-frame.component';
-import { MinifiedStackFrameComponent } from './dashboard/minified-stack-frame/minified-stack-frame.component';
 import { LogEndpointService } from './_services/logEndpoint.service';
 import { BrowserEventComponent } from './dashboard/browser-event/browser-event.component';
 import { CsharpLogResolver } from './dashboard/csharp/csharp-log-detail/csharp-log.resolver';
 import { CsharpLogDetailComponent } from './dashboard/csharp/csharp-log-detail/csharp-log-detail.component';
-import { CsharpStackFrameComponent } from './dashboard/csharp/csharp-stack-frame/csharp-stack-frame.component';
+import { JsLogDetailComponent } from './dashboard/javascript/js-log-detail/js-log-detail.component';
+import { JsLogResolver } from './dashboard/javascript/js-log-detail/js-log.resolver';
+import { StackFrameComponent } from './dashboard/stack-frame/stack-frame.component';
 
 export function hljsLanguages() {
   return [{ name: 'typescript', func: javascript }];
@@ -71,12 +69,10 @@ export function tokenGetter() {
     LoginComponent,
     ConfirmModalComponent,
     ErrorThrowComponent,
-    StacktraceComponent,
-    StackFrameComponent,
-    MinifiedStackFrameComponent,
     BrowserEventComponent,
     CsharpLogDetailComponent,
-    CsharpStackFrameComponent
+    StackFrameComponent,
+    JsLogDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -112,6 +108,7 @@ export function tokenGetter() {
     LogsListResolver,
     AlertifyService,
     CsharpLogResolver,
+    JsLogResolver,
     {
       provide: ErrorHandler,
       useClass: GlobalErrorHandler

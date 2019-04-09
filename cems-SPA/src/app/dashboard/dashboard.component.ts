@@ -84,7 +84,8 @@ export class DashboardComponent implements OnInit {
         this.router.navigate(['csharpLogDetail/' + logId]);
         break;
       }
-      case 'JavaScript': {
+      case 'javascript': {
+        this.router.navigate(['jsLogDetail/' + logId]);
         break;
       }
       default: {

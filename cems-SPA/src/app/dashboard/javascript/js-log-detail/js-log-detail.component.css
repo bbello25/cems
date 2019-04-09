@@ -1,0 +1,21 @@
+.exception-type {
+  font-size: 150%;
+  font-weight: 600;
+}
+
+.exception-file {
+  font-size: 150%;
+  font-weight: 400;
+}
+
+.exception-message {
+  font-weight: 300;
+}
+
+.exception-date {
+  font-weight: 200;
+}
+
+.clickable {
+  cursor: pointer;
+}

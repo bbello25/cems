@@ -10,6 +10,8 @@ using cems.API.Data;
 using cems.API.Features.Authorization;
 using cems.API.Helpers;
 using cems.API.Models;
+using cems.API.Models.identity;
+using cems.API.Models.user;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

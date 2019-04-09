@@ -1,7 +1,6 @@
 using System;
-using System.Collections.Generic;
+using cems.API.Models.user;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace cems.API.Models
 {

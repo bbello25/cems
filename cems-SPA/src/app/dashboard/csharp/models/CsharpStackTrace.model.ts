@@ -1,7 +1,8 @@
 import * as normalize from 'normalize-path';
+import { StackFrame } from 'src/app/_models/StackFrame.model';
 
 export class CsharpStackTrace {
-  public stackFrames: CsharpStackFrame[] = [];
+  public stackFrames: StackFrame[] = [];
 
   constructor(stackTraceJson: string) {
     const object = JSON.parse(stackTraceJson);
@@ -10,7 +11,7 @@ export class CsharpStackTrace {
     }
 
     for (const stackFrameObj of object) {
-      const stackFrame = new CsharpStackFrame();
+      const stackFrame = new StackFrame();
       stackFrame.file = normalize(stackFrameObj.File);
       stackFrame.method = stackFrameObj.Method;
       stackFrame.line = stackFrameObj.Line;
@@ -19,11 +20,4 @@ export class CsharpStackTrace {
       this.stackFrames.push(stackFrame);
     }
   }
-}
-
-export class CsharpStackFrame {
-  public file: string;
-  public method: string;
-  public line: number;
-  public column: number;
 }

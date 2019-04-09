@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Newtonsoft.Json;
-
-namespace cems.API.Models
+﻿namespace cems.API.Models.csharp
 {
     public class DotnetWebErrorLog : BaseErrorLog
     {

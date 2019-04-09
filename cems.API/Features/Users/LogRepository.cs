@@ -6,6 +6,9 @@ using AutoMapper;
 using cems.API.Data;
 using cems.API.Helpers;
 using cems.API.Models;
+using cems.API.Models.csharp;
+using cems.API.Models.identity;
+using cems.API.Models.javascript;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -103,6 +106,7 @@ namespace cems.API.Features.Users
             return await PagedList<BaseErrorLog>.CreateAsync(logs, userParams.PageNumber, userParams.PageSize);
         }
 
+        // TODO maybe make one method for both languages
         public async Task<List<DotnetWebErrorLogWithDistance>> GetSimilarErrorLogs(DotnetWebErrorLog errorLog)
         {
 
@@ -119,9 +123,21 @@ namespace cems.API.Features.Users
             return logsWithDistance.OrderByDescending(log => log.Distance).ToList();
         }
 
-        public async Task<List<DotnetWebErrorLog>> GetSimilarErrorLogs(BrowserErrorLog errorLog)
+        // TODO maybe make one method for both languages
+        public async Task<List<BrowserErrorLogWithDistance>> GetSimilarErrorLogs(BrowserErrorLog errorLog)
         {
-            return null;
+
+            var errorlogWithDistance = _mapper.Map<BrowserErrorLogWithDistance>(errorLog);
+
+            var logs = await _context.ErrorLogs.Include(l => l.WebApiKey)
+                .Where(l => l.WebApiKeyId == errorLog.WebApiKeyId && l.ProgLanguage == errorLog.ProgLanguage && l.Id != errorLog.Id)
+                .ToListAsync();
+
+            var logsWithDistance = logs.ConvertAll(log => _mapper.Map<BrowserErrorLogWithDistance>(log));
+
+            logsWithDistance.ForEach(log => log.SetDistance(errorlogWithDistance));
+
+            return logsWithDistance.OrderByDescending(log => log.Distance).ToList();
         }
     }
 }

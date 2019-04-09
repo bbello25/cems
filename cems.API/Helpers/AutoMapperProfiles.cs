@@ -4,6 +4,9 @@ using cems.API.Features.Authorization;
 using cems.API.Features.LogEndpoint;
 using cems.API.Features.Users;
 using cems.API.Models;
+using cems.API.Models.csharp;
+using cems.API.Models.identity;
+using cems.API.Models.javascript;
 
 namespace cems.API.Helpers
 {
@@ -21,10 +24,6 @@ namespace cems.API.Helpers
         {
             CreateMap<string, DateTime>().ConvertUsing(new DateTimeTypeConverter());
 
-            //Endpoint mappings
-            CreateMap<BrowserErrorForSaveDto, BrowserErrorLog>();
-            CreateMap<ErrorForSaveBaseDto, BrowserErrorLog>();
-
             CreateMap<User, UserForListDto>();
 //            CreateMap<BaseErrorLog, LogEntryForListDto>();
             CreateMap<User, UserDetailDto>();
@@ -32,6 +31,8 @@ namespace cems.API.Helpers
             CreateMap<UserForRegisterDto, User>();
 
            CreateMap<DotnetWebErrorLog, DotnetWebErrorLogWithDistance>();
+           CreateMap<BrowserErrorLog, BrowserErrorLogWithDistance>();
+
         }
     }
 }

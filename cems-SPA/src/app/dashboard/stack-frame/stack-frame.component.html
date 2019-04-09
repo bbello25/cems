@@ -1,15 +1,12 @@
-<div id="stackFrame" class="border-primary border-dark">
-    <div class="row p-1" id="header" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed"
-         aria-controls="sourceCode">
-        <div class="col">
-            <code class="js">{{getMethodName()}}</code>
-            in file
-            <code class="js">{{getFileName()}}</code>
-        </div>
+<div id="stackFrame" class=" px-3 border-bottom">
+  <div class="row " (click)="isCollapsed = !isCollapsed" data-toggle="collapse" [attr.aria-expanded]="!isCollapsed" aria-controls="sourceCode">
+    <div class="col collapsible bg-light p-2 ">
+      {{ getFormatedStackFrame() }}
     </div>
-    <div *ngIf="!isNullOrEmpty(stackFrame.DeminifiedStackFrame.SourceCode)" class="row p-1" id="sourceCode" [collapse]="isCollapsed">
-        <div class="col">
-            <pre><code [highlight]="stackFrame.DeminifiedStackFrame.SourceCode"></code></pre>
-        </div>
+  </div>
+  <div class="row p-1 content" id="sourceCode" [collapse]="isCollapsed">
+    <div class="col">
+      <pre><code>{{stackFrame | json}}</code></pre>
     </div>
+  </div>
 </div>

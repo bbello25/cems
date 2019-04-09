@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using cems.API.Models;
+using cems.API.Models.identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

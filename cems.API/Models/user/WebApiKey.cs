@@ -1,7 +1,8 @@
 using System.Collections.Generic;
+using cems.API.Models.identity;
 using Newtonsoft.Json;
 
-namespace cems.API.Models
+namespace cems.API.Models.user
 {
     public class WebApiKey
     {

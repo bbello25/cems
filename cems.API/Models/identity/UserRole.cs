@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace cems.API.Models
+namespace cems.API.Models.identity
 {
     public class UserRole : IdentityUserRole<int>
     {

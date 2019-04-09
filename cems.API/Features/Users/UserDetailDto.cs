@@ -1,4 +1,5 @@
 using cems.API.Models;
+using cems.API.Models.user;
 
 namespace cems.API.Features.Users
 {

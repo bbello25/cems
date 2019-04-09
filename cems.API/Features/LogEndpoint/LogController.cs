@@ -8,6 +8,8 @@ using cems.API.Data;
 using cems.API.Features.LogEndpoint;
 using cems.API.Features.Shared;
 using cems.API.Models;
+using cems.API.Models.csharp;
+using cems.API.Models.javascript;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -61,10 +63,8 @@ namespace cems.API.Features.LogCollector
             return Ok(sessionId);
         }
 
-        // TODO create model for data
-        // TODO refactor this following dotnetWebError
         [HttpPost("browserError")]
-        public async Task<IActionResult> BrowserErrorEndpoint([FromBody] dynamic data)
+        public async Task<IActionResult> BrowserErrorEndpoint([FromBody]BrowserExceptionDto data)
         {
             var apiKeyFromRequest = HttpContext.Request.Headers["api-key"];
             if (apiKeyFromRequest.ToString().Length == 0)
@@ -78,24 +78,21 @@ namespace cems.API.Features.LogCollector
                 return BadRequest("Unregistered API Key");
             }
 
-            var res = _deminifier.Deminfy(data.stacktrace.ToString());
+            var javascriptStackTrace = _deminifier.Deminfy(data.StackTrace.ToString());
 
-            var errorLog = new BrowserErrorForSaveDto
+            var errorLogToSave = new BrowserErrorLog()
             {
-                Timestamp = data.timestamp,
-                Email = data.email,
-                Ip = data.ip,
-                Message = data.message,
-                Name = data.name,
-                Source = data.source,
-                StackTrace = JsonConvert.SerializeObject(res),
-                SessionInfo = data.sessionInfo.ToString()
+                ExceptionMessage = data.Message,
+                Source = data.Source,
+                ProgLanguage = data.ProgLanguage,
+                Name = data.Name,
+                Timestamp = DateTimeConverter.UnixTimestampToDateTime(data.Timestamp),
+                StackTraceJson = JsonConvert.SerializeObject(javascriptStackTrace, serializerSettings),
+                StackTraceRaw = data.StackTrace,
+                WebApiKey = apiKeyFromDb,
+                SessionInfoJson =  data.SessionInfo
             };
-            var errorLogToSave = _mapper.Map<BrowserErrorLog>(errorLog);
-            errorLogToSave.Headers = JsonConvert.SerializeObject(Request.Headers.Where(h => h.Value.Count > 0).ToList());
-            errorLogToSave.Protocol = Request.Protocol;
-            errorLogToSave.ProgLanguage = "JavaScript";
-            errorLogToSave.WebApiKey = apiKeyFromDb;
+
             _context.ErrorLogs.Add(errorLogToSave);
 
             return await _context.SaveChangesAsync() > 0 ? Ok() : StatusCode(StatusCodes.Status500InternalServerError);

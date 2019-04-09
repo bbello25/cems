@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace cems.API.Models
+﻿namespace cems.API.Models
 {
-    public class CsharpStackFrame
+    public class CemsStackFrame
     {
         public string File { get; set; }
         public string Method { get; set; }
@@ -13,7 +8,7 @@ namespace cems.API.Models
         public int Column { get; set; }
 
 
-        public bool AreSame(CsharpStackFrame otherStackFrame)
+        public bool AreSame(CemsStackFrame otherStackFrame)
         {
             if (otherStackFrame == null)
                 return false;

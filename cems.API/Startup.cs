@@ -5,6 +5,7 @@ using cems.API.Features.LogEndpoint;
 using cems.API.Features.Users;
 using cems.API.Helpers;
 using cems.API.Models;
+using cems.API.Models.identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;

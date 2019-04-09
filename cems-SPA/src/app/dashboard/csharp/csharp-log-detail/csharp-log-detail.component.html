@@ -16,7 +16,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col exception-date">Stackrame similarity: {{ log.distance }}</div>
+        <div class="col exception-date">StackFrame similarity: {{ log.distance }}</div>
       </div>
     </div>
   </div>
@@ -34,9 +34,10 @@
             </div>
             <div *ngIf="!showRawStacktrace" class="border border-bottom-0">
               <div *ngFor="let stackFrame of log.stackTrace.stackFrames">
-                <app-csharp-stack-frame class="clickable" [stackFrame]="stackFrame"></app-csharp-stack-frame>
+                <app-stack-frame class="clickable" [stackFrame]="stackFrame"></app-stack-frame>
               </div>
             </div>
+
             <pre *ngIf="showRawStacktrace" class="bg-light p-2 border" [innerHTML]="log.stackTraceRaw"></pre>
             <div *ngIf="isTopLevel">
               <div class="h2 mt-4">Similar logs</div>
@@ -45,6 +46,7 @@
               </div>
             </div>
           </tab>
+
           <tab heading="Request" id="tab1">
             <div class="row">
               <div class="col col-lg-8 col-sm-12">
@@ -122,6 +124,7 @@
               </div>
             </div>
           </tab>
+
           <tab heading="Host" id="tab1">
             <div class="row">
               <div class="col">

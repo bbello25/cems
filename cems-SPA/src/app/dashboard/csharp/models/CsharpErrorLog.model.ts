@@ -9,8 +9,6 @@ export default class CsharpErrorLog extends ErrorLog {
   public host: string;
   public port: string;
   public stackTrace: CsharpStackTrace;
-  public stackTraceRaw: string;
-  public distance: number;
 
   public constructor(obj: any) {
     super(obj);
@@ -20,10 +18,6 @@ export default class CsharpErrorLog extends ErrorLog {
     this.host = obj.host;
     this.port = obj.port;
     this.stackTrace = new CsharpStackTrace(obj.stackTraceJson);
-    this.stackTraceRaw = this.repalceNewLine(obj.stackTraceRaw);
-    if (obj.distance >= 0) {
-      this.distance = obj.distance;
-    }
   }
 
   private parseRequestJson(requestJson: string): RequestInfo {
@@ -59,9 +53,5 @@ export default class CsharpErrorLog extends ErrorLog {
     connectionInfo.remoteipAddressV6 = object.remoteIpAddressV6;
     connectionInfo.RemotpPort = object.remotpPort;
     return connectionInfo;
-  }
-
-  repalceNewLine(stackTraceRaw: string) {
-    return stackTraceRaw.replace('\r\n', '\n');
   }
 }

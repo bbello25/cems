@@ -1,7 +1,8 @@
 using System.Collections.Generic;
+using cems.API.Models.user;
 using Microsoft.AspNetCore.Identity;
 
-namespace cems.API.Models
+namespace cems.API.Models.identity
 {
     public class User : IdentityUser<int>
     {

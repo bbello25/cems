@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace cems.API.Models
+namespace cems.API.Models.csharp
 {
     public class DotnetWebErrorLogWithDistance : DotnetWebErrorLog
     {
@@ -12,8 +10,8 @@ namespace cems.API.Models
 
         public void SetDistance(DotnetWebErrorLogWithDistance other)
         {
-            var stackFrames = JsonConvert.DeserializeObject<List<CsharpStackFrame>>(StackTraceJson);
-            var otherStackFrames = JsonConvert.DeserializeObject<List<CsharpStackFrame>>(other.StackTraceJson);
+            var stackFrames = JsonConvert.DeserializeObject<List<CemsStackFrame>>(StackTraceJson);
+            var otherStackFrames = JsonConvert.DeserializeObject<List<CemsStackFrame>>(other.StackTraceJson);
             var numberOfMatchingStackFrames = 0.0;
 
             for (var i = 0; i < stackFrames.Count; i++)
