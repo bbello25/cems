@@ -25,16 +25,28 @@
     <div class="row m-2 ">
       <div class="col col-12 bg-white border">
         <tabset>
-          <tab heading="Info" id="tab1" class="mb-3">
+          <tab heading="Info" id="tabInfo" class="mb-3">
             <div class="row">
               <div class="col h2">
                 StackTrace
               </div>
             </div>
-            <div class="row">
-              <div class="col"><button (click)="toggleStackTraceVariant('minified')" class="btn">Minified</button></div>
-              <div class="col"><button (click)="toggleStackTraceVariant('deminified')" class="btn">Deminified</button></div>
-              <div class="col"><button (click)="toggleStackTraceVariant('raw')" class="btn">RAW Minified</button></div>
+            <div class="row ">
+              <div class="col">
+                <button (click)="toggleStackTraceVariant('minified')" class="btn w-100" [ngClass]="{ 'btn-primary': showStacktraceVariant === 'minified' }">
+                  Minified
+                </button>
+              </div>
+              <div class="col">
+                <button (click)="toggleStackTraceVariant('deminified')" class="btn w-100" [ngClass]="{ 'btn-primary': showStacktraceVariant === 'deminified' }">
+                  Deminified
+                </button>
+              </div>
+              <div class="col">
+                <button (click)="toggleStackTraceVariant('raw')" class="btn w-100" [ngClass]="{ 'btn-primary': showStacktraceVariant === 'raw' }">
+                  RAW Minified
+                </button>
+              </div>
             </div>
 
             <div *ngIf="showStacktraceVariant === 'minified'" class="border border-bottom-0">
@@ -55,6 +67,119 @@
               <div class="h2 mt-4">Similar logs</div>
               <div *ngFor="let similarLog of similarLogs">
                 <app-js-log-detail [log]="similarLog" [isTopLevel]="false"> </app-js-log-detail>
+              </div>
+            </div>
+          </tab>
+          <tab heading="Seession" id="session">
+            <div class="row">
+              <div class="col col-lg-12 col-sm-12">
+                <div class="h2">Session details</div>
+                <div class="border mb-3">
+                  <div class="row px-3 py-1">
+                    <div class="col">
+                      <h6>Session id</h6>
+                    </div>
+                    <div class="col">{{ log.sessionInfo.sessionId }}</div>
+                  </div>
+
+                  <div class="row px-3 py-1">
+                    <div class="col bg-light">
+                      <h6>Duration</h6>
+                    </div>
+                    <div class="col bg-light">{{ log.sessionInfo.duration }} seconds</div>
+                  </div>
+                </div>
+
+                <div class="h2">Events</div>
+                <div *ngFor="let event of log.sessionInfo.eventsHistory" class="border border-bottom-0">
+                  <app-browser-event class="clickable" [eventLog]="event"></app-browser-event>
+                </div>
+              </div>
+            </div>
+
+            <div class="h2 my-4">Data Storage</div>
+            <div class="border mb-3">
+              <div *ngFor="let item of generateArray(log.sessionInfo.browserInfo.dataStorage); index as i">
+                <div class="row px-3 py-1">
+                  <div class="col col-6" [ngClass]="{ 'bg-light': i % 2 == 0 }">
+                    <h6>{{ item.key }}</h6>
+                  </div>
+                  <div class="col col-6" style="overflow-wrap: break-word" [ngClass]="{ 'bg-light': i % 2 == 0 }">{{ item.value }}</div>
+                </div>
+              </div>
+            </div>
+          </tab>
+
+          <tab heading="Browser" id="browserTab">
+            <div class="h2 my-4">Basic Info</div>
+
+            <div class="border">
+              <div class="row px-3 py-1">
+                <div class="col">
+                  <h6>OS</h6>
+                </div>
+                <div class="col">{{ log.sessionInfo.browserInfo.os.name }} {{ log.sessionInfo.browserInfo.os.version }}</div>
+              </div>
+
+              <div class="row px-3 py-1">
+                <div class="col bg-light">
+                  <h6>Browser</h6>
+                </div>
+                <div class="col bg-light">{{ log.sessionInfo.browserInfo.browser.name }} {{ log.sessionInfo.browserInfo.browser.version }}</div>
+              </div>
+
+              <div class="row px-3 py-1">
+                <div class="col">
+                  <h6>User Agent</h6>
+                </div>
+                <div class="col">{{ log.sessionInfo.browserInfo.browserUserAgent }}</div>
+              </div>
+
+              <div class="row px-3 py-1">
+                <div class="col bg-light">
+                  <h6>Language</h6>
+                </div>
+                <div class="col bg-light">{{ log.sessionInfo.browserInfo.browserLanguage }}</div>
+              </div>
+
+              <div class="row px-3 py-1">
+                <div class="col">
+                  <h6>Was online</h6>
+                </div>
+                <div class="col">{{ log.sessionInfo.browserInfo.browserOnline }}</div>
+              </div>
+
+              <div class="row px-3 py-1">
+                <div class="col bg-light">
+                  <h6>Platform</h6>
+                </div>
+                <div class="col bg-light">{{ log.sessionInfo.browserInfo.browserPlatform }}</div>
+              </div>
+
+              <div class="row px-3 py-1">
+                <div class="col">
+                  <h6>Java enabled</h6>
+                </div>
+                <div class="col">{{ log.sessionInfo.browserInfo.javaEnabled }}</div>
+              </div>
+
+              <div class="row px-3 py-1">
+                <div class="col bg-light">
+                  <h6>Data cookies enabled</h6>
+                </div>
+                <div class="col bg-light">{{ log.sessionInfo.browserInfo.dataCookiesEnabled }}</div>
+              </div>
+            </div>
+
+            <div class="h2 my-4">Screen Info</div>
+            <div class="border mb-3">
+              <div *ngFor="let item of generateArray(log.sessionInfo.screenInfo); index as i">
+                <div class="row px-3 py-1">
+                  <div class="col col-6" [ngClass]="{ 'bg-light': i % 2 == 0 }">
+                    <h6>{{ item.key }}</h6>
+                  </div>
+                  <div class="col col-6" style="overflow-wrap: break-word" [ngClass]="{ 'bg-light': i % 2 == 0 }">{{ item.value }} px</div>
+                </div>
               </div>
             </div>
           </tab>

@@ -120,7 +120,7 @@ namespace cems.API.Features.Users
 
             logsWithDistance.ForEach(log => log.SetDistance(errorlogWithDistance));
 
-            return logsWithDistance.OrderByDescending(log => log.Distance).ToList();
+            return logsWithDistance.Where(log => log.Distance > 0.0).OrderByDescending(log => log.Distance).ToList();
         }
 
         // TODO maybe make one method for both languages
@@ -137,7 +137,7 @@ namespace cems.API.Features.Users
 
             logsWithDistance.ForEach(log => log.SetDistance(errorlogWithDistance));
 
-            return logsWithDistance.OrderByDescending(log => log.Distance).ToList();
+            return logsWithDistance.Where(log => log.Distance > 0.0).OrderByDescending(log => log.Distance).ToList();
         }
     }
 }

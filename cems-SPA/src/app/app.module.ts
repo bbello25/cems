@@ -16,7 +16,6 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { appRoutes } from './routes';
 import { AuthGuard } from './_guards/auth.guard';
 import { JwtModule } from '@auth0/angular-jwt';
-import { LogDetailComponent } from './dashboard/log-detail/log-detail.component';
 import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { HasRoleDirective } from './_directives/hasRole.directive';
 import { UserManagementComponent } from './admin/user-management/user-management.component';
@@ -37,7 +36,7 @@ import { HighlightModule } from 'ngx-highlightjs';
 
 import javascript from 'node_modules/highlight.js/lib/languages/javascript.js';
 import { LogEndpointService } from './_services/logEndpoint.service';
-import { BrowserEventComponent } from './dashboard/browser-event/browser-event.component';
+import { BrowserEventComponent } from './dashboard/javascript/browser-event/browser-event.component';
 import { CsharpLogResolver } from './dashboard/csharp/csharp-log-detail/csharp-log.resolver';
 import { CsharpLogDetailComponent } from './dashboard/csharp/csharp-log-detail/csharp-log-detail.component';
 import { JsLogDetailComponent } from './dashboard/javascript/js-log-detail/js-log-detail.component';
@@ -59,7 +58,6 @@ export function tokenGetter() {
     NavComponent,
     RegisterComponent,
     DashboardComponent,
-    LogDetailComponent,
     AdminPanelComponent,
     HasRoleDirective,
     UserManagementComponent,

@@ -59,4 +59,10 @@ export class JsLogDetailComponent implements OnInit {
       this.ref.markForCheck();
     });
   }
+
+  generateArray(obj: any) {
+    return Object.keys(obj).map(key => {
+      return { key: key, value: obj[key] };
+    });
+  }
 }

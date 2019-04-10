@@ -19,8 +19,8 @@ export class SessionInfo {
 }
 
 export class BrowserInfo {
-  public os: string;
-  public browser: string;
+  public os: any;
+  public browser: any;
   public browserUserAgent: string;
   public browserLanguage: string;
   public browserOnline: string;

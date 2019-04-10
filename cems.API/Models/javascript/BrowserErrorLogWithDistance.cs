@@ -10,7 +10,7 @@ namespace cems.API.Models.javascript
         public void SetDistance(BrowserErrorLogWithDistance other)
         {
             var stackTrace = new BrowserStackTrace(StackTraceJson);
-            var otherStackTrace = new BrowserStackTrace(StackTraceJson);
+            var otherStackTrace = new BrowserStackTrace(other.StackTraceJson);
             var stackFrames = stackTrace.MinifiedStackFrames;
             var otherStackFrames = otherStackTrace.MinifiedStackFrames;
             var numberOfMatchingStackFrames = 0.0;
