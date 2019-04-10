@@ -11,7 +11,7 @@ services:
   db:
     image: "microsoft/mssql-server-linux:latest"
     volumes:
-      - d:/data2:/var/opt/mssql
+      - /opt/data:/var/opt/mssql
     environment:
       SA_PASSWORD: "Bello1+25B"
       ACCEPT_EULA: "Y"
