@@ -1,6 +1,6 @@
-#FROM microsoft/dotnet:2.1.5-aspnetcore-runtime AS base
+#FROM mcr.microsoft.com/dotnet/core/aspnet:2.2 AS base
 #
-#FROM microsoft/dotnet:2.1.403-sdk AS build
+#FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build
 FROM microsoft/dotnet
 COPY . /app
 WORKDIR /app
