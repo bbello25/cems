@@ -20,4 +20,5 @@
       <ProjectReference Include="..\SourcemapToolkit.CallstackDeminifier.Core\SourcemapToolkit.CallstackDeminifier.Core.csproj" />
     </ItemGroup>
 
+
 </Project>
