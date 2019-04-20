@@ -1,11 +1,13 @@
 ﻿using System.Text;
 using AutoMapper;
 using cems.API.Data;
+using cems.API.Features.LogBrowser.Services;
 using cems.API.Features.LogEndpoint;
 using cems.API.Features.Users;
 using cems.API.Helpers;
 using cems.API.Models;
 using cems.API.Models.identity;
+using cems.API.Models.javascript;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -38,7 +40,7 @@ namespace cems.API
             services.AddDbContext<DataContext>(options =>
                 options.UseSqlServer(connString));
 
-            services.AddScoped<ILogRepository, LogRepository>();
+            services.AddScoped<ILogService, LogService>();
             services.AddScoped<IStackTraceDeminifierService, StackTraceDeminifierService>();
 
             var builder = services.AddIdentityCore<User>(opt =>

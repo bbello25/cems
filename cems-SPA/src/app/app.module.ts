@@ -31,7 +31,7 @@ import { LoginComponent } from './login/login.component';
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 import { ErrorThrowComponent } from './error-throw/error-throw.component';
 import { environment } from '../environments/environment';
-import { LogsListResolver } from './_resolvers/logs-list.resolver';
+import { LogsListResolver } from './dashboard/logs-list.resolver';
 import { HighlightModule } from 'ngx-highlightjs';
 
 import javascript from 'node_modules/highlight.js/lib/languages/javascript.js';
@@ -42,6 +42,7 @@ import { CsharpLogDetailComponent } from './dashboard/csharp/csharp-log-detail/c
 import { JsLogDetailComponent } from './dashboard/javascript/js-log-detail/js-log-detail.component';
 import { JsLogResolver } from './dashboard/javascript/js-log-detail/js-log.resolver';
 import { StackFrameComponent } from './dashboard/stack-frame/stack-frame.component';
+import { LogHeaderComponent } from './dashboard/log-header/log-header.component';
 
 export function hljsLanguages() {
   return [{ name: 'typescript', func: javascript }];
@@ -70,7 +71,8 @@ export function tokenGetter() {
     BrowserEventComponent,
     CsharpLogDetailComponent,
     StackFrameComponent,
-    JsLogDetailComponent
+    JsLogDetailComponent,
+    LogHeaderComponent
   ],
   imports: [
     BrowserModule,

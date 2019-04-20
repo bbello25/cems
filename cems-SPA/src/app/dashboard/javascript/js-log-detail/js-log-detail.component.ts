@@ -1,8 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LogService } from 'src/app/_services/log.service';
-import JsErrorLog from '../models/JsErrorLog.model';
-import { ErrorLog } from 'src/app/_models/ErrorLog';
+import { CemsLog } from 'src/app/_models/CemsLog.model';
+import { JavascripLog } from '../models/JavascriptLog.model';
 
 @Component({
   selector: 'app-js-log-detail',
@@ -10,37 +10,26 @@ import { ErrorLog } from 'src/app/_models/ErrorLog';
   styleUrls: ['./js-log-detail.component.css']
 })
 export class JsLogDetailComponent implements OnInit {
-  @Input() log: JsErrorLog;
+  @Input() log: JavascripLog;
   @Input() isTopLevel = true;
   public showStacktraceVariant = 'deminified';
   public showErrorDetails = true;
 
-  public similarLogs: JsErrorLog[] = [];
+  public similarLogs: JavascripLog[] = [];
+  public sameSessionLogs: JavascripLog[] = [];
 
-  constructor(private activatedRoute: ActivatedRoute, private logService: LogService, private ref: ChangeDetectorRef) {}
+  constructor(private activatedRoute: ActivatedRoute, private logService: LogService, private ref: ChangeDetectorRef) { }
 
   ngOnInit() {
     if (this.isTopLevel) {
       this.activatedRoute.data.subscribe(data => {
         this.log = data.log;
       });
-      this.getSimilarLogs();
+      this.getSimilarLogs('similarity');
+      this.getSimilarLogs('sessionId');
     }
   }
 
-  parseFileName() {
-    let fullPath;
-    if (this.log.stackTrace.deminifiedStackFrames[0] && this.log.stackTrace.deminifiedStackFrames[0].file) {
-      fullPath = this.log.stackTrace.deminifiedStackFrames[0].file;
-    } else if (this.log.stackTrace.minifiedStackFrames[0] && this.log.stackTrace.minifiedStackFrames[0].file) {
-      fullPath = this.log.stackTrace.minifiedStackFrames[0].file;
-    } else {
-      return '';
-    }
-    const lastSlash = fullPath.lastIndexOf('/');
-    const fileName = fullPath.substring(lastSlash + 1);
-    return fileName;
-  }
 
   toggleStackTraceVariant(variant: string) {
     this.showStacktraceVariant = variant;
@@ -50,11 +39,16 @@ export class JsLogDetailComponent implements OnInit {
     this.showErrorDetails = !this.showErrorDetails;
   }
 
-  private getSimilarLogs() {
-    this.logService.getSimilarLogs(this.log.id).subscribe((logs: ErrorLog[]) => {
-      logs.forEach(logObj => {
-        const newLog = new JsErrorLog(logObj);
-        this.similarLogs.push(newLog);
+  private getSimilarLogs(matchReason: string) {
+    this.logService.getSimilarLogs(this.log.id, matchReason).subscribe((logs: any[]) => {
+      logs.forEach((log: JavascripLog) => {
+        if (matchReason === 'similarity') {
+          const newLog = new JavascripLog(log);
+          this.similarLogs.push(newLog);
+        } else if (matchReason === 'sessionId') {
+          const newLog = new JavascripLog(log);
+          this.sameSessionLogs.push(newLog);
+        }
       });
       this.ref.markForCheck();
     });

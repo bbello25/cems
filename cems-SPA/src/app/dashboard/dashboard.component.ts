@@ -1,10 +1,11 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { ErrorLog } from '../_models/ErrorLog';
 import { LogService } from '../_services/log.service';
 import { AuthService } from '../_services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Pagination, PaginationResult } from '../_models/Pagination';
 import { AlertifyService } from '../_services/alertify.service';
+import { CemsLog } from '../_models/CemsLog.model';
+import { Platforms } from '../_models/Platforms.enum';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,7 +13,7 @@ import { AlertifyService } from '../_services/alertify.service';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  logs: ErrorLog[];
+  logs: CemsLog[];
   pagination: Pagination;
   currentOrderBy: string;
   timeUnits = [
@@ -30,7 +31,7 @@ export class DashboardComponent implements OnInit {
     private alertify: AlertifyService,
     private ref: ChangeDetectorRef,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.route.data.subscribe(data => {
@@ -57,13 +58,12 @@ export class DashboardComponent implements OnInit {
 
   pageChanged(event: any): void {
     this.pagination.currentPage = event.page;
-    console.log(event.page);
     this.loadLogs();
   }
 
   loadLogs() {
     this.logService.getLogs(this.pagination.currentPage, this.pagination.itemsPerPage, this.userParams).subscribe(
-      (res: PaginationResult<ErrorLog[]>) => {
+      (res: PaginationResult<CemsLog[]>) => {
         this.logs = res.result;
         this.pagination = res.pagination;
         this.ref.detectChanges();
@@ -74,23 +74,34 @@ export class DashboardComponent implements OnInit {
     );
   }
 
-  showLogDetail(logId: number) {
+  redirectToLogDetail(logId: number) {
     const log = this.logs.find(l => {
       return l.id === logId;
     });
 
-    switch (log.progLanguage) {
-      case 'C#': {
+    switch (log.platform) {
+      case Platforms.Dotnet: {
         this.router.navigate(['csharpLogDetail/' + logId]);
         break;
       }
-      case 'javascript': {
+      case Platforms.Javascript: {
         this.router.navigate(['jsLogDetail/' + logId]);
         break;
       }
       default: {
-        this.alertify.error(`Unsupported language ${log.progLanguage}`);
+        this.alertify.error(`Unsupported platform ${Platforms[log.platform]}`);
       }
     }
   }
+
+  onLogToggle($event: boolean, logId: number) {
+    if ($event === true) {
+      this.redirectToLogDetail(logId);
+    }
+  }
+
+  getCorespondingPlatfrom(platformId: Platforms): string {
+    return Platforms[platformId];
+  }
+
 }

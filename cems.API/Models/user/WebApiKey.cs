@@ -10,7 +10,7 @@ namespace cems.API.Models.user
         public string ApiKey { get; set; }
 
         public ICollection<TrustedHost> TrustedHosts { get; set; }
-        public ICollection<BaseErrorLog> LogEntries { get; set; }
+        public ICollection<CemsLogModel> LogEvents { get; set; }
 
         [JsonIgnore] public User User { get; set; }
         [JsonIgnore] public int UserId { get; set; }

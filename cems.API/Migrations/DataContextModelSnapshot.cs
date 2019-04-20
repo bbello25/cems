@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using cems.API.Data;
+using cems.API.Models;
 
 namespace cems.API.Migrations
 {
@@ -89,25 +90,21 @@ namespace cems.API.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("cems.API.Models.BaseErrorLog", b =>
+            modelBuilder.Entity("cems.API.Models.CemsLogModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ErrorLogType");
+                    b.Property<DateTime>("CreatedTime");
 
-                    b.Property<string>("ExceptionMessage");
+                    b.Property<int>("CurrentState");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("ExceptionDetails");
 
-                    b.Property<string>("ProgLanguage");
+                    b.Property<int>("Platform");
 
-                    b.Property<string>("Source");
-
-                    b.Property<string>("StackTraceJson");
-
-                    b.Property<string>("StackTraceRaw");
+                    b.Property<DateTime>("StateChangedTime");
 
                     b.Property<DateTime>("Timestamp");
 
@@ -121,12 +118,12 @@ namespace cems.API.Migrations
 
                     b.HasIndex("WebApiKeyId");
 
-                    b.ToTable("ErrorLog");
+                    b.ToTable("LogEvents");
 
-                    b.HasDiscriminator<int>("ErrorLogType").HasValue(1);
+                    b.HasDiscriminator<int>("Platform").HasValue(0);
                 });
 
-            modelBuilder.Entity("cems.API.Models.Role", b =>
+            modelBuilder.Entity("cems.API.Models.identity.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -151,24 +148,7 @@ namespace cems.API.Migrations
                     b.ToTable("AspNetRoles");
                 });
 
-            modelBuilder.Entity("cems.API.Models.TrustedHost", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Host");
-
-                    b.Property<int>("WebApiKeyId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("WebApiKeyId");
-
-                    b.ToTable("TrustedHosts");
-                });
-
-            modelBuilder.Entity("cems.API.Models.User", b =>
+            modelBuilder.Entity("cems.API.Models.identity.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -224,7 +204,7 @@ namespace cems.API.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("cems.API.Models.UserRole", b =>
+            modelBuilder.Entity("cems.API.Models.identity.UserRole", b =>
                 {
                     b.Property<int>("UserId");
 
@@ -237,7 +217,24 @@ namespace cems.API.Migrations
                     b.ToTable("AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("cems.API.Models.WebApiKey", b =>
+            modelBuilder.Entity("cems.API.Models.user.TrustedHost", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Host");
+
+                    b.Property<int>("WebApiKeyId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WebApiKeyId");
+
+                    b.ToTable("TrustedHosts");
+                });
+
+            modelBuilder.Entity("cems.API.Models.user.WebApiKey", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -255,39 +252,37 @@ namespace cems.API.Migrations
                     b.ToTable("WebApiKeys");
                 });
 
-            modelBuilder.Entity("cems.API.Models.BrowserErrorLog", b =>
+            modelBuilder.Entity("cems.API.Features.LogEndpoint.dotnet.Models.DotnetLogModel", b =>
                 {
-                    b.HasBaseType("cems.API.Models.BaseErrorLog");
+                    b.HasBaseType("cems.API.Models.CemsLogModel");
 
-                    b.Property<string>("Headers");
+                    b.Property<string>("DotnetApplicationInfo");
 
-                    b.Property<string>("Ip");
+                    b.Property<string>("DotnetExceptionDetails");
 
-                    b.Property<string>("Protocol");
+                    b.Property<string>("DotnetHttpContext");
 
-                    b.Property<string>("SessionInfoJson");
+                    b.HasDiscriminator().HasValue(1);
+                });
+
+            modelBuilder.Entity("cems.API.Models.javascript.JavascriptLogModel", b =>
+                {
+                    b.HasBaseType("cems.API.Models.CemsLogModel");
+
+                    b.Property<string>("JavascriptApplicationInfo");
+
+                    b.Property<string>("JavascriptBrowserInfo");
+
+                    b.Property<string>("JavascriptExceptionDetails");
+
+                    b.Property<string>("JavascriptSessionInfo");
 
                     b.HasDiscriminator().HasValue(2);
                 });
 
-            modelBuilder.Entity("cems.API.Models.DotnetWebErrorLog", b =>
-                {
-                    b.HasBaseType("cems.API.Models.BaseErrorLog");
-
-                    b.Property<string>("ConnectionInfoJson");
-
-                    b.Property<string>("Host");
-
-                    b.Property<string>("Port");
-
-                    b.Property<string>("RequestJson");
-
-                    b.HasDiscriminator().HasValue(3);
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
-                    b.HasOne("cems.API.Models.Role")
+                    b.HasOne("cems.API.Models.identity.Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -295,7 +290,7 @@ namespace cems.API.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
-                    b.HasOne("cems.API.Models.User")
+                    b.HasOne("cems.API.Models.identity.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -303,7 +298,7 @@ namespace cems.API.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
-                    b.HasOne("cems.API.Models.User")
+                    b.HasOne("cems.API.Models.identity.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -311,50 +306,50 @@ namespace cems.API.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.HasOne("cems.API.Models.User")
+                    b.HasOne("cems.API.Models.identity.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("cems.API.Models.BaseErrorLog", b =>
+            modelBuilder.Entity("cems.API.Models.CemsLogModel", b =>
                 {
-                    b.HasOne("cems.API.Models.User")
-                        .WithMany("LogEntries")
+                    b.HasOne("cems.API.Models.identity.User")
+                        .WithMany("LogEvents")
                         .HasForeignKey("UserId");
 
-                    b.HasOne("cems.API.Models.WebApiKey", "WebApiKey")
-                        .WithMany("LogEntries")
+                    b.HasOne("cems.API.Models.user.WebApiKey", "WebApiKey")
+                        .WithMany("LogEvents")
                         .HasForeignKey("WebApiKeyId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("cems.API.Models.TrustedHost", b =>
+            modelBuilder.Entity("cems.API.Models.identity.UserRole", b =>
                 {
-                    b.HasOne("cems.API.Models.WebApiKey", "WebApiKey")
-                        .WithMany("TrustedHosts")
-                        .HasForeignKey("WebApiKeyId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("cems.API.Models.UserRole", b =>
-                {
-                    b.HasOne("cems.API.Models.Role", "Role")
+                    b.HasOne("cems.API.Models.identity.Role", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("cems.API.Models.User", "User")
+                    b.HasOne("cems.API.Models.identity.User", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("cems.API.Models.WebApiKey", b =>
+            modelBuilder.Entity("cems.API.Models.user.TrustedHost", b =>
                 {
-                    b.HasOne("cems.API.Models.User", "User")
+                    b.HasOne("cems.API.Models.user.WebApiKey", "WebApiKey")
+                        .WithMany("TrustedHosts")
+                        .HasForeignKey("WebApiKeyId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("cems.API.Models.user.WebApiKey", b =>
+                {
+                    b.HasOne("cems.API.Models.identity.User", "User")
                         .WithOne("WebApiKey")
-                        .HasForeignKey("cems.API.Models.WebApiKey", "UserId")
+                        .HasForeignKey("cems.API.Models.user.WebApiKey", "UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

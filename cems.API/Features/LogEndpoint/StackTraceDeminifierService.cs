@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using cems.API.Models;
 using cems.API.StackTraceUtils;
 using SourcemapToolkit.CallstackDeminifier.Core;
 using SourcePosition = SourcemapToolkit.SourcemapParser.Core.SourcePosition;
@@ -18,7 +17,8 @@ namespace cems.API.Features.LogEndpoint
             ISourceMapProvider sourceMapProvider = new CemsSourceMapProvider();
             ISourceCodeProvider sourceCodeProvider = new CemsSourceCodeProvider();
             _originalSourceCodeProvider = new CemsOriginalSourceCodeProvider();
-            _sourceMapCallstackDeminifier = StackTraceDeminfierFactory.GetStackTraceDeminfier(sourceMapProvider, sourceCodeProvider);
+            _sourceMapCallstackDeminifier =
+                StackTraceDeminfierFactory.GetStackTraceDeminfier(sourceMapProvider, sourceCodeProvider);
         }
 
         public DeminifyStackTraceResult Deminfy(string stackTraceString)
@@ -28,18 +28,28 @@ namespace cems.API.Features.LogEndpoint
             for (var i = 0; i < deminifyStackTraceResult.DeminifiedStackFrameResults.Count; i++)
             {
                 if (deminifyStackTraceResult.MinifiedStackFrames[i] == null &&
-                    (deminifyStackTraceResult.DeminifiedStackFrameResults[i].DeminificationError != DeminificationError.None ||
-                    deminifyStackTraceResult.DeminifiedStackFrameResults[i].DeminificationError != DeminificationError.NoWrapingFunctionFound))
+                    (deminifyStackTraceResult.DeminifiedStackFrameResults[i].DeminificationError !=
+                     DeminificationError.None ||
+                     deminifyStackTraceResult.DeminifiedStackFrameResults[i].DeminificationError !=
+                     DeminificationError.NoWrapingFunctionFound))
                     continue;
 
-                var sourceCodePath = GetFullPath(deminifyStackTraceResult.DeminifiedStackFrameResults[i].DeminifiedStackFrame, deminifyStackTraceResult.MinifiedStackFrames[i]);
-
-                //TODO cache this result
+                var sourceCodePath =
+                    GetFullPath(deminifyStackTraceResult.DeminifiedStackFrameResults[i].DeminifiedStackFrame,
+                        deminifyStackTraceResult.MinifiedStackFrames[i]);
+                if (sourceCodePath.Contains("webpack") || sourceCodePath.Contains("ng://")) continue;
                 try
                 {
                     var originalCode = _originalSourceCodeProvider.GetSourceCodeString(sourceCodePath);
-                    var finalCode = GetWrappingCode(originalCode, deminifyStackTraceResult.DeminifiedStackFrameResults[i].DeminifiedStackFrame.SourcePosition);
-                    deminifyStackTraceResult.DeminifiedStackFrameResults[i].DeminifiedStackFrame.SourceCode = finalCode;
+                    if (deminifyStackTraceResult.DeminifiedStackFrameResults[i].DeminifiedStackFrame.SourcePosition !=
+                        null && originalCode != "")
+                    {
+                        var finalCode = GetWrappingCode(originalCode,
+                            deminifyStackTraceResult.DeminifiedStackFrameResults[i].DeminifiedStackFrame
+                                .SourcePosition);
+                        deminifyStackTraceResult.DeminifiedStackFrameResults[i].DeminifiedStackFrame.SourceCode =
+                            finalCode;
+                    }
                 }
                 catch (Exception e)
                 {
@@ -61,7 +71,7 @@ namespace cems.API.Features.LogEndpoint
 
         private string GetWrappingCode(string originalCode, SourcePosition sourcePosition)
         {
-            var lines = originalCode.Split(new string[] { "\r\n" },
+            var lines = originalCode.Split(new string[] {"\r\n"},
                 StringSplitOptions.None);
 
             const int numOfWrappingLines = 2;

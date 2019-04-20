@@ -7,7 +7,7 @@ const { name: name } = require('../../../package.json');
   providedIn: 'root'
 })
 export class LogEndpointService {
-  url = environment.apiUrl + 'log/browserError';
+  url = environment.apiUrl + 'log/javascript';
   logger: CemsLogger = null;
 
   constructor() {
@@ -19,7 +19,7 @@ export class LogEndpointService {
     });
   }
 
-   async log(error: Error) {
+  async log(error: Error) {
     await this.logger.sendLog(error);
   }
 }

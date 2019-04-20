@@ -1,11 +1,13 @@
-﻿using cems.API.Models;
-using cems.API.Models.csharp;
+﻿using cems.API.Features.LogEndpoint.dotnet.Models;
+using cems.API.Models;
+using cems.API.Models.dotnet;
 using cems.API.Models.identity;
 using cems.API.Models.javascript;
 using cems.API.Models.user;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace cems.API.Data
 {
@@ -16,17 +18,15 @@ namespace cems.API.Data
         {
         }
 
-        public DbSet<BaseErrorLog> ErrorLogs { get; set; }
         public DbSet<WebApiKey> WebApiKeys { get; set; }
         public DbSet<TrustedHost> TrustedHosts { get; set; }
 
+        public DbSet<CemsLogModel> LogEvents { get; set; }
+        public DbSet<DotnetLogModel> DotnetLogEvents { get; set; }
+        public DbSet<JavascriptLogModel> JavascriptLogEvents { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            /*if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer(
-                    @"Server=tcp:bel0104.database.windows.net,1433;Initial Catalog=cems;Persist Security Info=False;User ID=cems;Password=Bello1+25B;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
-            }*/
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -57,7 +57,7 @@ namespace cems.API.Data
 
                 webApiKey.HasOne(w => w.User).WithOne(u => u.WebApiKey).IsRequired();
                 webApiKey.HasMany(w => w.TrustedHosts).WithOne(t => t.WebApiKey);
-                webApiKey.HasMany(w => w.LogEntries).WithOne(t => t.WebApiKey);
+                webApiKey.HasMany(w => w.LogEvents).WithOne(t => t.WebApiKey);
             });
 
             modelBuilder.Entity<TrustedHost>(trustedHost =>
@@ -66,17 +66,69 @@ namespace cems.API.Data
                     .HasForeignKey(t => t.WebApiKeyId);
             });
 
-            modelBuilder.Entity<BaseErrorLog>(logEntry =>
+            modelBuilder.Entity<CemsLogModel>(logEntry =>
             {
-                logEntry.HasOne(e => e.WebApiKey).WithMany(w => w.LogEntries);
+                logEntry.HasOne(e => e.WebApiKey).WithMany(w => w.LogEvents);
             });
 
-            modelBuilder.Entity<BaseErrorLog>()
-                .ToTable("ErrorLog")
-                .HasDiscriminator<int>("ErrorLogType")
-                .HasValue<BaseErrorLog>(1)
-                .HasValue<BrowserErrorLog>(2)
-                .HasValue<DotnetWebErrorLog>(3);
+            modelBuilder.Entity<CemsLogModel>()
+                .ToTable("LogEvents")
+                .HasDiscriminator<Platforms>("Platform")
+                .HasValue<CemsLogModel>(Platforms.Base)
+                .HasValue<JavascriptLogModel>(Platforms.Javascript)
+                .HasValue<DotnetLogModel>(Platforms.Dotnet);
+
+            modelBuilder.Entity<CemsLogModel>().Property(e => e.ExceptionDetails).HasConversion(
+                v => JsonConvert.SerializeObject(v,
+                    new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore}),
+                v => JsonConvert.DeserializeObject<CemsExceptionDetailsModel>(v,
+                    new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore}));
+
+
+            modelBuilder.Entity<DotnetLogModel>().Property(e => e.DotnetApplicationInfo).HasConversion(
+                v => JsonConvert.SerializeObject(v,
+                    new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore}),
+                v => JsonConvert.DeserializeObject<DotnetApplicationInfoModel>(v,
+                    new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore}));
+
+            modelBuilder.Entity<DotnetLogModel>().Property(e => e.DotnetHttpContext).HasConversion(
+                v => JsonConvert.SerializeObject(v,
+                    new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore}),
+                v => JsonConvert.DeserializeObject<DotnetHttpContextModel>(v,
+                    new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore}));
+
+            modelBuilder.Entity<DotnetLogModel>().Property(e => e.DotnetExceptionDetails).HasConversion(
+                v => JsonConvert.SerializeObject(v,
+                    new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore}),
+                v => JsonConvert.DeserializeObject<DotnetExceptionDetailsModel>(v,
+                    new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore}));
+
+
+
+            modelBuilder.Entity<JavascriptLogModel>().Property(e => e.JavascriptApplicationInfo).HasConversion(
+                v => JsonConvert.SerializeObject(v,
+                    new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore}),
+                v => JsonConvert.DeserializeObject<JavascriptApplicationInfoModel>(v,
+                    new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore}));
+
+            modelBuilder.Entity<JavascriptLogModel>().Property(e => e.JavascriptBrowserInfo).HasConversion(
+                v => JsonConvert.SerializeObject(v,
+                    new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }),
+                v => JsonConvert.DeserializeObject<JavascriptBrowserInfoModel>(v,
+                    new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }));
+
+            modelBuilder.Entity<JavascriptLogModel>().Property(e => e.JavascriptExceptionDetails).HasConversion(
+                v => JsonConvert.SerializeObject(v,
+                    new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }),
+                v => JsonConvert.DeserializeObject<JavascriptExceptionDetailsModel>(v,
+                    new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }));
+
+            modelBuilder.Entity<JavascriptLogModel>().Property(e => e.JavascriptSessionInfo).HasConversion(
+                v => JsonConvert.SerializeObject(v,
+                    new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }),
+                v => JsonConvert.DeserializeObject<JavascriptSessionInfoModel>(v,
+                    new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }));
+
         }
     }
 }

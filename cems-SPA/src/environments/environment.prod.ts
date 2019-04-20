@@ -4,5 +4,5 @@ export const environment = {
   whitelistedDomain: 'localhost:5000',
   blacklistedRoute: 'localhost:5000/api/auth',
   cemsLoggerURL: 'http://localhost:5000/',
-  cemsLoggerApiKey: 'otktqinesgatepagsvv4fkcre4zm0i'
+  cemsLoggerApiKey: '2tvajnpa8bq53otuf18a9hknywy4gd'
 };

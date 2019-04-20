@@ -1,0 +1,18 @@
+<div class="row" [ngClass]="{ clickable: toggleable }" (click)="toggleable && toggle()">
+  <div class="col col-12 bg-light border py-2">
+    <div class=" d-flex flex-row ">
+      <div class="exception-type">{{ log.exceptionDetails.type }}</div>
+      <div class="exception-file ml-3 ">{{ parseFileName() }}</div>
+    </div>
+    <div class="row">
+      <div class="col exception-message">
+        {{ log.exceptionDetails.message }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col  exception-date">
+        {{ log.timestamp | date: 'medium' }}
+      </div>
+    </div>
+  </div>
+</div>

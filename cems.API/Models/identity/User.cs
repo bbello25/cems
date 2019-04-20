@@ -10,7 +10,7 @@ namespace cems.API.Models.identity
         public string LastName { get; set; }
 
         public ICollection<UserRole> UserRoles { get; set; }
-        public ICollection<BaseErrorLog> LogEntries { get; set; }
+        public ICollection<CemsLogModel> LogEvents { get; set; }
 
         public WebApiKey WebApiKey { get; set; }
     }

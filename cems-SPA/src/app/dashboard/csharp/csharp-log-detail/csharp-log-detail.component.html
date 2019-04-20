@@ -2,12 +2,12 @@
   <div class="row m-2" [ngClass]="{ clickable: !isTopLevel }" (click)="!isTopLevel && toggleErrorDetails()">
     <div class="col col-12 bg-light border py-2">
       <div class=" d-flex flex-row ">
-        <div class="exception-type">{{ log.name }}</div>
+        <div class="exception-type">{{ log.exceptionDetails.type }}</div>
         <div class="exception-file ml-3 ">{{ parseFileName() }}</div>
       </div>
       <div class="row">
         <div class="col exception-message">
-          {{ log.exceptionMessage }}
+          {{ log.exceptionDetails.message }}
         </div>
       </div>
       <div class="row">
@@ -15,8 +15,9 @@
           {{ log.timestamp | date: 'medium' }}
         </div>
       </div>
-      <div class="row">
-        <div class="col exception-date">StackFrame similarity: {{ log.distance }}</div>
+      <div *ngIf="log.dotnetExceptionDetails.dotnetStackTrace.distance" class="row">
+        <div class="col exception-date">StackFrame similarity:
+          {{ log.dotnetExceptionDetails.dotnetStackTrace.distance }}</div>
       </div>
     </div>
   </div>
@@ -30,15 +31,17 @@
               <div class="col h2">
                 StackTrace
               </div>
-              <div class="col text-right my-auto mr-2"><button (click)="toggleRawStackTrace()" class="btn">RAW</button></div>
+              <div class="col text-right my-auto mr-2"><button (click)="toggleRawStackTrace()" class="btn">RAW</button>
+              </div>
             </div>
             <div *ngIf="!showRawStacktrace" class="border border-bottom-0">
-              <div *ngFor="let stackFrame of log.stackTrace.stackFrames">
+              <div *ngFor="let stackFrame of log.dotnetExceptionDetails.dotnetStackTrace.stackFrames">
                 <app-stack-frame class="clickable" [stackFrame]="stackFrame"></app-stack-frame>
               </div>
             </div>
 
-            <pre *ngIf="showRawStacktrace" class="bg-light p-2 border" [innerHTML]="log.stackTraceRaw"></pre>
+            <pre *ngIf="showRawStacktrace" class="bg-light p-2 border"
+              [innerHTML]="log.exceptionDetails.rawStackTrace"></pre>
             <div *ngIf="isTopLevel">
               <div class="h2 mt-4">Similar logs</div>
               <div *ngFor="let similarLog of similarLogs">
@@ -51,14 +54,18 @@
             <div class="row">
               <div class="col col-lg-8 col-sm-12">
                 <div class="h2">Headers</div>
-                <pre class="bg-light p-2 border"><code>{{ log.request.headers | json }}</code></pre>
+                <pre
+                  class="bg-light p-2 border"><code>{{ log.dotnetHttpContext.request.headersJson | json }}</code></pre>
               </div>
               <div class="col col-lg-3 col-sm-12 border py-2 m-3 mt-5">
                 <div class="h2">Details</div>
                 <div>
-                  <div *ngIf="log.request.body">
+                  <div class="col bg-light">
+                    <h6>Body</h6>
+                  </div>
+                  <div *ngIf="log.dotnetHttpContext.request.body">
                     <div class="col ">
-                      <code>{{ log.request.body }} </code>
+                      <code>{{ log.dotnetHttpContext.request.body }} </code>
                     </div>
                   </div>
 
@@ -66,35 +73,35 @@
                     <div class="col bg-light">
                       <h6>Host</h6>
                     </div>
-                    <div class="col bg-light">{{ log.request.host }}</div>
+                    <div class="col bg-light">{{ log.dotnetHttpContext.request.host }}</div>
                   </div>
 
                   <div class="row px-3 py-1">
                     <div class="col">
                       <h6>Is Https</h6>
                     </div>
-                    <div class="col">{{ log.request.isHttps }}</div>
+                    <div class="col">{{ log.dotnetHttpContext.request.isHttps }}</div>
                   </div>
 
                   <div class="row px-3 py-1">
                     <div class="col bg-light">
                       <h6>Method</h6>
                     </div>
-                    <div class="col bg-light">{{ log.request.method }}</div>
+                    <div class="col bg-light">{{ log.dotnetHttpContext.request.method }}</div>
                   </div>
 
                   <div class="row px-3 py-1">
                     <div class="col">
                       <h6>Path</h6>
                     </div>
-                    <div class="col">{{ log.request.path }}</div>
+                    <div class="col">{{ log.dotnetHttpContext.request.path }}</div>
                   </div>
 
                   <div class="row px-3 py-1">
                     <div class="col bg-light">
                       <h6>Protocol</h6>
                     </div>
-                    <div class="col bg-light">{{ log.request.protocol }}</div>
+                    <div class="col bg-light">{{ log.dotnetHttpContext.request.protocol }}</div>
                   </div>
 
                   <div class="row px-3 py-1">
@@ -108,16 +115,17 @@
                     <div class="col bg-light">
                       <h6>Scheme</h6>
                     </div>
-                    <div class="col bg-light">{{ log.request.scheme }}</div>
+                    <div class="col bg-light">{{ log.dotnetHttpContext.request.scheme }}</div>
                   </div>
 
                   <div class="h2 my-4">Connection</div>
-                  <div *ngFor="let item of generateArray(log.connectionInfo); index as i">
+                  <div *ngFor="let item of generateArray(log.dotnetHttpContext.connection); index as i">
                     <div class="row px-3 py-1">
                       <div class="col col-6" [ngClass]="{ 'bg-light': i % 2 == 0 }">
                         <h6>{{ item.key }}</h6>
                       </div>
-                      <div class="col col-6" style="overflow-wrap: break-word" [ngClass]="{ 'bg-light': i % 2 == 0 }">{{ item.value }}</div>
+                      <div class="col col-6" style="overflow-wrap: break-word" [ngClass]="{ 'bg-light': i % 2 == 0 }">
+                        {{ item.value }}</div>
                     </div>
                   </div>
                 </div>
@@ -138,15 +146,45 @@
               <div class="col bg-light">
                 <h6>Host</h6>
               </div>
-              <div class="col bg-light">{{ log.host }}:{{ log.port }}</div>
+              <div class="col bg-light">{{ log.dotnetApplicationInfo.host }}:{{ log.dotnetApplicationInfo.port }}</div>
             </div>
 
             <div class="row px-3  py-1">
               <div class="col">
                 <h6>App name</h6>
               </div>
-              <div class="col">{{ log.source }}</div>
+              <div class="col">{{ log.dotnetApplicationInfo.name }}</div>
             </div>
+
+            <div class="row px-3  py-1">
+              <div class="col bg-light">
+                <h6>App version</h6>
+              </div>
+              <div class="col bg-light">{{ log.dotnetApplicationInfo.assemblyVersion }}</div>
+            </div>
+
+            <div class="row px-3  py-1">
+              <div class="col">
+                <h6>Server hostname</h6>
+              </div>
+              <div class="col">{{ log.dotnetApplicationInfo.hostName }}</div>
+            </div>
+
+            <div class="row px-3  py-1 ">
+              <div class="col bg-light">
+                <h6>Server os</h6>
+              </div>
+              <div class="col bg-light">{{ log.dotnetApplicationInfo.os }}</div>
+            </div>
+
+
+            <div class="row px-3  py-1">
+              <div class="col">
+                <h6>ENVIRONMENT</h6>
+              </div>
+              <div class="col">{{ log.dotnetApplicationInfo.environment }}</div>
+            </div>
+
           </tab>
         </tabset>
       </div>

@@ -26,8 +26,9 @@ namespace cems.API.Helpers
         public static async Task<PagedList<T>> CreateAsync(IQueryable<T> source, int pageNumber, int pageSize)
         {
             var count = await source.CountAsync();
-            var items = await source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
-            var newList = new PagedList<T>(items, count, pageNumber, pageSize);
+            var items = source.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+            var res = await items.ToListAsync();
+            var newList = new PagedList<T>(res, count, pageNumber, pageSize);
             return newList;
         }
     }

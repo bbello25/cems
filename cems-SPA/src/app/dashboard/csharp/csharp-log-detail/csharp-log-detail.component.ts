@@ -1,8 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import CsharpErrorLog from '../models/CsharpErrorLog.model';
 import { LogService } from 'src/app/_services/log.service';
-import { ErrorLog } from 'src/app/_models/ErrorLog';
+import { DotnetLogModel } from '../models/DotnetLog.model';
 
 @Component({
   selector: 'app-csharp-log-detail',
@@ -10,13 +9,13 @@ import { ErrorLog } from 'src/app/_models/ErrorLog';
   styleUrls: ['./csharp-log-detail.component.css']
 })
 export class CsharpLogDetailComponent implements OnInit {
-  @Input() log: CsharpErrorLog;
+  @Input() log: DotnetLogModel;
   @Input() isTopLevel = true;
   public showRawStacktrace = false;
   public showErrorDetails = true;
-  public similarLogs: CsharpErrorLog[] = [];
+  public similarLogs: DotnetLogModel[] = [];
 
-  constructor(private activatedRoute: ActivatedRoute, private logService: LogService, private ref: ChangeDetectorRef) {}
+  constructor(private activatedRoute: ActivatedRoute, private logService: LogService, private ref: ChangeDetectorRef) { }
 
   ngOnInit() {
     if (this.isTopLevel) {
@@ -34,8 +33,11 @@ export class CsharpLogDetailComponent implements OnInit {
   }
 
   parseFileName() {
-    const fullPath = this.log.stackTrace.stackFrames[0].file;
-    const lastSlash = fullPath.lastIndexOf('/');
+    const fullPath = this.log.dotnetExceptionDetails.dotnetStackTrace.stackFrames[0].file;
+    let lastSlash = fullPath.lastIndexOf('/');
+    if (lastSlash === -1) {
+      lastSlash = fullPath.lastIndexOf('\\');
+    }
     const fileName = fullPath.substring(lastSlash + 1);
     return fileName;
   }
@@ -49,9 +51,9 @@ export class CsharpLogDetailComponent implements OnInit {
   }
 
   private getSimilarLogs() {
-    this.logService.getSimilarLogs(this.log.id).subscribe((logs: ErrorLog[]) => {
+    this.logService.getSimilarLogs(this.log.id).subscribe((logs: any[]) => {
       logs.forEach(logObj => {
-        const newLog = new CsharpErrorLog(logObj);
+        const newLog = new DotnetLogModel(logObj);
         this.similarLogs.push(newLog);
       });
       this.ref.markForCheck();

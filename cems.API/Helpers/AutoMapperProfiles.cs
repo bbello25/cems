@@ -3,8 +3,8 @@ using AutoMapper;
 using cems.API.Features.Authorization;
 using cems.API.Features.LogEndpoint;
 using cems.API.Features.Users;
+using cems.API.Features.Users.Dtos;
 using cems.API.Models;
-using cems.API.Models.csharp;
 using cems.API.Models.identity;
 using cems.API.Models.javascript;
 
@@ -30,8 +30,8 @@ namespace cems.API.Helpers
             CreateMap<UserDetailDto, User>();
             CreateMap<UserForRegisterDto, User>();
 
-           CreateMap<DotnetWebErrorLog, DotnetWebErrorLogWithDistance>();
-           CreateMap<BrowserErrorLog, BrowserErrorLogWithDistance>();
+           /*CreateMap<DotnetWebErrorLog, DotnetWebErrorLogWithDistance>();
+           CreateMap<BrowserErrorLog, BrowserErrorLogWithDistance>();*/
 
         }
     }

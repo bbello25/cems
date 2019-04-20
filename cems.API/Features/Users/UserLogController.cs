@@ -2,10 +2,11 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using cems.API.Data;
+using cems.API.Features.LogBrowser.Services;
 using cems.API.Features.LogEndpoint;
+using cems.API.Features.LogEndpoint.dotnet.Models;
 using cems.API.Helpers;
 using cems.API.Models;
-using cems.API.Models.csharp;
 using cems.API.Models.identity;
 using cems.API.Models.javascript;
 using Microsoft.AspNetCore.Identity;
@@ -19,101 +20,18 @@ namespace cems.API.Features.Users
     [ApiController]
     public class UserLogController : ControllerBase
     {
-        private readonly DataContext _context;
-        private readonly UserManager<User> _userManager;
-        private readonly ILogRepository _logRepository;
-        private readonly IStackTraceDeminifierService _deminifier;
+        private readonly DataContext m_context;
+        private readonly UserManager<User> m_userManager;
+        private readonly ILogService m_logService;
+        private readonly IStackTraceDeminifierService m_deminifier;
 
-        public UserLogController(DataContext context, UserManager<User> userManager, ILogRepository logRepository,
+        public UserLogController(DataContext context, UserManager<User> userManager, ILogService logService,
             IStackTraceDeminifierService deminifier)
         {
-            _context = context;
-            _userManager = userManager;
-            _logRepository = logRepository;
-            _deminifier = deminifier;
+            m_context = context;
+            m_userManager = userManager;
+            m_logService = logService;
+            m_deminifier = deminifier;
         }
-
-        [HttpGet]
-        public async Task<IActionResult> GetUserLogs([FromQuery] UserParams userParams)
-        {
-            var username = User.FindFirst(ClaimTypes.Name).Value;
-
-            var logs = await _logRepository.GetLogs(userParams, username);
-            Response.AddPagination(logs.CurrentPage, logs.PageSize, logs.TotalCount, logs.TotalPages);
-
-            return Ok(logs);
-        }
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserLog(int id)
-        {
-            var username = User.FindFirst(ClaimTypes.Name).Value;
-            var userFromDb = await _context.Users.Include(u => u.WebApiKey)
-                .Where(u => u.NormalizedUserName == username.ToUpper()).FirstOrDefaultAsync();
-
-            BaseErrorLog log;
-            if (await _userManager.IsInRoleAsync(userFromDb, "Admin"))
-            {
-                log = await _context.ErrorLogs.FirstOrDefaultAsync(l => l.Id == id);
-            }
-            else
-            {
-                log = await _context.ErrorLogs.Include(l => l.WebApiKey)
-                    .Where(l => l.WebApiKeyId == userFromDb.WebApiKey.Id && l.Id == id).FirstOrDefaultAsync();
-            }
-
-            if (log == null)
-            {
-                return NotFound();
-            }
-
-            /*var retyped = (BrowserErrorLog) log;
-            if (retyped.Headers != null)
-            {
-                retyped.Headers = JsonConvert.DeserializeObject(retyped.Headers);
-            }
-
-            if (retyped.SessionInfo != null)
-            {
-                retyped.SessionInfo = JsonConvert.DeserializeObject(retyped.SessionInfo);
-
-            }*/
-
-
-            return Ok(log);
-        }
-
-        [HttpGet("{id}/similarLogs")]
-        public async Task<IActionResult> GetSimilarLogs(int id) 
-        {
-            var username = User.FindFirst(ClaimTypes.Name).Value;
-            var userFromDb = await _context.Users.Include(u => u.WebApiKey)
-                .Where(u => u.NormalizedUserName == username.ToUpper()).FirstOrDefaultAsync();
-
-            BaseErrorLog log;
-            log = await _context.ErrorLogs.Include(l => l.WebApiKey)
-                .Where(l => l.WebApiKeyId == userFromDb.WebApiKey.Id && l.Id == id).FirstOrDefaultAsync();
-
-            if (log.ProgLanguage == "C#")
-            {
-                var similarLogs = await _logRepository.GetSimilarErrorLogs(log as DotnetWebErrorLog);
-                return Ok(similarLogs);
-            }
-
-            if (log.ProgLanguage == "javascript")
-            {
-                var similarLogs = await _logRepository.GetSimilarErrorLogs(log as BrowserErrorLog);
-                return Ok(similarLogs);
-            }
-
-
-
-          
-      
-
-            return NotFound();
-        }
-
     }
-
 }

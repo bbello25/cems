@@ -3,6 +3,7 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp2.2</TargetFramework>
         <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+        <TypeScriptToolsVersion>3.3</TypeScriptToolsVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -11,6 +12,7 @@
         <PackageReference Include="Microsoft.AspNetCore.App" />
         <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.0" />
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
         <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
         <PackageReference Include="NSwag.AspNetCore" Version="12.0.9" />
         <PackageReference Include="OdeToCode.AddFeatureFolders" Version="2.0.3" />

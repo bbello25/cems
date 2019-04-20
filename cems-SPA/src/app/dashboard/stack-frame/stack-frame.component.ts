@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { DeminfiedJsStackFrame } from '../javascript/models/JsStackTrace.model';
+import { DeminfiedJsStackFrame } from '../javascript/models/JavascriptStackTrace.model';
 import { StackFrame } from 'src/app/_models/StackFrame.model';
 
 @Component({
@@ -12,9 +12,9 @@ export class StackFrameComponent implements OnInit {
 
   isCollapsed = true;
 
-  constructor() {}
+  constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   public getFormatedStackFrame() {
     let formated = 'Invalid stackframe data';

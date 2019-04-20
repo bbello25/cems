@@ -3,8 +3,6 @@ import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../_models/user';
 import { Observable } from 'rxjs';
-import { ErrorLog } from '../_models/ErrorLog';
-import { Log } from '@angular/core/testing/src/logger';
 import { Role } from '../_models/Role';
 
 @Injectable({
@@ -13,7 +11,7 @@ import { Role } from '../_models/Role';
 export class AdminService {
   baseUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getUsersWithRoles() {
     return this.http.get(this.baseUrl + 'admin/user/usersWithRoles');
