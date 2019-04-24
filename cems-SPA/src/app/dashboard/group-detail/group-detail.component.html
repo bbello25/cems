@@ -1,0 +1,49 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col">
+      <h1>Group overview</h1>
+      <div class="border" *ngIf="group">
+        <div class="row px-3 py-1">
+          <div class="col col-12">
+            <h3> Grouing reason </h3>
+          </div>
+          <div class="col col-12">
+            <pre class=" h4 px-3">{{getGroupingReason(group.groupingReason)}}</pre>
+          </div>
+        </div>
+
+        <div class="row p-3  justify-content-center">
+          <div class="col col-3 h4">First occured</div>
+          <div class="col col-2">{{group.firstOccured | date: 'medium'}}</div>
+          <div class="col col-2 text-center font-weight-bold">-</div>
+          <div class="col col-2">{{group.lastOccured  | date: 'medium'}}</div>
+          <div class="col col-3 h4 text-right">Last occured</div>
+        </div>
+
+        <div class="row px-3 py-1">
+          <div class="col col-12">
+            <h3>Grouping context</h3>
+          </div>
+          <div class="col col-12">
+            <pre class="bg-light border p-3"><code>{{group.groupingContext}}</code></pre>
+          </div>
+        </div>
+
+        <div class="row p-3">
+          <div class="col col-12">
+            <h3>Last log summary</h3>
+          </div>
+          <div class="col col-12">
+            <pre class=" p-3 border bg-light">{{ group.lastLogHeader | json }}</pre>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="col" *ngIf="group">
+      <h1 class="text-center ">Logs in group</h1>
+      <app-log-list [groupId]="group.id"></app-log-list>
+    </div>
+  </div>
+
+</div>

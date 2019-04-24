@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { User } from '../_models/user';
+import { User } from '../../_models/User';
 import { Resolve, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { AuthService } from '../_services/auth.service';
-import { UserService } from '../_services/user.service';
+import { AuthService } from '../../_services/auth.service';
+import { UserService } from '../../_services/user.service';
 
 @Injectable()
 export class MemberEditResolver implements Resolve<User> {
@@ -12,7 +12,7 @@ export class MemberEditResolver implements Resolve<User> {
     private userService: UserService,
     private router: Router,
     private authService: AuthService
-  ) {}
+  ) { }
 
   resolve(route: ActivatedRouteSnapshot): Observable<User> {
     return this.userService.getById(this.authService.decodedToken.nameid).pipe(

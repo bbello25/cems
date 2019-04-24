@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using cems.API.Models.user;
 
 namespace cems.API.Features.Users.Dtos
@@ -11,6 +12,6 @@ namespace cems.API.Features.Users.Dtos
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
 
-        public WebApiKey WebApiKey { get; set; }
+        public ICollection<ApiKey> ApiKeys { get; set; }
     }
 }

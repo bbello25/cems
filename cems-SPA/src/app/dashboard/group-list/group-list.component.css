@@ -1,0 +1,15 @@
+th {
+    border: 0
+}
+
+.thActive {
+    color: #007bff !important;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.notDisplayed {
+    border: 1px solid black
+}

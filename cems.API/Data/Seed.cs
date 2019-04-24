@@ -1,7 +1,6 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using cems.API.Helpers;
-using cems.API.Models;
 using cems.API.Models.identity;
 using cems.API.Models.user;
 using Microsoft.AspNetCore.Identity;
@@ -12,13 +11,11 @@ namespace cems.API.Data
     {
         private readonly UserManager<User> _userManger;
         private readonly RoleManager<Role> _roleManager;
-        private readonly DataContext _dataContext;
 
         public Seed(UserManager<User> userManager, RoleManager<Role> roleManager, DataContext dataContext)
         {
             _userManger = userManager;
             _roleManager = roleManager;
-            _dataContext = dataContext;
         }
 
 
@@ -37,18 +34,22 @@ namespace cems.API.Data
                     _roleManager.CreateAsync(role).Wait();
                 }
 
-                var generator = new ApiKeyGenerator(_dataContext);
+            
 
-                var webApiKey = new WebApiKey
+                var apiKey = new ApiKey
                 {
-                    ApiKey = generator.GenerateApiKey()
+                    Key = Guid.NewGuid().ToString("N")
                 };
 
+                var apiKeys = new List<ApiKey>();
+                apiKeys.Add(apiKey);
                 var adminUser = new User
                 {
                     UserName = "Admin",
-                    WebApiKey = webApiKey
+                    ApiKeys = apiKeys
                 };
+
+              
 
                 IdentityResult result = _userManger.CreateAsync(adminUser, "Pa$$w0rD").Result;
 

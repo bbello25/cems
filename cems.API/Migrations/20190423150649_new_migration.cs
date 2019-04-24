@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace cems.API.Migrations
 {
-    public partial class new_model : Migration
+    public partial class new_migration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -68,6 +68,27 @@ namespace cems.API.Migrations
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ApiKeys",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Key = table.Column<string>(nullable: true),
+                    IsActive = table.Column<bool>(nullable: false),
+                    UserId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApiKeys", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ApiKeys_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -158,27 +179,31 @@ namespace cems.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "WebApiKeys",
+                name: "Groups",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ApiKey = table.Column<string>(nullable: true),
-                    UserId = table.Column<int>(nullable: false)
+                    GroupingReason = table.Column<int>(nullable: false),
+                    GroupingContext = table.Column<string>(nullable: true),
+                    FirstOccured = table.Column<DateTime>(nullable: false),
+                    LastOccured = table.Column<DateTime>(nullable: false),
+                    Platform = table.Column<int>(nullable: false),
+                    OwnerId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WebApiKeys", x => x.Id);
+                    table.PrimaryKey("PK_Groups", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_WebApiKeys_AspNetUsers_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Groups_AspNetUsers_OwnerId",
+                        column: x => x.OwnerId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "LogEvents",
+                name: "Logs",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -186,11 +211,10 @@ namespace cems.API.Migrations
                     Platform = table.Column<int>(nullable: false),
                     Timestamp = table.Column<DateTime>(nullable: false),
                     ExceptionDetails = table.Column<string>(nullable: true),
-                    WebApiKeyId = table.Column<int>(nullable: false),
+                    ApiKeyId = table.Column<int>(nullable: false),
                     CreatedTime = table.Column<DateTime>(nullable: false),
                     StateChangedTime = table.Column<DateTime>(nullable: false),
                     CurrentState = table.Column<int>(nullable: false),
-                    UserId = table.Column<int>(nullable: true),
                     DotnetApplicationInfo = table.Column<string>(nullable: true),
                     DotnetHttpContext = table.Column<string>(nullable: true),
                     DotnetExceptionDetails = table.Column<string>(nullable: true),
@@ -201,19 +225,13 @@ namespace cems.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LogEvents", x => x.Id);
+                    table.PrimaryKey("PK_Logs", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_LogEvents_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
+                        name: "FK_Logs_ApiKeys_ApiKeyId",
+                        column: x => x.ApiKeyId,
+                        principalTable: "ApiKeys",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_LogEvents_WebApiKeys_WebApiKeyId",
-                        column: x => x.WebApiKeyId,
-                        principalTable: "WebApiKeys",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -223,18 +241,47 @@ namespace cems.API.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Host = table.Column<string>(nullable: true),
-                    WebApiKeyId = table.Column<int>(nullable: false)
+                    ApiKeyId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TrustedHosts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TrustedHosts_WebApiKeys_WebApiKeyId",
-                        column: x => x.WebApiKeyId,
-                        principalTable: "WebApiKeys",
+                        name: "FK_TrustedHosts_ApiKeys_ApiKeyId",
+                        column: x => x.ApiKeyId,
+                        principalTable: "ApiKeys",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "GroupItems",
+                columns: table => new
+                {
+                    CemsLogId = table.Column<int>(nullable: false),
+                    GroupId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GroupItems", x => new { x.CemsLogId, x.GroupId });
+                    table.ForeignKey(
+                        name: "FK_GroupItems_Logs_CemsLogId",
+                        column: x => x.CemsLogId,
+                        principalTable: "Logs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_GroupItems_Groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Groups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApiKeys_UserId",
+                table: "ApiKeys",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -276,25 +323,24 @@ namespace cems.API.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LogEvents_UserId",
-                table: "LogEvents",
-                column: "UserId");
+                name: "IX_GroupItems_GroupId",
+                table: "GroupItems",
+                column: "GroupId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LogEvents_WebApiKeyId",
-                table: "LogEvents",
-                column: "WebApiKeyId");
+                name: "IX_Groups_OwnerId",
+                table: "Groups",
+                column: "OwnerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TrustedHosts_WebApiKeyId",
+                name: "IX_Logs_ApiKeyId",
+                table: "Logs",
+                column: "ApiKeyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TrustedHosts_ApiKeyId",
                 table: "TrustedHosts",
-                column: "WebApiKeyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_WebApiKeys_UserId",
-                table: "WebApiKeys",
-                column: "UserId",
-                unique: true);
+                column: "ApiKeyId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -315,7 +361,7 @@ namespace cems.API.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "LogEvents");
+                name: "GroupItems");
 
             migrationBuilder.DropTable(
                 name: "TrustedHosts");
@@ -324,7 +370,13 @@ namespace cems.API.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "WebApiKeys");
+                name: "Logs");
+
+            migrationBuilder.DropTable(
+                name: "Groups");
+
+            migrationBuilder.DropTable(
+                name: "ApiKeys");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

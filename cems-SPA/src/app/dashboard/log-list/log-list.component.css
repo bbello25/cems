@@ -1,0 +1,7 @@
+.clickable {
+    cursor: pointer
+}
+
+.thActive {
+    color: #007bff !important;
+}

@@ -8,10 +8,8 @@ namespace cems.API.Models.identity
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-
         public ICollection<UserRole> UserRoles { get; set; }
-        public ICollection<CemsLogModel> LogEvents { get; set; }
-
-        public WebApiKey WebApiKey { get; set; }
+        public ICollection<Group> Groups { get; set; }  
+        public ICollection<ApiKey>  ApiKeys { get; set; }
     }
 }

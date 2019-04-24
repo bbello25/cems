@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { User } from '../../_models/user';
+import { User } from '../../_models/User';
 import { AdminService } from '../../_services/admin.service';
 import { error } from '@angular/compiler/src/util';
 import { detectChanges } from '@angular/core/src/render3';

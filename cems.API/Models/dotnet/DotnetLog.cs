@@ -3,16 +3,16 @@ using cems.API.Models.dotnet;
 
 namespace cems.API.Features.LogEndpoint.dotnet.Models
 {
-    public class DotnetLogModel : CemsLogModel
+    public class DotnetLog : CemsLog
     {
-        public DotnetApplicationInfoModel DotnetApplicationInfo { get; set; }
-        public DotnetHttpContextModel DotnetHttpContext { get; set; }
-        public DotnetExceptionDetailsModel DotnetExceptionDetails { get; set; }
-        public DotnetLogModel() : base(Platforms.Dotnet)
+        public DotnetApplicationInfo DotnetApplicationInfo { get; set; }
+        public DotnetHttpContext DotnetHttpContext { get; set; }
+        public DotnetExceptionDetails DotnetExceptionDetails { get; set; }
+        public DotnetLog() : base(Platforms.Dotnet)
         {
-            DotnetApplicationInfo = new DotnetApplicationInfoModel();
-            DotnetHttpContext = new DotnetHttpContextModel();
-            DotnetExceptionDetails = new DotnetExceptionDetailsModel();
+            DotnetApplicationInfo = new DotnetApplicationInfo();
+            DotnetHttpContext = new DotnetHttpContext();
+            DotnetExceptionDetails = new DotnetExceptionDetails();
         }
 
        /* public void AppendExceptionDetails(Exception e)
@@ -28,10 +28,10 @@ namespace cems.API.Features.LogEndpoint.dotnet.Models
             var csharpStackFrames = stackTrace.GetFrames();
             if (csharpStackFrames != null)
             {
-                var stackFrames = new List<CemsStackFrameModel>();
+                var stackFrames = new List<CemsStackFrame>();
                 foreach (var stackFrame in csharpStackFrames)
                 {
-                    var frame = new CemsStackFrameModel
+                    var frame = new CemsStackFrame
                     {
                         File = stackFrame.GetFileName(),
                         Method = stackFrame.GetMethod().Name,

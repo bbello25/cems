@@ -1,6 +1,6 @@
 ﻿namespace cems.API.Features.LogEndpoint.dotnet.Models
 {
-    public class DotnetConnectionInfoModel 
+    public class DotnetConnectionInfo 
     {
         public string LocalIpAddressV4 { get; set; }
         public string LocalIpAddressV6 { get; set; }

@@ -4,12 +4,12 @@ using Newtonsoft.Json;
 
 namespace cems.API.Models.dotnet
 {
-    public class DotnetStackTraceModel
+    public class DotnetStackTrace
     {
-        public List<CemsStackFrameModel> StackFrames { get; set; }
+        public List<CemsStackFrame> StackFrames { get; set; }
         public double Distance { get; set; }
 
-        public void SetDistance(DotnetStackTraceModel other)
+        public void SetDistance(DotnetStackTrace other)
         {
             var stackFrames = StackFrames;
             var otherStackFrames = other.StackFrames;
@@ -50,5 +50,7 @@ namespace cems.API.Models.dotnet
 
             return file;
         }
+
+
     }
 }

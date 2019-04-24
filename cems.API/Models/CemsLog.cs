@@ -1,25 +1,28 @@
 ﻿using System;
+using System.Collections.Generic;
 using cems.API.Models.user;
 using Newtonsoft.Json;
 
 namespace cems.API.Models
 {
-    public class CemsLogModel : ITrackable
+    public class CemsLog : ITrackable
     {
         public int Id { get; set; }
         public Platforms Platform { get; set; }
         public DateTime Timestamp { get; set; }
-        public CemsExceptionDetailsModel ExceptionDetails { get; set; }
-        public CemsLogModel() { }
-        public CemsLogModel(Platforms platform)
+        public CemsExceptionDetails ExceptionDetails { get; set; }
+        public CemsLog() { }
+        public CemsLog(Platforms platform)
         {
             Platform = platform;
-            ExceptionDetails = new CemsExceptionDetailsModel();
+            ExceptionDetails = new CemsExceptionDetails();
             Timestamp = DateTime.Now;
         }
 
-        [JsonIgnore] public int WebApiKeyId { get; set; }
-        [JsonIgnore] public WebApiKey WebApiKey { get; set; }
+        [JsonIgnore] public int ApiKeyId { get; set; }
+        [JsonIgnore] public ApiKey ApiKey { get; set; }
+
+        public ICollection<GroupItem> Groups { get; set; }
 
         public DateTime CreatedTime { get; set; }
         public DateTime StateChangedTime { get; set; }

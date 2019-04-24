@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AjaxMinExtensions;
 using AutoMapper;
 using cems.API.Data;
 using cems.API.Features.LogBrowser.Dtos;
@@ -11,7 +12,9 @@ using cems.API.Models;
 using cems.API.Models.identity;
 using cems.API.Models.javascript;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
+using static System.String;
 
 namespace cems.API.Features.LogBrowser.Services
 {
@@ -20,32 +23,36 @@ namespace cems.API.Features.LogBrowser.Services
         private readonly DataContext m_context;
         private readonly UserManager<User> m_userManager;
         private readonly IMapper m_mapper;
+        private readonly IGroupService m_groupService;
 
-        public LogService(DataContext context, UserManager<User> userManager, IMapper mapper)
+        public LogService(DataContext context, UserManager<User> userManager, IMapper mapper,
+            IGroupService groupService)
         {
-            this.m_context = context;
-            this.m_userManager = userManager;
-            this.m_mapper = mapper;
+            m_context = context;
+            m_userManager = userManager;
+            m_mapper = mapper;
+            m_groupService = groupService;
         }
 
-        public async Task<PagedList<CemsLogModel>> GetLogs(QueryParams queryParams, string username)
+        public async Task<PagedList<CemsLog>> GetLogs(LogListQueryParams queryParams, string username)
         {
-            var userFromDb = await m_context.Users.Include(u => u.WebApiKey)
+            var userFromDb = await m_context.Users.Include(u => u.ApiKeys)
                 .Where(u => u.NormalizedUserName == username.ToUpper()).FirstOrDefaultAsync();
 
             var isAdmin = await m_userManager.IsInRoleAsync(userFromDb, "Admin");
 
-            var logs = m_context.LogEvents.Include(log => log.WebApiKey).OrderByDescending(log => log.Timestamp)
+            var logs = m_context.Logs.Include(log => log.ApiKey).OrderByDescending(log => log.Timestamp)
                 .AsQueryable();
 
             if (isAdmin)
             {
-                logs = m_context.LogEvents.Include(log => log.WebApiKey)
+                logs = m_context.Logs.Include(log => log.ApiKey)
                     .ThenInclude(webApikey => webApikey.User);
             }
             else
             {
-                logs = logs.Where(log => log.WebApiKeyId == userFromDb.WebApiKey.Id);
+                //TODO
+                /* logs = logs.Where(log =>  userFromDb.ApiKeys.Contains(userFromDb.ApiKey) );*/
             }
 
             var converted = queryParams.TimeValue;
@@ -65,7 +72,7 @@ namespace cems.API.Features.LogBrowser.Services
             var now = DateTime.Now;
             logs = logs.Where(log => (now - log.Timestamp).TotalHours < converted);
 
-            if (!string.IsNullOrEmpty(queryParams.OrderBy))
+            if (!IsNullOrEmpty(queryParams.OrderBy))
             {
                 switch (queryParams.OrderBy)
                 {
@@ -87,190 +94,131 @@ namespace cems.API.Features.LogBrowser.Services
                 }
             }
 
-            return await PagedList<CemsLogModel>.CreateAsync(logs, queryParams.PageNumber, queryParams.PageSize);
+            return await PagedList<CemsLog>.CreateAsync(logs, queryParams.PageNumber, queryParams.PageSize);
         }
 
-        public async Task<PagedList<LogEventGroupDto>> GetLogGroups(QueryParams queryParams, string username)
+        public async Task<List<CemsLog>> GetSimilarLogs(int logId, string matchReason, string username)
         {
-            var userFromDb = await m_context.Users.Include(u => u.WebApiKey)
-                .Where(u => u.NormalizedUserName == username.ToUpper()).FirstOrDefaultAsync();
-            var isAdmin = await m_userManager.IsInRoleAsync(userFromDb, "Admin");
-
-            var dotnetLogs = m_context.DotnetLogEvents.Include(log => log.WebApiKey).AsQueryable();
-            var javascriptLogs = m_context.JavascriptLogEvents.Include(log => log.WebApiKey).AsQueryable();
-
-
-            if (isAdmin)
-            {
-                dotnetLogs = dotnetLogs.Include(log => log.WebApiKey).ThenInclude(webApikey => webApikey.User);
-                javascriptLogs = javascriptLogs.Include(log => log.WebApiKey).ThenInclude(webApikey => webApikey.User);
-            }
-            else
-            {
-                dotnetLogs = dotnetLogs.Where(log => log.WebApiKeyId == userFromDb.WebApiKey.Id);
-                javascriptLogs = javascriptLogs.Where(log => log.WebApiKeyId == userFromDb.WebApiKey.Id);
-            }
-
-
-            var dotnetGroups = dotnetLogs.GroupBy(dotnetLog => dotnetLog.ExceptionDetails.RawStackTrace,
-                (key, group) => new LogEventGroupDto
-                {
-                    Count = group.Count(),
-                    ExceptionType = group.ElementAt(0).ExceptionDetails.Type,
-                    Message = group.ElementAt(0).ExceptionDetails.Message,
-                    FirstOccurred = group.Min(l => l.Timestamp),
-                    LastOccurred = group.Max(l => l.Timestamp),
-                    File = group.ElementAt(0).DotnetExceptionDetails.DotnetStackTrace
-                        .GetNormalizedExceptionLocation(),
-                    LastLogId = group.ElementAt(0).Id
-                });
-
-            var javascriptGroups = javascriptLogs.GroupBy(javascriptLog => javascriptLog.ExceptionDetails.RawStackTrace,
-                (key, group) => new LogEventGroupDto
-                {
-                    Count = group.Count(),
-                    ExceptionType = group.ElementAt(0).ExceptionDetails.Type,
-                    Message = group.ElementAt(0).ExceptionDetails.Message,
-                    FirstOccurred = group.Min(l => l.Timestamp),
-                    LastOccurred = group.Max(l => l.Timestamp),
-                    File = group.ElementAt(0).JavascriptExceptionDetails.JavascriptStackTrace
-                        .GetNormalizedExceptionLocation(),
-                    LastLogId = group.ElementAt(0).Id
-                });
-
-            //union and concat not works if one array is empty?
-            IQueryable<LogEventGroupDto> union = null;
-            if (dotnetGroups.Any() && javascriptGroups.Any())
-            {
-                union = dotnetGroups.Concat(javascriptGroups);
-            }
-            else if (dotnetGroups.Any())
-            {
-                union = dotnetGroups;
-            }
-            else if (javascriptGroups.Any())
-            {
-                union = javascriptGroups;
-            }
-
-            if (union != null)
-            {
-                union = union.OrderByDescending(group => group.Count);
-                return await PagedList<LogEventGroupDto>.CreateAsync(union, queryParams.PageNumber,
-                    queryParams.PageSize);
-            }
-
-            return null;
-        }
-
-        public async Task<List<CemsLogModel>> GetSimilarLogs(int logId, string matchReason, string username)
-        {
-            var userFromDb = await m_context.Users.Include(u => u.WebApiKey)
+            var userFromDb = await m_context.Users.Include(u => u.ApiKeys)
                 .Where(u => u.NormalizedUserName == username.ToUpper()).FirstOrDefaultAsync();
 
-            var log = await m_context.LogEvents.Include(l => l.WebApiKey)
-                .Where(l => l.WebApiKeyId == userFromDb.WebApiKey.Id && l.Id == logId).FirstOrDefaultAsync();
+            var log = await m_context.Logs.Include(l => l.ApiKey)
+                .Where(l => userFromDb.ApiKeys.Contains(l.ApiKey) && l.Id == logId).FirstOrDefaultAsync();
 
-            List<CemsLogModel> logs = new List<CemsLogModel>();
+            List<CemsLog> logs = new List<CemsLog>();
             if (log.Platform == Platforms.Dotnet)
             {
-                logs = await GetSimilarLogs(log as DotnetLogModel, matchReason);
+                logs = await GetSimilarLogs(log as DotnetLog, matchReason);
             }
 
             if (log.Platform == Platforms.Javascript)
             {
-                logs = await GetSimilarLogs(log as JavascriptLogModel, matchReason);
+                logs = await GetSimilarLogs(log as JavascriptLog, matchReason);
             }
 
             return logs;
         }
 
-        private async Task<List<CemsLogModel>> GetSimilarLogs(DotnetLogModel logModel, string matchReason)
+        private async Task<List<CemsLog>> GetSimilarLogs(DotnetLog dotnetLog, string matchReason)
         {
-            var logs = await m_context.DotnetLogEvents.Include(l => l.WebApiKey)
-                .Where(l => l.WebApiKeyId == logModel.WebApiKeyId && l.Platform == logModel.Platform &&
-                            l.Id != logModel.Id)
+            var logs = await m_context.DotnetLogs.Include(l => l.ApiKey)
+                .Where(l => l.ApiKeyId == dotnetLog.ApiKeyId && l.Platform == dotnetLog.Platform &&
+                            l.Id != dotnetLog.Id)
                 .ToListAsync();
 
 
             logs.ForEach(log =>
                 log.DotnetExceptionDetails.DotnetStackTrace.SetDistance(
-                    logModel.DotnetExceptionDetails.DotnetStackTrace));
+                    log.DotnetExceptionDetails.DotnetStackTrace));
 
             return logs.Where(log => log.DotnetExceptionDetails.DotnetStackTrace.Distance > 0.0)
                 .OrderByDescending(log => log.DotnetExceptionDetails.DotnetStackTrace.Distance)
-                .Cast<CemsLogModel>().ToList();
+                .Cast<CemsLog>().ToList();
         }
 
-        public async Task<List<CemsLogModel>> GetSimilarLogs(JavascriptLogModel logModel, string matchReason)
+        public async Task<List<CemsLog>> GetSimilarLogs(JavascriptLog jsLog, string matchReason)
         {
-
-            var logsQuery = m_context.JavascriptLogEvents.Include(l => l.WebApiKey)
-                .Where(l => l.WebApiKeyId == logModel.WebApiKeyId
-                            && l.Platform == logModel.Platform
-                            && l.Id != logModel.Id)
-                .Cast<JavascriptLogModel>();
+            var logsQuery = m_context.JavascriptLogs.Include(l => l.ApiKey)
+                .Where(l => l.ApiKeyId == jsLog.ApiKeyId
+                            && l.Platform == jsLog.Platform
+                            && l.Id != jsLog.Id)
+                .Cast<JavascriptLog>();
 
             if (matchReason == "sessionId")
             {
                 logsQuery = logsQuery.Where(l =>
-                    l.JavascriptSessionInfo.SessionId == logModel.JavascriptSessionInfo.SessionId);
+                    l.JavascriptSessionInfo.SessionId == jsLog.JavascriptSessionInfo.SessionId);
             }
 
-            var logs = await logsQuery.Where(l=>l.JavascriptExceptionDetails.JavascriptStackTrace != null).ToListAsync();
+            var logs = await logsQuery.Where(l => l.JavascriptExceptionDetails.JavascriptStackTrace != null)
+                .ToListAsync();
 
             logs.ForEach(log =>
-                log.JavascriptExceptionDetails.JavascriptStackTrace.SetDistance(logModel.JavascriptExceptionDetails
+                log.JavascriptExceptionDetails.JavascriptStackTrace.SetDistance(jsLog.JavascriptExceptionDetails
                     .JavascriptStackTrace));
 
             return logs.Where(log => log.JavascriptExceptionDetails.JavascriptStackTrace.Distance > 0.0)
                 .OrderByDescending(log => log.JavascriptExceptionDetails.JavascriptStackTrace.Distance)
-                .Cast<CemsLogModel>().ToList();
+                .Cast<CemsLog>().ToList();
         }
 
-        public async Task<CemsLogModel> GetLog(int logId, string username)
+        public async Task<CemsLog> GetLog(int logId, string username)
         {
-            var userFromDb = await m_context.Users.Include(u => u.WebApiKey)
+            var userFromDb = await m_context.Users.Include(u => u.ApiKeys)
                 .Where(u => u.NormalizedUserName == username.ToUpper()).FirstOrDefaultAsync();
             var isAdmin = await m_userManager.IsInRoleAsync(userFromDb, "Admin");
 
-            CemsLogModel log;
+            CemsLog log;
             if (isAdmin)
             {
-                log = await m_context.LogEvents.FirstOrDefaultAsync(l => l.Id == logId);
+                log = await m_context.Logs.FirstOrDefaultAsync(l => l.Id == logId);
             }
             else
             {
-                log = await m_context.LogEvents.Include(l => l.WebApiKey)
-                    .Where(l => l.WebApiKeyId == userFromDb.WebApiKey.Id && l.Id == logId).FirstOrDefaultAsync();
+                log = await m_context.Logs.Include(l => l.ApiKey)
+                    .Where(l => userFromDb.ApiKeys.Contains(l.ApiKey) && l.Id == logId).FirstOrDefaultAsync();
             }
 
             return log;
         }
 
-        public async Task<bool> AddLog(CemsLogModel logModel)
+        public async Task<bool> AddLog(CemsLog log)
         {
-            m_context.LogEvents.Add(logModel);
-            return await m_context.SaveChangesAsync() > 0 ? true : false;
+            m_context.Logs.Add(log);
+            var saved = await m_context.SaveChangesAsync() > 0;
+            if (!saved) return false;
+
+            if (!IsNullOrWhiteSpace(log.ExceptionDetails.RawStackTrace))
+            {
+                await m_groupService.TryAddLogToGroup(log, GroupingReason.SameStackTrace);
+            }
+
+            var jsLog = log as JavascriptLog;
+            if (jsLog != null && !IsNullOrWhiteSpace(jsLog.JavascriptSessionInfo.SessionId))
+            {
+                await m_groupService.TryAddLogToGroup(log, GroupingReason.SameSession);
+            }
+
+            return true;
         }
 
         public async Task<int> UpdateLogsStatus(IList<EventLogStatusUpdateDto> logsToUpdate, string username)
         {
-            var userFromDb = await m_context.Users.Include(u => u.WebApiKey)
+            var userFromDb = await m_context.Users.Include(u => u.ApiKeys)
                 .Where(u => u.NormalizedUserName == username.ToUpper()).FirstOrDefaultAsync();
             var isAdmin = await m_userManager.IsInRoleAsync(userFromDb, "Admin");
 
             foreach (var logStatusUpdateDto in logsToUpdate)
             {
-                CemsLogModel log;
+                CemsLog log;
                 if (isAdmin)
                 {
-                    log = await m_context.LogEvents.FirstOrDefaultAsync(l => l.Id == logStatusUpdateDto.Id);
+                    log = await m_context.Logs.FirstOrDefaultAsync(l => l.Id == logStatusUpdateDto.Id);
                 }
                 else
                 {
-                    log = await m_context.LogEvents.Include(l => l.WebApiKey)
-                        .Where(l => l.WebApiKeyId == userFromDb.WebApiKey.Id && l.Id == logStatusUpdateDto.Id)
+                    log = await m_context.Logs.Include(l => l.ApiKey)
+                        .Where(l => userFromDb.ApiKeys.Contains(l.ApiKey) && l.Id == logStatusUpdateDto.Id)
                         .FirstOrDefaultAsync();
                 }
 
@@ -282,7 +230,7 @@ namespace cems.API.Features.LogBrowser.Services
 
                 log.CurrentState = logStatusUpdateDto.NewState;
                 log.StateChangedTime = DateTime.Now;
-                m_context.LogEvents.Update(log);
+                m_context.Logs.Update(log);
             }
 
             var numberOfUpdated = await m_context.SaveChangesAsync();

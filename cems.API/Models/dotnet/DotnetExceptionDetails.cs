@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace cems.API.Models.dotnet
 {
-    public class DotnetExceptionDetailsModel
+    public class DotnetExceptionDetails
     {
-        public DotnetStackTraceModel DotnetStackTrace { get; set; }
+        public DotnetStackTrace DotnetStackTrace { get; set; }
 
     }
 }

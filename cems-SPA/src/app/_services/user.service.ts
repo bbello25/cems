@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { TrustedHost } from '../_models/trustedHost';
-import { User } from '../_models/user';
+import { TrustedHost } from '../_models/TrustedHost';
+import { User } from '../_models/User';
 
 @Injectable({
   providedIn: 'root'
@@ -32,4 +32,9 @@ export class UserService {
   updateTrustedHosts(id: number, trustedHosts: any) {
     return this.http.post(this.baseUrl + 'user/update/' + id, trustedHosts);
   }
+
+  /*addHost(host: string) {
+    return this.http.post(this.baseUrl + 'user/add/' + host);
+  }*/
+
 }

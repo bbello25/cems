@@ -1,0 +1,69 @@
+<div class="border" *ngIf="groups">
+  <form [formGroup]="filtersForm" (submit)="onSubmit()" class="form bg-light border m-0 p-2">
+
+    <h3>Filters</h3>
+    <div formArrayName="filters">
+      <div *ngFor="let item of filters.controls; let filterIndex=index" [formGroupName]="filterIndex"
+        class="form-row my-2">
+        <div class="col ">
+          <select formControlName="attribute" class="form-control">
+            <option value="" disabled selected hidden>Select column</option>
+            <option *ngFor="let column of groupColumns" [ngValue]="column">{{column}}</option>
+          </select>
+        </div>
+        <div class="col ">
+          <select formControlName="filterType" class="form-control">
+            <option value="" disabled selected hidden>Select filter type</option>
+            <option *ngFor="let type of filterTypes" [ngValue]="type">{{type}}</option>
+          </select>
+        </div>
+        <div class="col  "><input type="text" class="form-control" formControlName="filterValue"
+            placeholder="Enter value" /></div>
+        <div class="col "><button type="button" class="btn btn-danger" (click)="deleteFilter(filterIndex)">Delete
+            Filter</button></div>
+      </div>
+      <button type="button" class="btn btn-success" (click)="addFilter()">Add Filter</button>
+    </div>
+    <div class="d-flex flex-row-reverse">
+      <button type="submit" class="btn btn-primary">Filter</button>
+    </div>
+  </form>
+
+
+  <table class="table border-bottom" name="logGroups" id="logGroupsTable">
+    <thead class="thead border-0 thead-light">
+      <th [class]="queryParams.orderBy == 'id' ? 'thActive clickable' : 'clickable'" (click)="sort('id')"> Id</th>
+      <th [class]="queryParams.orderBy == 'groupingReason' ? 'thActive clickable' : 'clickable'"
+        (click)="sort('groupingReason')">Grouping
+        Reason</th>
+      <th [class]="queryParams.orderBy == 'firstOccured' ? 'thActive clickable' : 'clickable'"
+        (click)="sort('firstOccured')">First Occured
+      </th>
+      <th [class]="queryParams.orderBy == 'lastOccured' ? 'thActive clickable' : 'clickable'"
+        (click)="sort('lastOccured')">Last Occured
+      </th>
+      <th [class]="queryParams.orderBy == 'count' ? 'thActive clickable' : 'clickable'" (click)="sort('count')">Logs
+        Count</th>
+      <th [class]="queryParams.orderBy == 'platform' ? 'thActive clickable' : 'clickable'" (click)="sort('platform')">
+        Platform</th>
+    </thead>
+
+    <tbody class="tbody">
+      <tr class="clickable" *ngFor="let group of groups" (click)="redirectToGroupDetail(group.id)">
+        <td>{{group.id}}</td>
+        <td>{{getGroupingReason(group.groupingReason)}}</td>
+        <td>{{group.firstOccured | date: 'medium'}}</td>
+        <td>{{group.lastOccured | date: 'medium'}}</td>
+        <td>{{group.logsCount}}</td>
+        <td>{{getPlatform( group.lastLogHeader.platform)}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="d-flex mt-3 justify-content-center">
+    <pagination [boundaryLinks]="true" [totalItems]="pagination.totalItems" [(ngModel)]="pagination.currentPage"
+      [itemsPerPage]="pagination.itemsPerPage" (pageChanged)="pageChanged($event)" [maxSize]="15"
+      previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
+    </pagination>
+  </div>
+</div>

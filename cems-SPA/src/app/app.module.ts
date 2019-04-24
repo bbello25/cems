@@ -23,7 +23,7 @@ import { AdminService } from './_services/admin.service';
 import { RolesModalComponent } from './admin/roles-modal/roles-modal.component';
 import { UsersEditComponent } from './users/users-edit/users-edit.component';
 import { UserService } from './_services/user.service';
-import { MemberEditResolver } from './_resolvers/user-edit.resolver';
+import { MemberEditResolver } from './users/users-edit/user-edit.resolver';
 import { GlobalErrorHandler } from './GlobalErrorHandler';
 import { AlertifyService } from './_services/alertify.service';
 import { RolesManagementComponent } from './admin/roles-management/roles-management.component';
@@ -31,7 +31,7 @@ import { LoginComponent } from './login/login.component';
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 import { ErrorThrowComponent } from './error-throw/error-throw.component';
 import { environment } from '../environments/environment';
-import { LogsListResolver } from './dashboard/logs-list.resolver';
+import { LogsListResolver } from './dashboard/log-list/logs-list.resolver';
 import { HighlightModule } from 'ngx-highlightjs';
 
 import javascript from 'node_modules/highlight.js/lib/languages/javascript.js';
@@ -43,6 +43,10 @@ import { JsLogDetailComponent } from './dashboard/javascript/js-log-detail/js-lo
 import { JsLogResolver } from './dashboard/javascript/js-log-detail/js-log.resolver';
 import { StackFrameComponent } from './dashboard/stack-frame/stack-frame.component';
 import { LogHeaderComponent } from './dashboard/log-header/log-header.component';
+import { GroupListComponent } from './dashboard/group-list/group-list.component';
+import { LogListComponent } from './dashboard/log-list/log-list.component';
+import { GroupDetailComponent } from './dashboard/group-detail/group-detail.component';
+import { GroupDetailResolver } from './dashboard/group-detail/group-detail.resolver';
 
 export function hljsLanguages() {
   return [{ name: 'typescript', func: javascript }];
@@ -72,7 +76,10 @@ export function tokenGetter() {
     CsharpLogDetailComponent,
     StackFrameComponent,
     JsLogDetailComponent,
-    LogHeaderComponent
+    LogHeaderComponent,
+    GroupListComponent,
+    LogListComponent,
+    GroupDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -109,6 +116,7 @@ export function tokenGetter() {
     AlertifyService,
     CsharpLogResolver,
     JsLogResolver,
+    GroupDetailResolver,
     {
       provide: ErrorHandler,
       useClass: GlobalErrorHandler
@@ -117,4 +125,4 @@ export function tokenGetter() {
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

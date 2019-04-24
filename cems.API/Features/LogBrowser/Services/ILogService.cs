@@ -10,18 +10,12 @@ namespace cems.API.Features.LogBrowser.Services
 {
     public interface ILogService
     {
-        Task<PagedList<CemsLogModel>> GetLogs(QueryParams queryParams, string username);
-        Task<PagedList<LogEventGroupDto>> GetLogGroups(QueryParams queryParams, string username);
+        Task<PagedList<CemsLog>> GetLogs(LogListQueryParams queryParams, string username);
+        Task<List<CemsLog>> GetSimilarLogs(int logId, string matchReason, string username);
 
-        Task<List<CemsLogModel>> GetSimilarLogs(int logId, string matchReason, string username);
-
-        //Task<List<CemsLogModel>> GetSimilarLogs(DotnetLogModel logModel, string matchReason, string username);
-
-        //Task<List<CemsLogModel>> GetSimilarErrorLogs(JavascriptLogModel errorLog, string matchReason,
-        //    string username);
-
-        Task<CemsLogModel> GetLog(int logId, string username);
-        Task<bool> AddLog(CemsLogModel log);
+        
+        Task<CemsLog> GetLog(int logId, string username);
+        Task<bool> AddLog(CemsLog log);
         Task<int> UpdateLogsStatus(IList<EventLogStatusUpdateDto> logsToUpdate, string username);
     }
 }

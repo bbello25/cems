@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
 import { Router } from '@angular/router';
 import { AlertifyService } from '../_services/alertify.service';
-import { User } from '../_models/user';
+import { User } from '../_models/User';
 
 @Component({
   selector: 'app-nav',
@@ -16,7 +16,7 @@ export class NavComponent implements OnInit {
     public authService: AuthService,
     private router: Router,
     private alertify: AlertifyService
-  ) {}
+  ) { }
 
   ngOnInit() {
   }

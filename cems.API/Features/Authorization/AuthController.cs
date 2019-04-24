@@ -7,9 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using cems.API.Data;
-using cems.API.Features.Authorization;
-using cems.API.Helpers;
-using cems.API.Models;
 using cems.API.Models.identity;
 using cems.API.Models.user;
 using Microsoft.AspNetCore.Authorization;
@@ -19,7 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace cems.API.Controllers
+namespace cems.API.Features.Authorization
 {
     [AllowAnonymous]
     [Route("api/[controller]")]
@@ -47,11 +44,15 @@ namespace cems.API.Controllers
         {
             var userToCreate = _mapper.Map<User>(userForRegisterDto);
 
-            var generator = new ApiKeyGenerator(_dataContext);
-            userToCreate.WebApiKey = new WebApiKey
+            var apiKey = new ApiKey
             {
-                ApiKey = generator.GenerateApiKey()
+                Key = Guid.NewGuid().ToString("N")
             };
+
+            var apiKeys = new List<ApiKey>();
+            apiKeys.Add(apiKey);
+
+            userToCreate.ApiKeys = apiKeys;
 
             var result = await _userManager.CreateAsync(userToCreate, userForRegisterDto.Password);
 
@@ -82,7 +83,7 @@ namespace cems.API.Controllers
             if (result.Succeeded)
             {
                 var appUser = await _userManager.Users.Where(u =>
-                        u.NormalizedUserName == userForLoginDto.Username.ToUpper()).Include(u => u.WebApiKey)
+                        u.NormalizedUserName == userForLoginDto.Username.ToUpper()).Include(u => u.ApiKeys)
                     .FirstOrDefaultAsync();
 
                 var appUser2 = await (from u in _userManager.Users
@@ -92,7 +93,7 @@ namespace cems.API.Controllers
                         {
                             Id = u.Id,
                             username = u.UserName,
-                            WebApiKey = u.WebApiKey.ApiKey
+                            ApiKeys = u.ApiKeys
                         }).FirstOrDefaultAsync();
 
 

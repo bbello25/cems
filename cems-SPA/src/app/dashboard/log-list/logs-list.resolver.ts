@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { Resolve, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { AlertifyService } from '../_services/alertify.service';
-import { LogService } from '../_services/log.service';
-import { CemsLog } from '../_models/CemsLog.model';
+import { AlertifyService } from '../../_services/alertify.service';
+import { LogService } from '../../_services/log.service';
+import { CemsLog } from '../../_models/CemsLog.model';
 
 @Injectable()
 export class LogsListResolver implements Resolve<CemsLog[]> {

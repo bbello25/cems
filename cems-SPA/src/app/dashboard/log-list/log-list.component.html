@@ -1,0 +1,63 @@
+<div class="border" *ngIf="logs">
+  <form class="form bg-light border m-0 p-2" (submit)="loadLogs()">
+    <div class="form-row my-2">
+      <div class="col col-5">
+        <div class="row">
+          <div class="col">
+            <strong>Display last</strong>
+          </div>
+          <div class="col">
+            <input type="number" class="form-control ml-1" id="timeValue" name="timeValue"
+              [(ngModel)]="queryParams.timeValue" />
+          </div>
+        </div>
+      </div>
+      <div class="col col-3">
+        <select class="form-control ml-1" id="timeUnits" name="timeUnits" [(ngModel)]="queryParams.timeUnits">
+          <option *ngFor="let unit of timeUnits" [value]="unit.value">{{ unit.display }}</option>
+        </select>
+      </div>
+      <div class="col col-2">
+        <button type="submit" class="btn btn-success">Apply Filters</button>
+      </div>
+      <div class="col col-2 text-right"><button type="button" class="btn btn-primary"
+          (click)="resetFilters()">ResetFilters</button>
+      </div>
+    </div>
+
+  </form>
+
+  <table class="table border-bottom">
+    <thead class="thead-light">
+      <tr>
+        <th [class]="currentOrderBy == 'id' ? 'thActive clickable' : 'clickable '" (click)="sort('id')">Id</th>
+        <th>Exception message</th>
+        <th [class]="currentOrderBy == 'exceptionType' ? 'thActive clickable ' : 'clickable '"
+          (click)="sort('exceptionType')">Exception type
+        </th>
+        <th [class]="currentOrderBy == 'timestamp' ? 'thActive clickable ' : 'clickable '" (click)="sort('timestamp')">
+          Timestamp</th>
+        <th [class]="currentOrderBy == 'platform' ? 'thActive clickable ' : 'clickable '" (click)="sort('platform')">
+          Platfrom
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr [class]="log.currentState == 0 ? 'font-weight-bold clickable' : 'clickable'" *ngFor="let log of logs"
+        (click)="redirectToLogDetail(log.id)">
+        <td>{{ log.id }}</td>
+        <td>{{ log.exceptionMessage }}</td>
+        <td>{{ log.exceptionType}}</td>
+        <td>{{ log.timestamp | date: 'medium' }}</td>
+        <td>{{ getCorespondingPlatfrom( log.platform )}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="d-flex mt-3 justify-content-center">
+    <pagination [boundaryLinks]="true" [totalItems]="pagination.totalItems" [(ngModel)]="pagination.currentPage"
+      [itemsPerPage]="pagination.itemsPerPage" (pageChanged)="pageChanged($event)" [maxSize]="15"
+      previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
+    </pagination>
+  </div>
+</div>

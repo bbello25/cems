@@ -1,10 +1,9 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using cems.API.Data;
 using cems.API.Features.Authorization;
-using cems.API.Helpers;
-using cems.API.Models;
 using cems.API.Models.identity;
 using cems.API.Models.user;
 using Microsoft.AspNetCore.Authorization;
@@ -21,22 +20,20 @@ namespace cems.API.Features.Admin
     {
         private readonly DataContext _context;
         private readonly UserManager<User> _userManager;
-        private readonly RoleManager<Role> _roleManager;
         private readonly IMapper _mapper;
 
-        public UserController(DataContext context, UserManager<User> userManager, RoleManager<Role> roleManager,
+        public UserController(DataContext context, UserManager<User> userManager,
             IMapper mapper)
         {
             _context = context;
             _userManager = userManager;
-            _roleManager = roleManager;
             _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
-            var users = await _context.Users.Include(u => u.WebApiKey)
+            var users = await _context.Users.Include(u => u.ApiKeys)
                 .Include(u => u.UserRoles)
                 .Select(a => new
                 {
@@ -45,7 +42,7 @@ namespace cems.API.Features.Admin
                     a.FirstName,
                     a.LastName,
                     a.Email,
-                    WebApiKey = a.WebApiKey.ApiKey,
+                    a.ApiKeys,
                     Roles = a.UserRoles.Select(r => new {r.Role.Id, r.Role.Name})
                 }).ToListAsync();
 
@@ -55,7 +52,7 @@ namespace cems.API.Features.Admin
         [HttpGet("usersWithRoles")]
         public async Task<IActionResult> GetUsersWithRoles()
         {
-            var users = await _context.Users.Include(u => u.WebApiKey)
+            var users = await _context.Users
                 .Include(u => u.UserRoles)
                 .Select(a => new
                 {
@@ -71,11 +68,10 @@ namespace cems.API.Features.Admin
         {
             var userToCreate = _mapper.Map<User>(userForCreate);
 
-            var generator = new ApiKeyGenerator(_context);
-            userToCreate.WebApiKey = new WebApiKey
+            userToCreate.ApiKeys.Add(new ApiKey
             {
-                ApiKey = generator.GenerateApiKey()
-            };
+                Key = Guid.NewGuid().ToString("N")
+            });
 
             var result = await _userManager.CreateAsync(userToCreate, userForCreate.Password);
 

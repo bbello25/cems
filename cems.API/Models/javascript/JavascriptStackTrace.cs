@@ -8,8 +8,8 @@ namespace cems.API.Models.javascript
 {
     public class JavascriptStackTrace
     {
-        public List<CemsStackFrameModel> MinifiedStackFrames { get; set; }
-        public List<JavascriptDeminifiedStackFrameModel> DeminifiedStackFrames { get; set; }
+        public List<CemsStackFrame> MinifiedStackFrames { get; set; }
+        public List<JavascriptDeminifiedStackFrame> DeminifiedStackFrames { get; set; }
         public double Distance { get; set; }
         public static JavascriptStackTrace FromJsonString(string stackTraceJson)
         {
@@ -24,12 +24,12 @@ namespace cems.API.Models.javascript
             return stackTrace;
         }
 
-        private static List<CemsStackFrameModel> parseMinifiedStackTrackFrames(JArray minifiedStackFramesJArray)
+        private static List<CemsStackFrame> parseMinifiedStackTrackFrames(JArray minifiedStackFramesJArray)
         {
-            List<CemsStackFrameModel> newStackFrames = new List<CemsStackFrameModel>();
+            List<CemsStackFrame> newStackFrames = new List<CemsStackFrame>();
             foreach (JObject item in minifiedStackFramesJArray)
             {
-                var stackFrame = new CemsStackFrameModel();
+                var stackFrame = new CemsStackFrame();
                 stackFrame.File = item.GetValue("FilePath").ToString();
                 stackFrame.Method = item.GetValue("MethodName").ToString();
                 var source = item.GetValue("sourcePosition") as JObject;
@@ -45,13 +45,13 @@ namespace cems.API.Models.javascript
             return newStackFrames;
         }
 
-        private static List<JavascriptDeminifiedStackFrameModel> parseDeminifiedStackTrackFrames(JArray deminifiedStackFramesJArray)
+        private static List<JavascriptDeminifiedStackFrame> parseDeminifiedStackTrackFrames(JArray deminifiedStackFramesJArray)
         {
-            List<JavascriptDeminifiedStackFrameModel> newStackFrames = new List<JavascriptDeminifiedStackFrameModel>();
+            List<JavascriptDeminifiedStackFrame> newStackFrames = new List<JavascriptDeminifiedStackFrame>();
 
             foreach (JObject item in deminifiedStackFramesJArray)
             {
-                var stackFrame = new JavascriptDeminifiedStackFrameModel();
+                var stackFrame = new JavascriptDeminifiedStackFrame();
                 stackFrame.DeminificationError = (int) item.GetValue("DeminificationError");
                 var deminifiedStackFrameJObject = item.GetValue("DeminifiedStackFrame") as JObject;
                 if (deminifiedStackFrameJObject != null)

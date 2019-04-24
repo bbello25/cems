@@ -41,6 +41,7 @@ namespace cems.API
                 options.UseSqlServer(connString));
 
             services.AddScoped<ILogService, LogService>();
+            services.AddScoped<IGroupService, GroupService>();
             services.AddScoped<IStackTraceDeminifierService, StackTraceDeminifierService>();
 
             var builder = services.AddIdentityCore<User>(opt =>

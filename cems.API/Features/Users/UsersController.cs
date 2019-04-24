@@ -32,16 +32,14 @@ namespace cems.API.Features.Users
             if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
                 return Unauthorized();
 
-            var user = _dataContext.Users
+            var user = await _dataContext.Users
                 .Where(u => u.Id == id)
-                .Include(u => u.WebApiKey)
-                .FirstOrDefault();
+                .Include(u => u.ApiKeys)
+                .ThenInclude(apiKey => apiKey.TrustedHosts)
+                .FirstOrDefaultAsync();
 
             if (user == null)
                 return NotFound();
-
-            user.WebApiKey.TrustedHosts =
-                await _dataContext.TrustedHosts.Where(w => w.WebApiKeyId == user.WebApiKey.Id).ToListAsync();
 
             var userForReturn = _mapper.Map<UserDetailDto>(user);
 

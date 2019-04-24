@@ -19,7 +19,6 @@ namespace cems.API.StackTraceUtils
             var lastSlash = uri.AbsoluteUri.LastIndexOf("/", StringComparison.Ordinal);
             var path = uri.AbsoluteUri.Substring(0, lastSlash);
             string fileString;
-            var sourceMapString = "";
             using (var client = new WebClient())
             {
                 fileString = client.DownloadString(sourceCodeUrl);

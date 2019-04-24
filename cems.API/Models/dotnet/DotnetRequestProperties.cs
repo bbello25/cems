@@ -1,6 +1,6 @@
 ﻿namespace cems.API.Features.LogEndpoint.dotnet.Models
 {
-    public class DotnetRequestPropertiesModel
+    public class DotnetRequestProperties
     {
         public string Body { get; set; }
         public string HeadersJson { get; set; }

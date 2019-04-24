@@ -1,4 +1,4 @@
-import { WebApiKey } from './webApiKey';
+import { ApiKey } from './ApiKey';
 import { Role } from './Role';
 
 export class User {
@@ -10,6 +10,8 @@ export class User {
   phone: string;
   email: string;
   token: string;
-  roles?: Role[];
-  webApiKey: WebApiKey;
+  roles?: Role[] = [];
+  apiKeys: ApiKey[] = [];
+
 }
+

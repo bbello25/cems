@@ -48,7 +48,7 @@ namespace cems.API.Features.LogEndpoint
                 return Unauthorized();
             }
 
-            var apiKeyFromDb = await _context.WebApiKeys.FirstOrDefaultAsync(k => k.ApiKey == apiKeyFromRequest);
+            var apiKeyFromDb = await _context.ApiKeys.FirstOrDefaultAsync(k => k.Key == apiKeyFromRequest);
             if (apiKeyFromDb == null)
             {
                 return BadRequest("Unregistered API Key");
@@ -60,7 +60,7 @@ namespace cems.API.Features.LogEndpoint
         }
 
         [HttpPost("javascript")]
-        public async Task<IActionResult> JavascriptEndpoint([FromBody] JavascriptLogModel logModel)
+        public async Task<IActionResult> JavascriptEndpoint([FromBody] JavascriptLog log)
         {
             var apiKeyFromRequest = HttpContext.Request.Headers["api-key"];
             if (apiKeyFromRequest.ToString().Length == 0)
@@ -68,7 +68,7 @@ namespace cems.API.Features.LogEndpoint
                 return Unauthorized();
             }
 
-            var apiKeyFromDb = _context.WebApiKeys.FirstOrDefaultAsync(k => k.ApiKey == apiKeyFromRequest).Result;
+            var apiKeyFromDb = _context.ApiKeys.FirstOrDefaultAsync(k => k.Key == apiKeyFromRequest).Result;
             if (apiKeyFromDb == null)
             {
                 return BadRequest("Unregistered API Key");
@@ -76,9 +76,9 @@ namespace cems.API.Features.LogEndpoint
 
             try
             {
-                var javascriptStackTrace = _deminifier.Deminfy(logModel.ExceptionDetails.RawStackTrace);
+                var javascriptStackTrace = _deminifier.Deminfy(log.ExceptionDetails.RawStackTrace);
                 //TODO stuff for building from json is prepared ... change this later to use DeminifyStackTraceResult
-                logModel.JavascriptExceptionDetails.JavascriptStackTrace =
+                log.JavascriptExceptionDetails.JavascriptStackTrace =
                     JavascriptStackTrace.FromJsonString(JsonConvert.SerializeObject(javascriptStackTrace));
             }
             catch (Exception e)
@@ -86,17 +86,17 @@ namespace cems.API.Features.LogEndpoint
                 Console.WriteLine(e);
             }
 
-            logModel.CreatedTime = DateTime.Now;
-            logModel.StateChangedTime = DateTime.Now;
-            logModel.WebApiKey = apiKeyFromDb;
-            _context.LogEvents.Add(logModel);
+            log.CreatedTime = DateTime.Now;
+            log.StateChangedTime = DateTime.Now;
+            log.ApiKey = apiKeyFromDb;
+            var added = await m_logService.AddLog(log);
 
-            return await _context.SaveChangesAsync() > 0 ? Ok() : StatusCode(StatusCodes.Status500InternalServerError);
+            return added ? Ok() : StatusCode(StatusCodes.Status500InternalServerError);
         }
 
 
         [HttpPost("dotnet")]
-        public async Task<IActionResult> DotnetEndpoint([FromBody] DotnetLogModel logModel)
+        public async Task<IActionResult> DotnetEndpoint([FromBody] DotnetLog log)
         {
             var apiKeyFromRequest = HttpContext.Request.Headers["api-key"];
             if (apiKeyFromRequest.ToString().Length == 0)
@@ -104,17 +104,17 @@ namespace cems.API.Features.LogEndpoint
                 return Unauthorized();
             }
 
-            var apiKeyFromDb = _context.WebApiKeys.FirstOrDefaultAsync(k => k.ApiKey == apiKeyFromRequest).Result;
+            var apiKeyFromDb = _context.ApiKeys.FirstOrDefaultAsync(k => k.Key == apiKeyFromRequest).Result;
             if (apiKeyFromDb == null)
             {
                 return BadRequest("Unregistered API Key");
             }
 
-            logModel.CreatedTime = DateTime.Now;
-            logModel.StateChangedTime = DateTime.Now;
-            logModel.WebApiKey = apiKeyFromDb;
+            log.CreatedTime = DateTime.Now;
+            log.StateChangedTime = DateTime.Now;
+            log.ApiKey = apiKeyFromDb;
 
-            var added = await m_logService.AddLog(logModel);
+            var added = await m_logService.AddLog(log);
 
             return added ? Ok() : StatusCode(StatusCodes.Status500InternalServerError);
         }

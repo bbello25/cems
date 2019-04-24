@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { User } from '../../_models/user';
+import { User } from '../../_models/User';
 import { UserService } from '../../_services/user.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertifyService } from '../../_services/alertify.service';
@@ -60,26 +60,20 @@ export class UsersEditComponent implements OnInit {
     this.user.email = value.email;
     this.user.phone = value.phone;
     this.userService.update(this.user).subscribe(result => {
-        this.alertify.success('Successfully updated');
-        this.toggleEditMode();
-        this.cdr.detectChanges();
-      },
+      this.alertify.success('Successfully updated');
+      this.toggleEditMode();
+      this.cdr.detectChanges();
+    },
       error1 => this.alertify.error(error1));
     return true;
   }
 
-  AddHost() {
-    const trustedHostsObj = {
-      trustedHost: [this.hostToAdd.host]
-    };
-    console.log(trustedHostsObj);
-    this.userService
-      .updateTrustedHosts(this.user.id, trustedHostsObj)
-      .subscribe(response => {
-        this.user.webApiKey.trustedHosts = [
-          ...this.user.webApiKey.trustedHosts,
-          this.hostToAdd
-        ];
-      });
+  AddHost(selectedapiKey) {
+
+    const newHost = <HTMLInputElement>document.getElementById(selectedapiKey);
+    newHost.value = '';
+    this.alertify.warning('Not implemented');
+
+    console.log('not Implemented');
   }
 }

@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { User } from '../_models/user';
+import { User } from '../_models/User';
 import { environment } from '../../environments/environment';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { WebApiKey } from '../_models/webApiKey';
 import { Local } from 'protractor/built/driverProviders';
+import { ApiKey } from '../_models/ApiKey';
 
 @Injectable({
   providedIn: 'root'
@@ -46,9 +46,11 @@ export class AuthService {
     const user = new User();
     user.id = userFromToken.id;
     user.username = userFromToken.username;
-    const webApiKey = new WebApiKey();
-    webApiKey.apiKey = userFromToken.webApiKey;
-    user.webApiKey = webApiKey;
+    userFromToken.apiKeys.forEach(apiKeyObj => {
+      const apiKey = new ApiKey();
+      apiKey.key = apiKeyObj;
+      user.apiKeys.push(apiKey);
+    });
     user.token = userFromToken.token;
     return user;
   }

@@ -1,6 +1,6 @@
 ﻿namespace cems.API.Features.LogEndpoint.dotnet.Models
 {
-    public class DotnetApplicationInfoModel 
+    public class DotnetApplicationInfo 
     {
         public string Name { get; set; }
         public string Host { get; set; }
